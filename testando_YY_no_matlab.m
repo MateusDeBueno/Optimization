@@ -191,7 +191,7 @@ M = [I_in_med,
 f_YY_menor60 = matlabFunction(M, 'vars', variaveis);
 save('f_YY_menor60.mat')
 
-vpa(subs(M,variaveis,ponto_de_operacao))
+% vpa(subs(M,variaveis,ponto_de_operacao))
 
 
 
