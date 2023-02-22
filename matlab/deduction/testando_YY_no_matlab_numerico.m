@@ -16,9 +16,9 @@ fs = 100e3;
 phi = 50*pi/180;
 T = 1/fs;
 
-t = 0:T/1000:T/2;
+t = 0:T/1000:T;
 
-k_max = 300;
+k_max = 20;
 
 a = zeros(1,k_max);
 b = a;
@@ -27,7 +27,7 @@ for k=1:k_max
     M = f_YY_harmonic_menor60(Vp,L,n,d,fs,phi,k);
     a(k) = M(2);
     b(k) = M(3);
-    eq = eq+a(k)*cos(k*pi*t/(T/2))+b(k)*sin(k*pi*t/(T/2));
+    eq = eq+a(k)*cos(2*pi*k*t/T)+b(k)*sin(2*pi*k*t/T);
 end
 
 for k=1:k_max

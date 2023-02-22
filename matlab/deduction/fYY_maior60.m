@@ -4,12 +4,28 @@ clear; close all; clc;
 % https://www.youtube.com/watch?v=ev0juGwUz78
 % https://www.geeksforgeeks.org/implementation-of-fourier-series-up-to-n-harmonics-in-matlab/
 % https://users.math.msu.edu/users/gnagy/teaching/11-winter/mth235/lslides/L36-235.pdf
+% https://rcub.ac.in/econtent/ug/bsc/6sem/BSC%20Sem%20VI%20Physics%20Fourier%20transform.pdf
 
-syms Vp d n phi fs L t k a_L b_L k_c_L a_t b_t k_c_t N_L Ac_L N_s Ac_trf real positive
-syms I0 real
+% syms Vp d n fs L t k a_L b_L k_c_L N_L Ac_L a_trf b_trf k_c_trf N_trf Ac_trf real positive
+% syms I0 phi real
+
+syms Vp d n fs L t k real positive
+syms I0 phi real
+
+% assumeAlso(phi < pi/3)
+% assumeAlso(phi > 0)
+% 
+% assumeAlso(N_trf > 1)
+% assumeAlso(N_L > 1)
+
+
+
+
+% variaveis =         [Vp,  L,     n,   d, fs,    phi,       k,  a_L,   b_L,   k_c_L, N_L, Ac_L, a_trf, b_trf, k_c_trf, N_trf, Ac_trf];
+% ponto_de_operacao = [400, 67e-6, 5/9, 1, 100e3, 50*pi/180, 1,  1.394, 2.248, 2.448, 14,  0.01, 1.585, 2.756, .402,    5,     0.01];
 
 variaveis =         [Vp,    L,      n,      d,  fs,     phi,        k];
-ponto_de_operacao = [400,   67e-6,  5/9,    1,  100e3,  50*pi/180,  1];
+ponto_de_operacao = [400,   67e-6,  5/9,    1,  100e3,  70*pi/180,  2];
 
 n_etapas=6;
 
@@ -22,16 +38,18 @@ ang = sym('ang_', [n_etapas,1],'real'); %angulo de cada ponto
 dt = sym('dT_', [n_etapas,1], 'real'); %tepo de cada intervalo
 I = sym('I_', [n_etapas,1], 'real'); %corrente em cada ponto
 exp = sym('exp_', [n_etapas,1], 'real'); %expressao de cada etapa
+time = sym('time_', [n_etapas,1], 'real'); %tempo de cada ponto
+part = sym('part_', [n_etapas,1], 'real'); %expressao de cada etapa
 
 dVp(1) = Vp/3;      dVp(2) = Vp/3;      dVp(3) = 2*Vp/3;
 dVp(4) = 2*Vp/3;    dVp(5) = Vp/3;      dVp(6) = Vp/3;
 
-dVs(1) = -Vs/3/n;   dVs(2) = Vs/3/n;    dVs(3) = Vs/3/n;
-dVs(4) = 2*Vs/3/n;  dVs(5) = 2*Vs/3/n;  dVs(6) = Vs/3/n;
+dVs(1) = -2*Vs/3;   dVs(2) = -Vs/3;     dVs(3) = -Vs/3;
+dVs(4) = Vs/3;      dVs(5) = Vs/3;      dVs(6) = 2*Vs/3;
+dVs = dVs/n;
 
-ang(1) = 0;         ang(2) = phi;       ang(3) = pi/3;
-ang(4) = pi/3+phi;  ang(5) = 2*pi/3;    ang(6) = 2*pi/3+phi;
-
+ang(1) = 0;         ang(2) = phi-pi/3;  ang(3) = pi/3;
+ang(4) = phi;       ang(5) = 2*pi/3;    ang(6) = pi/3+phi;
 
 dV = simplify(dVp-dVs); %tensao applicada no indutor
 
@@ -44,7 +62,7 @@ for i = 1:n_etapas
     I(i+1) = I(i) + dt(i)*a(i);
 end
 
-eq_I1 = I(1) == -I(7);
+eq_I1 = I(1) == -I(end);
 I1 = simplify(solve(eq_I1, I(1))); %corrente inicial no indutor
 I = simplify(subs(I, I(1), I1)); %resolvendo corrente d cada ponto
 
@@ -57,19 +75,21 @@ I_in_rms = sqrt((int(exp(3)^2,[0, dt(3)]) + int(exp(4)^2,[0, dt(4)]))/(dt(3)+dt(
 I_in_rms = simplify(I_in_rms);
 
 %% calcula das correntes de saida
-I_out_med = (int(exp(4)/n,[0, dt(4)]) + int(exp(5)/n,[0, dt(5)]))/(dt(4)+dt(5));
+I_out_med = (int(exp(6)/n,[0, dt(6)]) + int(-exp(1)/n,[0, dt(1)]))/(dt(6)+dt(1));
 I_out_med = simplify(I_out_med);
-I_out_rms = sqrt((int((exp(4)/n)^2,[0, dt(4)]) + int((exp(5)/n)^2,[0, dt(5)]))/(dt(4)+dt(5)));
+I_out_rms = sqrt((int((exp(6)/n)^2,[0, dt(6)]) + int((-exp(1)/n)^2,[0, dt(1)]))/(dt(6)+dt(1)));
 I_out_rms = simplify(I_out_rms);
 
 %% calcula da corrente rms no indutor
+
 I_L_rms = int(exp(1)^2,[0, dt(1)]);
 for i=2:n_etapas
     I_L_rms = I_L_rms + int(exp(i)^2,[0, dt(i)]);
 end
 I_L_rms = simplify(sqrt(I_L_rms*2/T));
 
-time = sym('time_', [n_etapas,1], 'real'); %tempo de cada ponto
+%% calcula os coeficientes da corrente no indutor
+
 time(1) = dt(1);
 for i=2:n_etapas
     time(i) = time(i-1)+dt(i);
@@ -83,14 +103,12 @@ for i=2:n_etapas
     limits(i,2) = time(i);
 end
 
-part = sym('part_', [n_etapas,1], 'real'); %expressao de cada etapa
 
 vetor_t = t*ones(n_etapas,1);
 part(1) = exp(1);
 for i=2:n_etapas
     part(i) = subs(exp(i),vetor_t(i-1),(t-time(i-1)));
 end
-
 
 % calculo do segundo ciclo
 limits2 = limits+simplify(sum(dt));
@@ -145,10 +163,12 @@ I_L_c_k_rms = I_L_c_k/sqrt(2); %peak to rms
 
 
 %% calcula da corrente rms no trf
-
 I_trf_rms = I_L_rms;
+
+%% calcula os coeficientes da corrente no trf
 I_trf_c_k = I_L_c_k;
 I_trf_c_k_rms = I_trf_c_k/sqrt(2);
+
 %% corrente nas chaves do primario
 I_sw_p_rms = int(exp(1)^2,[0, dt(1)]);
 for i=2:n_etapas
@@ -164,15 +184,25 @@ end
 I_sw_s_rms = simplify(sqrt(I_sw_s_rms/T));
 
 %% perdas magneticas no trf
-
 Wb_trf = sum(abs(dVs).*dt);
 Wb_trf = simplify(Wb_trf);
 
-%% perdas magneticas no indutor
+% integrais_trf = 0;
+% for i=1:n_etapas
+%     integrais_trf = integrais_trf + int(abs(dVs(i)/(N_trf*Ac_trf))^a_trf, [0, dt(i)]);
+% end
+% integrais_trf = simplify(integrais_trf);
 
+%% perdas magneticas no indutor
 Wb_indutor = max(I)*L*2;
 
-%% criar funcao dos resultados
+% integrais_L = 0;
+% for i=1:n_etapas
+%     integrais_L = integrais_L + int(abs(dV(i)/(N_L*Ac_L)).^a_L, [0, dt(i)]);
+% end
+% integrais_L = simplify(integrais_L);
+
+%% criar matrizes dos resultados
 M = [I_in_med,
     I_in_rms,
     I_out_med,
@@ -187,11 +217,14 @@ M = [I_in_med,
 M_harmonic = [I_L_c_k,
               I_trf_c_k];
 
-f_YY_menor60 = matlabFunction(M, 'vars', variaveis);
-save('f_YY_menor60.mat')
 
-f_YY_harmonic_menor60 = matlabFunction(M_harmonic, 'vars', variaveis);
-save('f_YY_harmonic_menor60.mat')
+vpa(subs(M,variaveis,ponto_de_operacao))
+%% exportar funcao
 
-% vpa(subs(subs(M_harmonic,variaveis,ponto_de_operacao),k,11))
+f_YY_maior60 = matlabFunction(M, 'vars', variaveis);
+save('f_YY_maior60.mat')
+
+f_YY_harmonic_maior60 = matlabFunction(M_harmonic, 'vars', variaveis);
+save('f_YY_harmonic_maior60.mat')
+
 
