@@ -1,0 +1,248 @@
+clear; close all; clc;
+
+
+syms phi fs Vi Vo real
+syms Ldab Ld1 Ld2 Lm n real
+syms Po real
+
+variaveis =         [Ldab,  Ld1,    Ld2,    Lm,     Vi,     Vo,     fs,     n,      phi];
+ponto_de_operacao = [67e-6, 2e-6,   4e-6,   .5e-3,  400,    300,    100e3,  3/4,    deg2rad(50)];
+
+
+Tcl = 1/3*[2 -1 -1; 0 sqrt(2) -sqrt(2); 1 1 1];
+Tclm = Tcl(1:2,:); %ignorar nivel zero
+Tclx = kron(eye(2), Tclm);
+
+Ts = 1/fs;
+
+tbase = (0:pi/3:2*pi)*Ts/(2*pi);
+ts = [0, phi, pi/3, pi/3+phi, 2*pi/3, 2*pi/3+phi, pi, pi+phi, pi+pi/3, pi+pi/3+phi, pi+2*pi/3, pi+2*pi/3+phi, 2*pi]*Ts/(2*pi); 
+
+%estados de comutacao de um inversor 3phase, ponto medio no meio do barramento
+sf = -0.5+[1 0 1; 1 0 0; 1 1 0; 0 1 0; 0 1 1; 0 0 1]';
+sf = kron(sf, [1, 1]); %abc
+sf = [sf; sf(:, end) sf(:,1:end-1)]; %a1b1c1 to a2b2c2
+scl = kron(eye(2), Tclm)*sf; %estados de comutacao, a1b1c1-a2b2c2 to alpha1beta1-alpha2beta2
+tf = matlabFunction(ts, 'vars', {phi, fs}); %criar funcao para definir os tempos
+
+%%  Validação dos Pulsos de Comutação
+figure(1)
+subplot(2,1,1)
+stairs(tf(deg2rad(15), 100e3) * 1e6, ([sf sf(:,1)]'+[0 -2 -4 -6 -8 -10]), 'LineWidth', 2)
+
+xlim([0 1/100e3]*1e6)
+ylabel('s')
+xlabel('t [\mus]')
+legend('Primary', 'Secondary')
+grid on
+subplot(2,1,2)
+stairs(tf(deg2rad(15), 100e3) * 1e6, ([scl scl(:,1)]'+[0 -2 -4 -6]), 'LineWidth', 2)
+% ylim([-450 450])
+xlim([0 1/100e3]*1e6)
+ylabel('s_{\alpha\beta}')
+xlabel('t [\mus]')
+legend('Primary', 'Secondary')
+grid on
+
+%%
+L = [Ldab+Ld1; Ld2/n^2];
+Udc = [Vi; Vo];
+u = Udc.*[1; 1/n];
+
+x = sym('x_', [2,1], 'real');
+dx = sym('dx_', [2,1], 'real'); %dx1 -> iLdab ou iLl1 (em serie) dx2 -> iLl2
+eq = sym('eq', [2,1], 'real');
+s = sym('s', [2,1], 'real');
+
+eq(1) = u(1)*s(1) == L(1)*dx(1) + Lm*(dx(1)-dx(2)*n);
+eq(2) = u(2)*s(2) == Lm*(dx(1)-dx(2)*n) - L(2)*dx(2)*n;
+
+dxs = simplify(struct2array(solve(eq, dx))).';
+M = equationsToMatrix(dxs, [x; s]);
+A = M(:,1:2);
+B = M(:,3:4); %devidas de iLdab e iLd
+
+A = kron(A, eye(2));
+B = kron(B, eye(2));
+
+%%
+
+x0 = sym('x0_', [4,1], 'real');
+x = sym('x_', [4,length(ts)], 'real');
+
+x(:,1) = x0;
+vs = [1 2 3 4 5 6 7 8 9 10 11 12];
+% vs = [1 3 2 4 5 4 8 7 10 9 12 11];
+for i=1:length(ts)-1
+    dt = ts(i+1) - ts(i); %aqui tem uma simplificacao para somente retas
+    x(:,i+1) = simplify(x(:,i) + dt*B*scl(:,vs(i))); %tempo x derivada x estados
+end
+
+x0x = struct2array(solve(x(:,1) == -x(:,7), x0)).'; %pega as 4 condicoes iniciais
+x0x = subs(x, x0, x0x); %substitui as condicoes inicias nos estados
+
+x0s = simplify(pinv(Tclx)*x0x);
+
+iSw = matlabFunction(x0s.', 'vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo});
+
+%% rms of all states
+
+syms t real
+
+derivadas = pinv(Tclx)*B*scl;
+
+
+%%
+
+
+[x_rms,x_mean] = f_rms_mean(derivadas,x0s,ts,(1:12),(1:12));
+
+IL_rms = x_rms(1);
+Itrf_sec_rms = x_rms(4);
+
+f_IL_rms = matlabFunction(IL_rms, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo});
+f_Itrf_sec_rms = matlabFunction(Itrf_sec_rms, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo});
+    
+%% Corrente de entrada
+
+[x_rms,x_mean] = f_rms_mean(derivadas,x0s,ts,(3:4),(3:4));
+Iin_med = x_mean(1);
+Iin_rms = x_rms(1);
+
+f_Iin_med = matlabFunction(Iin_med, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo});
+f_Iin_rms = matlabFunction(Iin_rms, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo});
+
+%% Corrente de saida
+
+[x_rms,x_mean] = f_rms_mean(derivadas,x0s,ts,(4:5),(4:5));
+Iout_med = x_mean(4);
+Iout_rms = x_rms(4);
+
+
+power_equation = Iout_med==Po/Vo;
+fphi = rhs(isolate(power_equation,phi));
+
+f_Iout_med = matlabFunction(Iout_med, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo});
+f_Iout_rms = matlabFunction(Iout_rms, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo});
+f_phi = matlabFunction(fphi, 'Vars', {Ldab, n, Ld1, Ld2, Lm, Po, fs, Vi, Vo});
+
+%% corrente nas chaves
+[x_rms,x_mean] = f_rms_mean(derivadas,x0s,ts,(1:6),(1:12));
+
+Isw_p_rms = x_rms(1);
+Isw_s_rms = x_rms(4);
+
+f_Isw_p_rms = matlabFunction(Isw_p_rms, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo});
+f_Isw_s_rms = matlabFunction(Isw_s_rms, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo});
+
+%% corrente de comutacao
+
+%primario
+Ip = x0s(1,1);
+
+%secundario
+Is = x0s(4,2);
+
+f_Is = matlabFunction(Is, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo});
+f_Ip = matlabFunction(Ip, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo});
+%% valores
+
+Lm_num = [500e-6, 1e-3, 1000e-3];
+Ld1_num = 2e-6;
+Ld2_num = 4e-6;
+Ldab_num = 67e-6;
+fs_num = 100e3;
+phi_num = deg2rad(50);
+Vi_num = 400;
+d_num = 3/4;
+Vo_num = d_num*Vi;
+n_num = 3/4;
+
+
+f_IL_rms(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num(1), phi_num, fs_num, Vi_num, Vo_num)
+%% fourier currents
+
+% 
+% syms t k real
+% 
+% a_k = 0;
+% for i=1:length(ts)-1
+%     dt = ts(i+1) - ts(i);
+%     equation_intervalo = (derivadas(:,i).*ones(6,1)*t+x0s(:,i));
+%     a_k = a_k + int(equation_intervalo*cos(2*pi*k*t/Ts), [0, dt]);
+% end
+% a_k = simplify(a_k*2/Ts);
+% 
+% b_k = 0;
+% for i=1:length(ts)-1
+%     dt = ts(i+1) - ts(i);
+%     equation_intervalo = (derivadas(:,i).*ones(6,1)*t+x0s(:,i));
+%     b_k = b_k + int(equation_intervalo*sin(2*pi*k*t/Ts), [0, dt]);
+% end
+% b_k = simplify(b_k*2/Ts);
+% 
+% c_k = abs(a_k-1i*b_k); %cos e sin to exponential
+% c_k = simplify(c_k);
+% c_k_rms = c_k/sqrt(2); %peak to rms
+% 
+% 
+% f_c_k = matlabFunction(c_k', 'vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo});
+
+
+
+
+
+%% equacoes de saidas
+output = [IL_rms,Itrf_sec_rms,Iin_med,Iin_rms,Iout_med,Iout_rms,fphi,Isw_p_rms,Isw_s_rms,Ip,Is]';
+vpa(subs(output,variaveis,ponto_de_operacao))
+% 
+% f_IL_rms
+% f_Itrf_sec_rms
+% f_Iin_med
+% f_Iin_rms
+% f_Iout_med
+% f_Iout_rms
+% f_phi
+% f_Isw_p_rms
+% f_Isw_s_rms
+% f_Is
+% f_Ip
+
+
+
+
+%% plots
+% 
+% figure
+% hold on
+% plot(tf(phi,fs), iSw(Ldab, n, Ld1, Ld2, Lm(1), phi, fs, Vi, Vo)*eye(6,3),'r','LineWidth',2)
+% plot(tf(phi,fs), iSw(Ldab, n, Ld1, Ld2, Lm(2), phi, fs, Vi, Vo)*eye(6,3),'b','LineWidth',2)
+% plot(tf(phi,fs), iSw(Ldab, n, Ld1, Ld2, Lm(3), phi, fs, Vi, Vo)*eye(6,3),'g')
+% hold off
+% grid on
+% grid minor
+% xlim([0 1/fs])
+% 
+% 
+% %% plot corrente secundario
+% M_sec = [zeros(3,3),eye(3,3)]';
+% 
+% 
+% figure
+% hold on
+% plot(tf(phi,fs), iSw(Ldab, n, Ld1, Ld2, Lm(1), phi, fs, Vi, Vo)*M_sec,'r','LineWidth',2)
+% plot(tf(phi,fs), iSw(Ldab, n, Ld1, Ld2, Lm(2), phi, fs, Vi, Vo)*M_sec,'b','LineWidth',2)
+% plot(tf(phi,fs), iSw(Ldab, n, Ld1, Ld2, Lm(3), phi, fs, Vi, Vo)*M_sec,'g')
+% hold off
+% grid on
+% grid minor
+% xlim([0 1/fs])
+% 
+% %% plot corrente da fase A, entrada e saida
+% M_fase_a = [1 0; 0 0; 0 0; 0 -1; 0 0; 0 0];
+% 
+% figure
+% plot(tf(phi,fs), iSw(Ldab, n, Ld1, Ld2, Lm(1), phi, fs, Vi, Vo)*M_fase_a,'LineWidth',2)
+% grid on
+% grid minor
+% xlim([0 1/fs])
