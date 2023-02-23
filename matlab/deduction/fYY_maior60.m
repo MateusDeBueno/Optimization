@@ -61,7 +61,6 @@ a = dV/L;
 for i = 1:n_etapas
     I(i+1) = I(i) + dt(i)*a(i);
 end
-
 eq_I1 = I(1) == -I(end);
 I1 = simplify(solve(eq_I1, I(1))); %corrente inicial no indutor
 I = simplify(subs(I, I(1), I1)); %resolvendo corrente d cada ponto
@@ -176,6 +175,7 @@ for i=2:n_etapas
 end
 I_sw_p_rms = simplify(sqrt(I_sw_p_rms/T));
 
+I_sw_p_on = I(1);
 %% corrente nas chaves do secundario
 I_sw_s_rms = int((exp(1)/n)^2,[0, dt(1)]);
 for i=2:n_etapas
@@ -183,6 +183,7 @@ for i=2:n_etapas
 end
 I_sw_s_rms = simplify(sqrt(I_sw_s_rms/T));
 
+I_sw_s_on = -I(4)/n;
 %% perdas magneticas no trf
 Wb_trf = sum(abs(dVs).*dt);
 Wb_trf = simplify(Wb_trf);
@@ -211,20 +212,21 @@ M = [I_in_med,
     I_trf_rms,
     I_sw_p_rms,
     I_sw_s_rms,
+    I_sw_p_on,
+    I_sw_s_on,
     Wb_trf,
     Wb_indutor];
 
 M_harmonic = [I_L_c_k,
               I_trf_c_k];
 
-
 vpa(subs(M,variaveis,ponto_de_operacao))
 %% exportar funcao
 
 f_YY_maior60 = matlabFunction(M, 'vars', variaveis);
-save('f_YY_maior60.mat')
+save('f_YY_maior60.mat', "f_YY_maior60", '-mat')
 
 f_YY_harmonic_maior60 = matlabFunction(M_harmonic, 'vars', variaveis);
-save('f_YY_harmonic_maior60.mat')
+save('f_YY_harmonic_maior60.mat', "f_YY_harmonic_maior60", '-mat')
 
 

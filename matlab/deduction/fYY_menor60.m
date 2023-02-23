@@ -6,23 +6,8 @@ clear; close all; clc;
 % https://users.math.msu.edu/users/gnagy/teaching/11-winter/mth235/lslides/L36-235.pdf
 % https://rcub.ac.in/econtent/ug/bsc/6sem/BSC%20Sem%20VI%20Physics%20Fourier%20transform.pdf
 
-% syms Vp d n fs L t k a_L b_L k_c_L N_L Ac_L a_trf b_trf k_c_trf N_trf Ac_trf real positive
-% syms I0 phi real
-
 syms Vp d n fs L t k real positive
 syms I0 phi real
-
-% assumeAlso(phi < pi/3)
-% assumeAlso(phi > 0)
-% 
-% assumeAlso(N_trf > 1)
-% assumeAlso(N_L > 1)
-
-
-
-
-% variaveis =         [Vp,  L,     n,   d, fs,    phi,       k,  a_L,   b_L,   k_c_L, N_L, Ac_L, a_trf, b_trf, k_c_trf, N_trf, Ac_trf];
-% ponto_de_operacao = [400, 67e-6, 5/9, 1, 100e3, 50*pi/180, 1,  1.394, 2.248, 2.448, 14,  0.01, 1.585, 2.756, .402,    5,     0.01];
 
 variaveis =         [Vp,    L,      n,      d,  fs,     phi,        k];
 ponto_de_operacao = [400,   67e-6,  5/9,    1,  100e3,  50*pi/180,  2];
@@ -176,6 +161,7 @@ for i=2:n_etapas
 end
 I_sw_p_rms = simplify(sqrt(I_sw_p_rms/T));
 
+I_sw_p_on = I(1);
 %% corrente nas chaves do secundario
 I_sw_s_rms = int((exp(1)/n)^2,[0, dt(1)]);
 for i=2:n_etapas
@@ -183,6 +169,7 @@ for i=2:n_etapas
 end
 I_sw_s_rms = simplify(sqrt(I_sw_s_rms/T));
 
+I_sw_s_on = -I(2)/n;
 %% perdas magneticas no trf
 Wb_trf = sum(abs(dVs).*dt);
 Wb_trf = simplify(Wb_trf);
@@ -211,6 +198,8 @@ M = [I_in_med,
     I_trf_rms,
     I_sw_p_rms,
     I_sw_s_rms,
+    I_sw_p_on,
+    I_sw_s_on,
     Wb_trf,
     Wb_indutor];
 
@@ -220,9 +209,8 @@ M_harmonic = [I_L_c_k,
 %% exportar funcao
 
 f_YY_menor60 = matlabFunction(M, 'vars', variaveis);
-save('f_YY_menor60.mat')
+save('f_YY_menor60.mat', "f_YY_menor60", '-mat')
 
 f_YY_harmonic_menor60 = matlabFunction(M_harmonic, 'vars', variaveis);
-save('f_YY_harmonic_menor60.mat')
-
+save('f_YY_harmonic_menor60.mat', "f_YY_harmonic_menor60", '-mat')
 
