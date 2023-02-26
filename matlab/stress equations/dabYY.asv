@@ -1,5 +1,5 @@
-function [f_IL_rms,f_Itrf_sec_rms,f_Iin_med,f_Iin_rms,f_Iout_med,f_Iout_rms,f_phi,f_Isw_p_rms,f_Isw_s_rms,f_Ip,f_Is,f_IL_rms_c_k,f_Itrf_sec_rms_c_k] = dabYY(phi_num)
-    syms phi fs Vi Vo Ldab Ld1 Ld2 Lm n Po dt k t real
+function [f_IL_rms,f_Itrf_sec_rms,f_Iin_med,f_Iin_rms,f_Iout_med,f_Iout_rms,f_phi,f_Isw_p_rms,f_Isw_s_rms,f_Ip,f_Is] = dabYY(phi_num)
+    syms phi fs Vi Vo Ldab Ld1 Ld2 Lm n Po dt t real
     
     pi_num = 3.141592653589793;
     
@@ -64,8 +64,8 @@ function [f_IL_rms,f_Itrf_sec_rms,f_Iin_med,f_Iin_rms,f_Iout_med,f_Iout_rms,f_ph
     IL_rms_c_k = ck_fourier(ts,derivadas(1,:),x0s(1,:));
     Itrf_sec_rms_c_k = ck_fourier(ts,derivadas(4,:),x0s(4,:));
     
-    f_IL_rms_c_k = matlabFunction(IL_rms_c_k, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo, k});
-    f_Itrf_sec_rms_c_k = matlabFunction(Itrf_sec_rms_c_k, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo, k});
+    f_c_k_x1 = matlabFunction(IL_rms_c_k, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo, k});
+    Itrf_sec_rms_c_k = matlabFunction(Itrf_sec_rms_c_k, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo, k});
     
     %% Corrente do half bridge do primario [MUDAR]
     derivadas_hb_p = derivadas(1:3,:);

@@ -17,38 +17,28 @@ pi_num = 3.141592653589793;
 
 
 
-
-
-
+syms phi fs Vi Vo Ldab Ld1 Ld2 Lm n Po dt k t real
+    
+pi_num = 3.141592653589793;
+    
 Tcl = 1/3*[2 -1 -1; 0 sqrt(2) -sqrt(2); 1 1 1]; %Transformada de clark
 Tclm = Tcl(1:2,:); %ignorar nivel zero
 Tclx = kron(eye(2), Tclm);
-
+    
 Ts = 1/fs;
 
 [sf_p, sf_s, sf, ang, sec_switch] = times_and_commutation(phi_num,pi);
 
+sf_line(1,:) = sf(1,:)-sf(2,:);
+sf_line(2,:) = sf(2,:)-sf(3,:);
+sf_line(3,:) = sf(3,:)-sf(1,:);
+
+sf = [sf_line; sf_s]; %a1b1c1 to a2b2c2
+
 scl = kron(eye(2), Tclm)*sf; %estados de comutacao, a1b1c1-a2b2c2 to alpha1beta1-alpha2beta2
 ts = simplify(ang)*Ts/(2*pi);
 tf = matlabFunction(ts, 'vars', {phi, fs}); %criar funcao para definir os tempos
-
-%%  Validação dos Pulsos de Comutação
-figure(1)
-subplot(2,1,1)
-stairs(tf(phi_num, fs_num) * 1e6, ([sf sf(:,1)]'+[0 -2 -4 -6 -8 -10]), 'LineWidth', 2)
-xlim([0 1/fs_num]*1e6)
-ylabel('s_{abc,ABC}')
-xlabel('t [\mus]')
-legend('Primary', 'Secondary')
-grid on
-subplot(2,1,2)
-stairs(tf(phi_num, fs_num) * 1e6, ([scl scl(:,1)]'+[0 -2 -4 -6]), 'LineWidth', 2)
-xlim([0 1/fs_num]*1e6)
-ylabel('s_{\alpha,\beta}')
-xlabel('t [\mus]')
-legend('Primary', 'Secondary')
-grid on
-
+        
 %% Resolvendo circuito monofasico equivalente [MUDAR]
 L = [Ldab+Ld1; Ld2/n^2];
 Udc = [Vi; Vo];
@@ -67,9 +57,9 @@ M = equationsToMatrix(dxs, [x; s]);
 A = M(:,1:2);
 B = M(:,3:4); %derivadas de iLdab e iLd
 
-A = kron(A, eye(2));
-B = kron(B, eye(2));
-
+    A = kron(A, eye(2));
+    B = kron(B, eye(2));
+    
 %% Obter valores de regime permanente
 g = simplify(expm(A*dt));
 h = B*dt;
@@ -93,148 +83,17 @@ IL_rms = x_rms(1);
 Itrf_sec_rms = x_rms(4);
 f_IL_rms = matlabFunction(IL_rms, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo});
 f_Itrf_sec_rms = matlabFunction(Itrf_sec_rms, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo});
-%% Fourier dos estados
-
-
-syms t w ii
-
-
-%%
-variaveis =         [phi, fs, Vi, Vo, Ldab, Ld1, Ld2, Lm, n, Po];
-ponto_de_operacao = [phi_num, fs_num, Vi_num, Vo_num, Ldab_num, Ld1_num, Ld2_num, Lm_num(1), n_num, Po_num];
-
-figure
-hold on
-for i=1:length(ts)-1
-    equacao = subs(derivadas(1,i)*(t-ts(i)),variaveis, ponto_de_operacao);
-    t_i = subs(ts(i),variaveis, ponto_de_operacao);
-    t_f = subs(ts(i+1),variaveis, ponto_de_operacao);
-    fplot(equacao,[double(t_i), double(t_f)],'Linewidth',2)
-end
-hold off
-xlim([0 1/100e3])
-grid on
-grid minor
-
-
-%%
-
-derivadas_hb_p = derivadas(1,:);
-pts_inics_hb_p = x0s(1,:);
-
-
-figure
-hold on
-for i=1:length(ts)-1
-    equacao = subs((derivadas_hb_p(i)*(t-ts(i)) + pts_inics_hb_p(i)),variaveis, ponto_de_operacao);
-    t_i = subs(ts(i),variaveis, ponto_de_operacao);
-    t_f = subs(ts(i+1),variaveis, ponto_de_operacao);
-    fplot(equacao,[double(t_i), double(t_f)],'Linewidth',2)
-end
-hold off
-xlim([0 1/100e3])
-grid on
-grid minor
-
-
-
-
-
-%%
-
-c_k_x1 = ck_fourier(ts,derivadas(1,:),x0s(1,:));
-c_k_x2 = ck_fourier(ts,derivadas(4,:),x0s(4,:));
-
-f_c_k_x1 = matlabFunction(c_k_x1, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo, k});
-f_c_k_x2 = matlabFunction(c_k_x2, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo, k});
-
-spec1 = zeros(1,20);
-spec2 = zeros(1,20);
-for i=1:20
-    spec1(i) = f_c_k_x1(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num(1), phi_num, fs_num, Vi_num, Vo_num, i);
-    spec2(i) = f_c_k_x2(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num(1), phi_num, fs_num, Vi_num, Vo_num, i);
-end
-
-figure
-bar(1:20,[spec1;spec2])
-
 
 %% Fourier dos estados
-close all
-syms t k real
-% % % % % % % % % % % 
-% % % % % % % % % % % I_L_a_k = 0;
-% % % % % % % % % % % for i=1:length(ts)-1
-% % % % % % % % % % % %     I_L_a_k = I_L_a_k + int(derivadas(1,i)*(t-ts(i))*cos(2*pi*fs*k*t), [ts(i) ts(i+1)]);
-% % % % % % % % % % %     fourier(derivadas(1,i)*(t-ts(i)), t, k)
-% % % % % % % % % % % end
-% % % % % % % % % % % I_L_a_k = simplify(I_L_a_k*2/Ts);
-% % % % % % % % % % % 
-% % % % % % % % % % % I_L_b_k = 0;
-% % % % % % % % % % % for i=1:length(ts)-1
-% % % % % % % % % % %     I_L_b_k = I_L_b_k + int(derivadas(1,i)*(t-ts(i))*sin(2*pi*fs*k*t), [ts(i) ts(i+1)]);
-% % % % % % % % % % % end
-% % % % % % % % % % % I_L_b_k = simplify(I_L_b_k*2/Ts);
-% % % % % % % % % % % 
-% % % % % % % % % % % I_L_c_k = abs(I_L_a_k-1i*I_L_b_k); %cos e sin to exponential
-% % % % % % % % % % % I_L_c_k = simplify(I_L_c_k);
-% % % % % % % % % % % I_L_c_k_rms = I_L_c_k/sqrt(2); %peak to rms
-% % % % % % % % % % % 
-% % % % % % % % % % % f_I_L_c_k = matlabFunction(I_L_c_k, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo, k});
-% % % % % % % % % % % 
-% % % % % % % % % % % 
-% % % % % % % % % % % for i=1:20
-% % % % % % % % % % %     spec(i) = f_I_L_c_k(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num(1), phi_num, fs_num, Vi_num, Vo_num, i);
-% % % % % % % % % % % end
-% % % % % % % % % % % 
-% % % % % % % % % % % 
-% % % % % % % % % % % 
-% % % % % % % % % % % 
-% % % % % % % % % % % figure
-% % % % % % % % % % % bar(1:20,spec)
-% % % % % % % % % % % 
-% % % % % % % % % % % 
-% % % % % % % % % % % jjjjjjjjjjjjjjjjjjjjj
-
-
-
-%%
-
-
-
-
-syms t k real
-
-% % % % % % % % 
-% % % % % % % % x1 = simplify(derivadas(1,:)*t + x0s(1,1:end-1));
-% % % % % % % % I_L_a_k = 0;
-% % % % % % % % for i=1:length(ts)-1
-% % % % % % % %     I_L_a_k = I_L_a_k + int(x1(i)*cos(2*pi*k*t/Ts), [0 ts(i+1)]);
-% % % % % % % % end
-% % % % % % % % I_L_a_k = simplify(I_L_a_k*2/Ts);
-% % % % % % % % 
-% % % % % % % % I_L_b_k = 0;
-% % % % % % % % for i=1:length(ts)-1
-% % % % % % % %     I_L_b_k = I_L_b_k + int(x1(i)*sin(2*pi*k*t/Ts), [0 ts(i+1)]);
-% % % % % % % % end
-% % % % % % % % I_L_b_k = simplify(I_L_b_k*2/Ts);
-% % % % % % % % I_L_c_k = abs(I_L_a_k-1i*I_L_b_k); %cos e sin to exponential
-% % % % % % % % I_L_c_k = simplify(I_L_c_k);
-% % % % % % % % I_L_c_k_rms = I_L_c_k/sqrt(2); %peak to rms
-% % % % % % % % 
-% % % % % % % % f_I_L_c_k = matlabFunction(I_L_c_k, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo, k});
-% % % % % % % % 
-% % % % % % % % 
-% % % % % % % % for i=1:20
-% % % % % % % %     spec(i) = f_I_L_c_k(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num(1), phi_num, fs_num, Vi_num, Vo_num, i);
-% % % % % % % % end
-% % % % % % % % 
-% % % % % % % % figure
-% % % % % % % % bar(1:20,spec)
+% IL_rms_c_k = ck_fourier(ts,derivadas(1,:),x0s(1,:));
+% Itrf_sec_rms_c_k = ck_fourier(ts,derivadas(4,:),x0s(4,:));
+% 
+% f_IL_rms_c_k = matlabFunction(IL_rms_c_k, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo, k});
+% f_Itrf_sec_rms_c_k = matlabFunction(Itrf_sec_rms_c_k, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo, k});
 
 %% Corrente do half bridge do primario [MUDAR]
-derivadas_hb_p = derivadas(1:3,:);
-pts_inics_hb_p = x0s(1:3,:);
+derivadas_hb_p = derivadas([1 2 3],:) - derivadas([3 1 2],:);
+pts_inics_hb_p = x0s([1 2 3],:) - x0s([3 1 2],:);
 
 %% Corrente do half bridge do primario [MUDAR]
 derivadas_hb_s = derivadas(4:6,:);
@@ -308,3 +167,21 @@ plot(tf(phi_num,fs_num), iSw(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num(1), phi_n
 grid on
 grid minor
 xlim([0 1/fs_num])
+
+
+
+
+
+f_IL_rms(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num(1), phi_num, fs_num, Vi_num, Vo_num)
+f_Itrf_sec_rms(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num(1), phi_num, fs_num, Vi_num, Vo_num)
+% f_IL_rms_c_k(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num(1), phi_num, fs_num, Vi_num, Vo_num, 1)
+% f_Itrf_sec_rms_c_k(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num(1), phi_num, fs_num, Vi_num, Vo_num, 1)
+f_Iin_med(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num(1), phi_num, fs_num, Vi_num, Vo_num)
+f_Iin_rms(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num(1), phi_num, fs_num, Vi_num, Vo_num)
+f_Iout_med(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num(1), phi_num, fs_num, Vi_num, Vo_num)
+f_Iout_rms(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num(1), phi_num, fs_num, Vi_num, Vo_num)
+f_phi(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num(1), Po_num, fs_num, Vi_num, Vo_num)*57.295779513082323
+f_Isw_p_rms(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num(1), phi_num, fs_num, Vi_num, Vo_num)
+f_Isw_s_rms(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num(1), phi_num, fs_num, Vi_num, Vo_num)
+f_Ip(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num(1), phi_num, fs_num, Vi_num, Vo_num)
+f_Is(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num(1), phi_num, fs_num, Vi_num, Vo_num)

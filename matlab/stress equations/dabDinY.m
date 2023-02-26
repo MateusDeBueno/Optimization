@@ -1,4 +1,4 @@
-function [f_IL_rms,f_Itrf_sec_rms,f_Iin_med,f_Iin_rms,f_Iout_med,f_Iout_rms,f_phi,f_Isw_p_rms,f_Isw_s_rms,f_Ip,f_Is,f_IL_rms_c_k,f_Itrf_sec_rms_c_k] = dabYY(phi_num)
+function [f_IL_rms,f_Itrf_sec_rms,f_Iin_med,f_Iin_rms,f_Iout_med,f_Iout_rms,f_phi,f_Isw_p_rms,f_Isw_s_rms,f_Ip,f_Is,f_IL_rms_c_k,f_Itrf_sec_rms_c_k] = dabDinY(phi_num)
     syms phi fs Vi Vo Ldab Ld1 Ld2 Lm n Po dt k t real
     
     pi_num = 3.141592653589793;
@@ -11,6 +11,12 @@ function [f_IL_rms,f_Itrf_sec_rms,f_Iin_med,f_Iin_rms,f_Iout_med,f_Iout_rms,f_ph
     
     [sf_p, sf_s, sf, ang, sec_switch] = times_and_commutation(phi_num,pi);
     
+    sf_line(1,:) = sf(1,:)-sf(2,:);
+    sf_line(2,:) = sf(2,:)-sf(3,:);
+    sf_line(3,:) = sf(3,:)-sf(1,:);
+    
+    sf = [sf_line; sf_s]; %a1b1c1 to a2b2c2
+
     scl = kron(eye(2), Tclm)*sf; %estados de comutacao, a1b1c1-a2b2c2 to alpha1beta1-alpha2beta2
     ts = simplify(ang)*Ts/(2*pi);
     tf = matlabFunction(ts, 'vars', {phi, fs}); %criar funcao para definir os tempos
@@ -68,8 +74,8 @@ function [f_IL_rms,f_Itrf_sec_rms,f_Iin_med,f_Iin_rms,f_Iout_med,f_Iout_rms,f_ph
     f_Itrf_sec_rms_c_k = matlabFunction(Itrf_sec_rms_c_k, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo, k});
     
     %% Corrente do half bridge do primario [MUDAR]
-    derivadas_hb_p = derivadas(1:3,:);
-    pts_inics_hb_p = x0s(1:3,:);
+    derivadas_hb_p = derivadas([1 2 3],:) - derivadas([3 1 2],:);
+    pts_inics_hb_p = x0s([1 2 3],:) - x0s([3 1 2],:);
     
     %% Corrente do half bridge do primario [MUDAR]
     derivadas_hb_s = derivadas(4:6,:);
