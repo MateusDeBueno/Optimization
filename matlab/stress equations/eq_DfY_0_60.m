@@ -8,7 +8,7 @@ fs_num = 100e3;
 Ldab_num = 61e-6;
 Ld1_num = 2e-6;
 Ld2_num = 2e-6;
-Lm_num = [100e-6, 1e-3, 1000e-3];
+Lm_num = [10000e-6, 1e-3, 1000e-3];
 phi_num = deg2rad(-90);  %[MUDAR]
 n_num = 5/9;
 Vo_num = d_num*Vi_num;
@@ -24,7 +24,7 @@ pi_num = 3.141592653589793;
 Tcl = 1/3*[2 -1 -1; 0 sqrt(2) -sqrt(2); 1 1 1]; %Transformada de clark
 Tclm = Tcl(1:2,:); %ignorar nivel zero
 Tclx = kron(eye(2), Tclm);
-    
+
 Ts = 1/fs;
 
 [sf_p, sf_s, sf, ang, sec_switch] = times_and_commutation(phi_num,pi);
@@ -40,6 +40,7 @@ ts = simplify(ang)*Ts/(2*pi);
 tf = matlabFunction(ts, 'vars', {phi, fs}); %criar funcao para definir os tempos
         
 %% Resolvendo circuito monofasico equivalente [MUDAR]
+% n1 = n/sqrt(3);
 L = [Ldab+Ld1/3; Ld2/n^2];
 Udc = [Vi; Vo];
 u = Udc.*[1; 1/n];
@@ -49,8 +50,8 @@ dx = sym('dx_', [2,1], 'real'); %dx1 -> iLdab ou iLl1 (em serie) dx2 -> iLl2
 eq = sym('eq', [2,1], 'real');
 s = sym('s', [2,1], 'real');
 
-eq(1) = u(1)*s(1) == L(1)*dx(1) + Lm/sqrt(3)*(dx(1)-dx(2)*n);
-eq(2) = u(2)*s(2) == Lm/sqrt(3)*(dx(1)-dx(2)*n) - L(2)*dx(2)*n;
+eq(1) = u(1)*s(1) == L(1)*dx(1) + Lm*(dx(1)-dx(2)*n);
+eq(2) = u(2)*s(2) == Lm*(dx(1)-dx(2)*n) - L(2)*dx(2)*n;
 
 dxs = simplify(struct2array(solve(eq, dx))).';
 M = equationsToMatrix(dxs, [x; s]);

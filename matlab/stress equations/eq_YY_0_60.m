@@ -142,21 +142,21 @@ grid minor
 
 %%
 
-c_k_x1 = ck_fourier(ts,derivadas(1,:),x0s(1,:));
-c_k_x2 = ck_fourier(ts,derivadas(4,:),x0s(4,:));
-
-f_c_k_x1 = matlabFunction(c_k_x1, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo, k});
-f_c_k_x2 = matlabFunction(c_k_x2, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo, k});
-
-spec1 = zeros(1,20);
-spec2 = zeros(1,20);
-for i=1:20
-    spec1(i) = f_c_k_x1(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num(1), phi_num, fs_num, Vi_num, Vo_num, i);
-    spec2(i) = f_c_k_x2(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num(1), phi_num, fs_num, Vi_num, Vo_num, i);
-end
-
-figure
-bar(1:20,[spec1;spec2])
+% c_k_x1 = ck_fourier(ts,derivadas(1,:),x0s(1,:));
+% c_k_x2 = ck_fourier(ts,derivadas(4,:),x0s(4,:));
+% 
+% f_c_k_x1 = matlabFunction(c_k_x1, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo, k});
+% f_c_k_x2 = matlabFunction(c_k_x2, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo, k});
+% 
+% spec1 = zeros(1,20);
+% spec2 = zeros(1,20);
+% for i=1:20
+%     spec1(i) = f_c_k_x1(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num(1), phi_num, fs_num, Vi_num, Vo_num, i);
+%     spec2(i) = f_c_k_x2(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num(1), phi_num, fs_num, Vi_num, Vo_num, i);
+% end
+% 
+% figure
+% bar(1:20,[spec1;spec2])
 
 
 %% Fourier dos estados

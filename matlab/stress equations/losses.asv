@@ -1,0 +1,56 @@
+clear; close all; clc;
+
+addpath('utils')
+addpath('utils_transf')
+
+load('trafo.mat')
+
+Vi_num = 400;
+d_num = 1;
+fs_num = 100e3;
+Ldab_num = 61e-6;
+Ld1_num = 3e-6;
+Ld2_num = 3e-6;
+Lm_num = 700e-6;
+phi_num = deg2rad(67);  %[MUDAR]
+n_num = 5/9;
+Vo_num = d_num*Vi_num;
+k_num = 1;
+
+
+[out] = fYY(trafo,Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num, phi_num, fs_num, Vi_num, Vo_num);
+
+IL_rms = out(1);
+Itrfsec_rms = out(2);
+Iin_med = out(3);
+Iin_rms = out(4);
+Iout_med = out(5);
+Iout_rms = out(6);
+Isw_p_rms = out(7);
+Isw_s_rms = out(8);
+Ip = out(9)
+Is  = out(10);
+
+
+
+
+
+
+
+% wire data
+awg_data = readtable('awg_table.txt');
+awg_wires = awg_data.Var3; %all wires in mm %wires between awg1 and awg32
+awg_chosen = 38;
+strand = 180;
+d_l = awg_wires(awg_chosen)*1e-3; % [m]
+
+NL = 14;
+Np = 9;
+Ns = 5;
+Sp = 2;
+Ss = 3;
+
+
+
+%%
+% [out] = fYY_harm(trafo,Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num, phi_num, fs_num, Vi_num, Vo_num, k_num);
