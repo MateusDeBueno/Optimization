@@ -9,7 +9,7 @@ Ldab_num = 61e-6;
 Ld1_num = 2e-6;
 Ld2_num = 2e-6;
 Lm_num = [700e-6, 1e-3, 1000e-3];
-phi_num = deg2rad(50);  %[MUDAR]
+phi_num = deg2rad(-90);  %[MUDAR]
 n_num = 5/9;
 Vo_num = d_num*Vi_num;
 Po_num = 3000;
@@ -91,18 +91,15 @@ f_Itrf_sec_rms = matlabFunction(Itrf_sec_rms, 'Vars', {Ldab, n, Ld1, Ld2, Lm, ph
 
 %%
 
-out = [IL_rms;Itrf_sec_rms]
+out = [IL_rms;Itrf_sec_rms];
 output = matlabFunction(out, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo});
 
 output(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num(1), phi_num, fs_num, Vi_num, Vo_num)
 
 
 
-t{1,:} = {f_IL_rms; f_Itrf_sec_rms]
+% t{1,:} = {f_IL_rms; f_Itrf_sec_rms]
 
-output = {t;t}
-
-cell2struct(output,FIELDS,DIM)
 
 % for phi_num=-150:60:150
 %     output{count,:} = dabDinY(deg2rad(phi_num));
@@ -121,32 +118,45 @@ cell2struct(output,FIELDS,DIM)
 % f_IL_rms_c_k = matlabFunction(IL_rms_c_k, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo, k});
 % f_Itrf_sec_rms_c_k = matlabFunction(Itrf_sec_rms_c_k, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo, k});
 
-% %% Corrente do half bridge do primario [MUDAR]
-% derivadas_hb_p = derivadas([1 2 3],:) - derivadas([3 1 2],:);
-% pts_inics_hb_p = x0s([1 2 3],:) - x0s([3 1 2],:);
-% 
-% %% Corrente do half bridge do primario [MUDAR]
-% derivadas_hb_s = derivadas(4:6,:);
-% pts_inics_hb_s = x0s(4:6,:);
-% 
-% %% Corrente de entrada
-% target = [1;0;0];
-% [etapas] = pega_etapa(sf_p,target);
-% [x_rms,x_mean] = rms_and_mean(derivadas_hb_p(1,:),pts_inics_hb_p(1,:),ts,etapas,etapas);
-% f_Iin_med = matlabFunction(x_mean, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo});
-% f_Iin_rms = matlabFunction(x_rms, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo});
-% 
-% %% Corrente de saida
-% target = [1;0;0];
-% [etapas] = pega_etapa(sf_s,target);
-% [x_rms,x_mean] = rms_and_mean(derivadas_hb_s(1,:),pts_inics_hb_s(1,:),ts,etapas,etapas);
-% f_Iout_med = matlabFunction(x_mean, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo});
-% f_Iout_rms = matlabFunction(x_rms, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo});
-% 
-% power_equation = x_mean==Po/Vo;
-% phi_solutions = solve(power_equation,phi);
+%% Corrente do half bridge do primario [MUDAR]
+derivadas_hb_p = derivadas([1 2 3],:) - derivadas([3 1 2],:);
+pts_inics_hb_p = x0s([1 2 3],:) - x0s([3 1 2],:);
+
+%% Corrente do half bridge do primario [MUDAR]
+derivadas_hb_s = derivadas(4:6,:);
+pts_inics_hb_s = x0s(4:6,:);
+
+%% Corrente de entrada
+target = [1;0;0];
+[etapas] = pega_etapa(sf_p,target);
+[x_rms,x_mean] = rms_and_mean(derivadas_hb_p(1,:),pts_inics_hb_p(1,:),ts,etapas,etapas);
+f_Iin_med = matlabFunction(x_mean, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo});
+f_Iin_rms = matlabFunction(x_rms, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo});
+
+%% Corrente de saida
+target = [1;0;0];
+[etapas] = pega_etapa(sf_s,target);
+[x_rms,x_mean] = rms_and_mean(derivadas_hb_s(1,:),pts_inics_hb_s(1,:),ts,etapas,etapas);
+f_Iout_med = matlabFunction(x_mean, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo});
+f_Iout_rms = matlabFunction(x_rms, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo});
+
+power_equation = x_mean==Po/Vo;
+[phi_sol,~,phi_cond] = solve(power_equation,phi,'ReturnConditions',true);
+
+if (length(phi_sol)==1)
+    [phi_sol;phi_cond;phi_sol;phi_cond]
+end
+
+phi_sol
+phi_cond
+
+
+size([phi_sol;phi_cond])
+size(phi_cond)
+size(phi_sol)
+gdsfhgrdsdrhd
 % f_phi = matlabFunction(phi_solutions, 'Vars', {Ldab, n, Ld1, Ld2, Lm, Po, fs, Vi, Vo});
-% 
+
 % %% Corrente nas chaves
 % [x_rms,x_mean] = rms_and_mean(derivadas_hb_p(1,:),pts_inics_hb_p(1,:),ts,(1:6),(1:12));
 % Isw_p_rms = x_rms;

@@ -6,15 +6,17 @@ Vi_num = 400;
 d_num = 1;
 fs_num = 100e3;
 Ldab_num = 61e-6;
-Ld1_num = 2e-6;
-Ld2_num = 2e-6;
-Lm_num = [700e-6, 1e-3, 1000e-3];
+Ld1_num = 1e-6;
+Ld2_num = 0.25e-6;
+Lm_num = [800e-6, 1e-3, 1000e-3];
 phi_num = deg2rad(50);  %[MUDAR]
 n_num = 5/9;
 Vo_num = d_num*Vi_num;
 Po_num = 3000;
 pi_num = 3.141592653589793;
 
+variaveis =         [phi, fs, Vi, Vo, Ldab, Ld1, Ld2, Lm, n];
+ponto_de_operacao = [phi_num, fs_num, Vi_num, Vo_num, Ldab_num, Ld1_num, Ld2_num, Lm_num, n_num];
 
 
 
@@ -60,7 +62,7 @@ eq = sym('eq', [2,1], 'real');
 s = sym('s', [2,1], 'real');
 
 eq(1) = u(1)*s(1) == L(1)*dx(1) + Lm*(dx(1)-dx(2)*n);
-eq(2) = u(2)*s(2) == Lm*(dx(1)-dx(2)*n) - L(2)*dx(2)*n;
+eq(2) = u(2)*s(2) == Lm*(dx(1)-dx(2)*n ) - L(2)*dx(2)*n;
 
 dxs = simplify(struct2array(solve(eq, dx))).';
 M = equationsToMatrix(dxs, [x; s]);
@@ -94,7 +96,6 @@ Itrf_sec_rms = x_rms(4);
 f_IL_rms = matlabFunction(IL_rms, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo});
 f_Itrf_sec_rms = matlabFunction(Itrf_sec_rms, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo});
 %% Fourier dos estados
-
 
 syms t w ii
 
@@ -137,8 +138,50 @@ grid on
 grid minor
 
 
+%% perdas no nucleo do indutor
 
 
+Wb_indutor = max(x0s(1,:))*Ldab*2;
+f_Wb_indutor(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num, phi_num, fs_num, Vi_num, Vo_num)
+
+
+Wb_trf = max(x0s(1,:))*Ldab*2;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+simplify(sum(Vo*sf_s(1,:).*ts(1:end-1)))
+
+f_Wb_indutor = matlabFunction(Wb_indutor, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo});
+
+Wb_inductor = simplify(sum(ts(1:end-1).*derivadas(1,:)));
+VLd2 = ts(1:end-1).*derivadas(4,:)
+
+Vtrf = VLd2
 
 %%
 

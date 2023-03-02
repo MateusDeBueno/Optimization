@@ -25,8 +25,7 @@ syms I0 phi real
 % ponto_de_operacao = [400, 67e-6, 5/9, 1, 100e3, 50*pi/180, 1,  1.394, 2.248, 2.448, 14,  0.01, 1.585, 2.756, .402,    5,     0.01];
 
 variaveis =         [Vp,    L,      n,      d,  fs,     phi,        k];
-ponto_de_operacao = [400,   67e-6,  5/9,    1,  100e3,  70*pi/180,  2];
-
+c
 n_etapas=6;
 
 T=1/fs;
@@ -113,28 +112,28 @@ end
 limits2 = limits+simplify(sum(dt));
 part2 = -part;
 part2 = subs(part2,t,(t-simplify(sum(dt))));
-
-I_L_a_k = 0;
-for i=1:n_etapas
-    I_L_a_k = I_L_a_k + int(part(i)*cos(2*pi*k*t/T), limits(i,:));
-end
-for i=1:n_etapas
-    I_L_a_k = I_L_a_k + int(part2(i)*cos(2*pi*k*t/T), limits2(i,:));
-end
-I_L_a_k = simplify(I_L_a_k*2/T);
-
-I_L_b_k = 0;
-for i=1:n_etapas
-    I_L_b_k = I_L_b_k + int(part(i)*sin(2*pi*k*t/T), limits(i,:));
-end
-for i=1:n_etapas
-    I_L_b_k = I_L_b_k + int(part2(i)*sin(2*pi*k*t/T), limits2(i,:));
-end
-I_L_b_k = simplify(I_L_b_k*2/T);
-
-I_L_c_k = abs(I_L_a_k-1i*I_L_b_k); %cos e sin to exponential
-I_L_c_k = simplify(I_L_c_k);
-I_L_c_k_rms = I_L_c_k/sqrt(2); %peak to rms
+% 
+% I_L_a_k = 0;
+% for i=1:n_etapas
+%     I_L_a_k = I_L_a_k + int(part(i)*cos(2*pi*k*t/T), limits(i,:));
+% end
+% for i=1:n_etapas
+%     I_L_a_k = I_L_a_k + int(part2(i)*cos(2*pi*k*t/T), limits2(i,:));
+% end
+% I_L_a_k = simplify(I_L_a_k*2/T);
+% 
+% I_L_b_k = 0;
+% for i=1:n_etapas
+%     I_L_b_k = I_L_b_k + int(part(i)*sin(2*pi*k*t/T), limits(i,:));
+% end
+% for i=1:n_etapas
+%     I_L_b_k = I_L_b_k + int(part2(i)*sin(2*pi*k*t/T), limits2(i,:));
+% end
+% I_L_b_k = simplify(I_L_b_k*2/T);
+% 
+% I_L_c_k = abs(I_L_a_k-1i*I_L_b_k); %cos e sin to exponential
+% I_L_c_k = simplify(I_L_c_k);
+% I_L_c_k_rms = I_L_c_k/sqrt(2); %peak to rms
 
 
 % IL = piecewise((limits(1,1) <= t & t < limits(1,2)), part(1) ...

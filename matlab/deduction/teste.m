@@ -1,6 +1,6 @@
 clear; close all; clc;
 
-
+awg_data = readtable('awg_table.txt');
 
 Vp = 400;
 L = 61e-6;

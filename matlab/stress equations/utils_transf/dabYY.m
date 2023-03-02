@@ -78,7 +78,7 @@ function [output,output_harmonic,output_phi] = dabYY(phi_num)
     [Iout_rms,Iout_med] = rms_and_mean(derivadas_hb_s(1,:),pts_inics_hb_s(1,:),ts,etapas,etapas);
     
     power_equation = Iout_med==Po/Vo;
-    phi_solutions = solve(power_equation,phi);
+    [phi_sol,~,phi_cond] = solve(power_equation,phi,'ReturnConditions',true);
 
     %% Corrente nas chaves
     [Isw_p_rms,~] = rms_and_mean(derivadas_hb_p(1,:),pts_inics_hb_p(1,:),ts,(1:6),(1:12));
@@ -95,5 +95,5 @@ function [output,output_harmonic,output_phi] = dabYY(phi_num)
     %% output
     output = [IL_rms,Itrfsec_rms,Iin_med,Iin_rms,Iout_med,Iout_rms,Isw_p_rms,Isw_s_rms,Ip,Is];
     output_harmonic = [IL_rms_c_k,Itrf_sec_rms_c_k];
-    output_phi = phi_solutions;
+    output_phi = [phi_sol;phi_cond];
 end

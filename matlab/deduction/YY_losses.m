@@ -45,7 +45,39 @@ function [P_med, eficiency, Ptotal] = YY_losses(Vp,L,n,d,fs,phi)
     Wb_trf = M(11);
     Wb_indutor = M(12);
     P_med = I_in_med*Vp;
-    
+
+    t_db = 220e-9;
+
+    if (I_sw_p_on>0)
+        phi = phi - t_db*fs*2*pi;
+        if (phi<pi/3 && phi>0)
+            M = f_YY_menor60(Vp,L,n,d,fs,phi,1);
+        else
+            M = f_YY_maior60(Vp,L,n,d,fs,phi,1);
+        end    
+    end
+    if (I_sw_s_on>0)
+        phi = phi + t_db*fs/(2*pi);
+        if (phi<pi/3 && phi>0)
+            M = f_YY_menor60(Vp,L,n,d,fs,phi,1);
+        else
+            M = f_YY_maior60(Vp,L,n,d,fs,phi,1);
+        end
+    end
+
+    I_in_med = M(1);
+    I_in_rms = M(2);
+    I_out_med = M(3);
+    I_out_rms = M(4);
+    I_L_rms = M(5);
+    I_trf_rms = M(6);
+    I_sw_p_rms = M(7);
+    I_sw_s_rms = M(8);
+    I_sw_p_on = M(9);
+    I_sw_s_on = M(10);
+    Wb_trf = M(11);
+    Wb_indutor = M(12);
+    P_med = I_in_med*Vp;     
     %% Conduction loss
     
     Pcond = f_cond_loss(I_sw_p_rms,I_sw_s_rms);
@@ -123,11 +155,14 @@ function [P_med, eficiency, Ptotal] = YY_losses(Vp,L,n,d,fs,phi)
     Pv_trf = ki_trf*2/T*abs(deltaB_trf)^(b_trf-a_trf)*integrais_trf;
     
     Pc_trf = Ve_trf*Pv_trf;
+    %% Perda do capacitor serie
     
+    RL =4.3e-3;
+    Pcap = 3*I_L_rms^2*RL;
     
     %% calculo eficiencia
     
-    Ptotal = Pcond + Pcu + p_switch + s_switch + Pc_L + Pc_trf;
+    Ptotal = Pcond + Pcu + p_switch + s_switch + Pc_L + Pc_trf + Pcap;
     
     eficiency = (P_med - Ptotal)/P_med;
 end

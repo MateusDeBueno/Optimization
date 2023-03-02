@@ -11,7 +11,7 @@ ii = 0;
 for phi_num=-150:60:150
     phi_num
     ii = ii + 1;
-    [str(ii,:),str_h(ii,:),calc_phi(ii,:)] = dabDinY(deg2rad(phi_num));
+    [str(ii,:),str_h(ii,:),fphi(ii,:)] = dabDinY(deg2rad(phi_num));
 end
 
 trafo.DinY.str.f1 = matlabFunction(str(1,:), 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo});
@@ -28,12 +28,40 @@ trafo.DinY.str_h.f4 = matlabFunction(str_h(4,:), 'Vars', {Ldab, n, Ld1, Ld2, Lm,
 trafo.DinY.str_h.f5 = matlabFunction(str_h(5,:), 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo, k});
 trafo.DinY.str_h.f6 = matlabFunction(str_h(6,:), 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo, k});
 
+trafo.DinY.fphi.f1 = matlabFunction(fphi(1,:), 'Vars', {Ldab, n, Ld1, Ld2, Lm, Po, fs, Vi, Vo});
+trafo.DinY.fphi.f2 = matlabFunction(fphi(2,:), 'Vars', {Ldab, n, Ld1, Ld2, Lm, Po, fs, Vi, Vo});
+trafo.DinY.fphi.f3 = matlabFunction(fphi(3,:), 'Vars', {Ldab, n, Ld1, Ld2, Lm, Po, fs, Vi, Vo});
+trafo.DinY.fphi.f4 = matlabFunction(fphi(4,:), 'Vars', {Ldab, n, Ld1, Ld2, Lm, Po, fs, Vi, Vo});
+trafo.DinY.fphi.f5 = matlabFunction(fphi(5,:), 'Vars', {Ldab, n, Ld1, Ld2, Lm, Po, fs, Vi, Vo});
+trafo.DinY.fphi.f6 = matlabFunction(fphi(6,:), 'Vars', {Ldab, n, Ld1, Ld2, Lm, Po, fs, Vi, Vo});
+
+
+
+
+
+Po_num = -3700;
+
+
+opc1 = trafo.DinY.fphi.f1(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num, Po_num, fs_num, Vi_num, Vo_num)*180/3.1415
+opc2 = trafo.DinY.fphi.f2(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num, Po_num, fs_num, Vi_num, Vo_num)*180/3.1415
+opc3 = trafo.DinY.fphi.f3(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num, Po_num, fs_num, Vi_num, Vo_num)*180/3.1415
+opc4 = trafo.DinY.fphi.f4(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num, Po_num, fs_num, Vi_num, Vo_num)*180/3.1415
+opc5 = trafo.DinY.fphi.f5(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num, Po_num, fs_num, Vi_num, Vo_num)*180/3.1415
+opc6 = trafo.DinY.fphi.f6(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num, Po_num, fs_num, Vi_num, Vo_num)*180/3.1415
+
+
+
+
+
+
+
+
 %% SALVAR EQUACOES DO DinY
 ii = 0;
 for phi_num=-150:60:150
     phi_num
     ii = ii + 1;
-    [str(ii,:),str_h(ii,:),calc_phi(ii,:)] = dabYY(deg2rad(phi_num));
+    [str(ii,:),str_h(ii,:),fphi(ii,:)] = dabYY(deg2rad(phi_num));
 end
 
 trafo.YY.str.f1 = matlabFunction(str(1,:), 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo});
@@ -55,7 +83,7 @@ ii = 0;
 for phi_num=-150:60:150
     phi_num
     ii = ii + 1;
-    [str(ii,:),str_h(ii,:),calc_phi(ii,:)] = dabYD(deg2rad(phi_num));
+    [str(ii,:),str_h(ii,:),fphi(ii,:)] = dabYD(deg2rad(phi_num));
 end
 
 trafo.YD.str.f1 = matlabFunction(str(1,:), 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo});
@@ -77,7 +105,7 @@ ii = 0;
 for phi_num=-150:60:150
     phi_num
     ii = ii + 1;
-    [str(ii,:),str_h(ii,:),calc_phi(ii,:)] = dabDinD(deg2rad(phi_num));
+    [str(ii,:),str_h(ii,:),fphi(ii,:)] = dabDinD(deg2rad(phi_num));
 end
 
 trafo.DinD.str.f1 = matlabFunction(str(1,:), 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo});
@@ -106,16 +134,17 @@ Vi_num = 400;
 d_num = 1;
 fs_num = 100e3;
 Ldab_num = 61e-6;
-Ld1_num = 2e-6;
-Ld2_num = 2e-6;
+Ld1_num = 10e-6;
+Ld2_num = 5e-6;
 Lm_num = 700e-6;
-phi_num = deg2rad(95);  %[MUDAR]
+phi_num = deg2rad(-150);  %[MUDAR]
 n_num = 5/9;
 Vo_num = d_num*Vi_num;
 k_num = 1;
+Po_num = -4700;
 
 
-
+trafo.DinY.fphi.f1(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num, Po_num, fs_num, Vi_num, Vo_num)*180/3.14
 
 [out] = fDinY(trafo,Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num, phi_num, fs_num, Vi_num, Vo_num)
 [out] = fDinY_harm(trafo,Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num, phi_num, fs_num, Vi_num, Vo_num, k_num)
