@@ -1,0 +1,17 @@
+function [out] = fDinY_harm(DinY,Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num, phi_num, fs_num, Vi_num, Vo_num, k_num)
+    
+    if (-pi <= phi_num && phi_num <= -2*pi/3)
+        out = DinY.harm2.f1(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num, phi_num, fs_num, Vi_num, Vo_num, k_num);
+    elseif (-2*pi/3 < phi_num && phi_num <= -pi/3)
+        out = DinY.harm2.f2(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num, phi_num, fs_num, Vi_num, Vo_num, k_num);
+    elseif (-pi/3 < phi_num && phi_num <= 0)
+        out = DinY.harm2.f3(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num, phi_num, fs_num, Vi_num, Vo_num, k_num);
+    elseif (0 < phi_num && phi_num <= pi/3)
+        out = DinY.harm2.f4(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num, phi_num, fs_num, Vi_num, Vo_num, k_num);
+    elseif (pi/3 < phi_num && phi_num <= 2*pi/3)
+        out = DinY.harm2.f5(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num, phi_num, fs_num, Vi_num, Vo_num, k_num);
+    elseif (2*pi/3 < phi_num && phi_num <= pi)
+        situacao = 5;
+        out = DinY.harm2.f6(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num, phi_num, fs_num, Vi_num, Vo_num, k_num);
+    end
+end

@@ -46,7 +46,7 @@ function [P_med, eficiency, Ptotal] = YY_losses(Vp,L,n,d,fs,phi)
     Wb_indutor = M(12);
     P_med = I_in_med*Vp;
 
-    t_db = 220e-9;
+    t_db = 100e-9;
 
     if (I_sw_p_on>0)
         phi = phi - t_db*fs*2*pi;

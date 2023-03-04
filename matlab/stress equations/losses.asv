@@ -18,7 +18,7 @@ Vo_num = d_num*Vi_num;
 k_num = 1;
 P_num = 3000;
 
-vec_phi = -180:360/1000000:180;
+vec_phi = -180:360/1000:180;
 Iout_med = zeros(1,1001);
 count = 0;
 for phi_num=vec_phi
@@ -27,9 +27,9 @@ for phi_num=vec_phi
     Pout_med(count) = out(5)*Vo_num;
 end
 
-[k] = get_k(Pout_med,P_num);
-vec_phi(k)
-phi_num = deg2rad(vec_phi(k));
+[k] = get_k(vP,P_num);
+
+phi_num = 
 %%
 
 

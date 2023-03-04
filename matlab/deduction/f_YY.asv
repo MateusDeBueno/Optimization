@@ -1,0 +1,17 @@
+function [M,M_harmonic] = f_YY(Vp_num,L_num,n_num,d_num,fs_num,phi_num,k_num)
+    
+    load('f_YY_menor60.mat')
+    load('f_YY_harmonic_menor60.mat')
+    load('f_YY_maior60.mat')
+    load('f_YY_harmonic_maior60.mat')
+
+    
+
+    if (phi_num<pi/3)
+        M = f_YY_menor60(Vp,L,n,d,fs,phi,k);
+        M_harmonic = f_YY_harmonic_menor60(Vp,L,n,d,fs,phi,k);
+    else
+        M = f_YY_maior60(Vp,L,n,d,fs,phi,k);
+        M_harmonic = f_YY_harmonic_maior60(Vp,L,n,d,fs,phi,k);
+    end
+end

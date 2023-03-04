@@ -1,5 +1,7 @@
-function [output,output_harmonic,output_phi] = dabDinD(phi_num)
-    syms phi fs Vi Vo Ldab Ld1 Ld2 Lm n dt Po k real    
+function [IL_rms,Itrf_sec_rms,Iin_med,Iin_rms,Iout_med,Iout_rms,phi,Isw_p_rms,Isw_s_rms,Ip,Is,IL_rms_c_k,Itrf_sec_rms_c_k] = dabYY(phi_num)
+    syms phi fs Vi Vo Ldab Ld1 Ld2 Lm n Po dt k t real
+    
+    pi_num = 3.141592653589793;
     
     Tcl = 1/3*[2 -1 -1; 0 sqrt(2) -sqrt(2); 1 1 1]; %Transformada de clark
     Tclm = Tcl(1:2,:); %ignorar nivel zero
@@ -9,12 +11,6 @@ function [output,output_harmonic,output_phi] = dabDinD(phi_num)
     
     [sf_p, sf_s, sf, ang, sec_switch] = times_and_commutation(phi_num,pi);
     
-    Tds = [1 -1 0;0 1 -1;-1 0 1];
-    sf_line_p = Tds*sf_p;
-    sf_line_s = Tds*sf_s;
-    
-    sf = [sf_line_p; sf_line_s]; %a1b1c1 to a2b2c2
-
     scl = kron(eye(2), Tclm)*sf; %estados de comutacao, a1b1c1-a2b2c2 to alpha1beta1-alpha2beta2
     ts = simplify(ang)*Ts/(2*pi);
     tf = matlabFunction(ts, 'vars', {phi, fs}); %criar funcao para definir os tempos
@@ -54,25 +50,26 @@ function [output,output_harmonic,output_phi] = dabDinD(phi_num)
     
     x0x = struct2array(solve(x(:,1) == -x(:,7), x0)).';
     x0s = simplify(pinv(Tclx)*subs(x, x0, x0x));
+    iSw = matlabFunction(x0s.', 'vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo});
     derivadas = pinv(Tclx)*B*scl; %derivadas dos estados, indutor e trafo secundario
     
     %% Corrente eficaz nos estados
-    [x_rms,~] = rms_and_mean(derivadas,x0s,ts,(1:12),(1:12));
+    [x_rms,x_mean] = rms_and_mean(derivadas,x0s,ts,(1:12),(1:12));
     IL_rms = x_rms(1);
-    Itrfsec_rms = x_rms(4);
+    Itrf_sec_rms = x_rms(4);
 
     %% Fourier dos estados
-    IL_rms_c_k = ck_fourier(ts,derivadas(1,:),x0s(1,:)); %DESCOMENTAR
-    Itrf_sec_rms_c_k = ck_fourier(ts,derivadas(4,:),x0s(4,:)); %DESCOMENTAR
+    IL_rms_c_k = ck_fourier(ts,derivadas(1,:),x0s(1,:));
+    Itrf_sec_rms_c_k = ck_fourier(ts,derivadas(4,:),x0s(4,:));
     
     %% Corrente do half bridge do primario [MUDAR]
-    derivadas_hb_p = derivadas([1 2 3],:) - derivadas([3 1 2],:);
-    pts_inics_hb_p = x0s([1 2 3],:) - x0s([3 1 2],:);
+    derivadas_hb_p = derivadas(1:3,:);
+    pts_inics_hb_p = x0s(1:3,:);
     
-    %% Corrente do half bridge do secundario [MUDAR]
-    derivadas_hb_s = derivadas([4 5 6],:) - derivadas([6 4 5],:);
-    pts_inics_hb_s = x0s([4 5 6],:) - x0s([6 4 5],:);
-
+    %% Corrente do half bridge do primario [MUDAR]
+    derivadas_hb_s = derivadas(4:6,:);
+    pts_inics_hb_s = x0s(4:6,:);
+    
     %% Corrente de entrada
     target = [1;0;0];
     [etapas] = pega_etapa(sf_p,target);
@@ -83,27 +80,25 @@ function [output,output_harmonic,output_phi] = dabDinD(phi_num)
     [etapas] = pega_etapa(sf_s,target);
     [Iout_rms,Iout_med] = rms_and_mean(derivadas_hb_s(1,:),pts_inics_hb_s(1,:),ts,etapas,etapas);
     
-    power_equation = Iout_med==Po/Vo;
-    [phi_sol,~,phi_cond] = solve(power_equation,phi,'ReturnConditions',true);
-
-    if (length(phi_sol)==1)
-        output_phi = [phi_sol;phi_sol;phi_cond;phi_cond];
-    else
-        output_phi = [phi_sol;phi_cond];
-    end
-    %% Corrente nas chaves
-    [Isw_p_rms,~] = rms_and_mean(derivadas_hb_p(1,:),pts_inics_hb_p(1,:),ts,(1:6),(1:12));
+    power_equation = x_mean==Po/Vo;
+    phi_solutions = solve(power_equation,phi);
     
-    [Isw_s_rms,~] = rms_and_mean(derivadas_hb_s(1,:),pts_inics_hb_s(1,:),ts,(1:6),(1:12));
+    %% Corrente nas chaves
+    [x_rms,x_mean] = rms_and_mean(derivadas_hb_p(1,:),pts_inics_hb_p(1,:),ts,(1:6),(1:12));
+    Isw_p_rms = x_rms;
+    
+    [x_rms,x_mean] = rms_and_mean(derivadas_hb_s(1,:),pts_inics_hb_s(1,:),ts,(1:6),(1:12));
+    Isw_s_rms = x_rms;
+    
+%     f_Isw_p_rms = matlabFunction(Isw_p_rms, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo});
+%     f_Isw_s_rms = matlabFunction(Isw_s_rms, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo});
     
     %% corrente de comutacao
     %primario
     Ip = pts_inics_hb_p(1,1);
+%     f_Ip = matlabFunction(Ip, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo});
     
     %secundario
     Is = -pts_inics_hb_s(1,sec_switch);
-
-    %% output
-    output = [IL_rms,Itrfsec_rms,Iin_med,Iin_rms,Iout_med,Iout_rms,Isw_p_rms,Isw_s_rms,Ip,Is];
-    output_harmonic = [IL_rms_c_k,Itrf_sec_rms_c_k];
+%     f_Is = matlabFunction(Is, 'Vars', {Ldab, n, Ld1, Ld2, Lm, phi, fs, Vi, Vo});
 end

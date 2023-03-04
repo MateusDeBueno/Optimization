@@ -1,0 +1,16 @@
+function [x_rms] = f_rms_mean(derivadas,x0s,ts,estados)
+
+    x_mean = zeros(6,1);
+    x_rms = zeros(6,1);
+
+    syms t real
+
+    for i=estados
+        dt = ts(i+1) - ts(i);
+        interval_equation = derivadas(:,i).*ones(6,1)*t+x0s(:,i);
+%         x_mean = x_mean + int(interval_equation,[0, dt]);
+        x_rms = x_rms + int(interval_equation.^2,[0, dt]);
+    end
+%     x_mean = simplify(x_mean/(ts(estados(end)+1)-ts(estados(1))));
+    x_rms = simplify(x_rms/(ts(estados(end)+1)-ts(estados(1))));
+end
