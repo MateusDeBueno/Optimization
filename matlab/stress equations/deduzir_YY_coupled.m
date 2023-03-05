@@ -13,11 +13,11 @@ Ts = 1/fs;
 
 % Parametros para validacao numerica
 Vi_num = 400;
-d_num = 0.5;
+d_num = 1;
 fs_num = 100e3;
 Ldab_num = 61e-6;
-Ld1_num = 2e-6;
-Ld2_num = 0.6e-6;
+Ld1_num = 10e-6;
+Ld2_num = 6e-6;
 Lm_num = 700e-6;
 phi_num = deg2rad(50);  %[MUDAR]
 n_num = 5/9;
@@ -38,31 +38,29 @@ s = sym('s_', [6,1], 'real');
 u(1:3) = s(1:3)*Vi;
 u(4:6) = s(4:6)*Vo;
 
-
-
 %corrente no primario do trafo
 il = x(1:2);
 il = [il; -sum(il)];
 dil = dx(1:2);
 dil = [dil; -sum(dil)];
+
 %corrente no secundario do trafo
 iL = x(4:5);
 iL = [iL; -sum(iL)];
 diL = dx(4:5);
 diL = [diL; -sum(diL)];
+
 %definicao das tensoes do indutor acoplado
-vP = + L1*dil - M*diL;
-vS = - M*dil + L2*diL;
+vP = + L1*dil + M*diL;
+vS = + M*dil + L2*diL;
+
 %definicao das tensoes nos indutores do dab
 vLdab = Ldab*dil;
 
-
 Tdiff = [1 -1 0; 0 1 -1; -1 0 1];
 
-m_p = -Tdiff*u(1:3) + Tdiff*vLdab + Tdiff*vP  == 0; %malha primario
-m_s = -Tdiff*u(4:6) - Tdiff*vS == 0; %malha secundario
-
-
+m_p = Tdiff*u(1:3) == Tdiff*vLdab + Tdiff*vP; %malha primario
+m_s = Tdiff*u(4:6) == Tdiff*vS; %malha secundario
 
 eq(1:2) = m_p(1:2);
 eq(3:4) = m_s(1:2);
@@ -84,8 +82,6 @@ Tclm = Tcl(1:2,:); %ignorar nivel zero
 Tclxz = kron(eye(2), Tcl);
 Tclx = kron(eye(2), Tclm);
 
-% A = simplify(Tclx*As*pinv(Tclx));
-% B = simplify(Tclx*Bs*pinv(Tclx));
 Axx = simplify(Tclxz*As*inv(Tclxz));
 Bxx = simplify(Tclxz*Bs*inv(Tclxz)); %a pinv deixa uns numeros feios
 Ax = [Axx(:,1:2),Axx(:,4:5)];
@@ -100,18 +96,6 @@ scl = kron(eye(2), Tclm)*sf; %estados de comutacao, a1b1c1-a2b2c2 to alpha1beta1
 
 ts = simplify(ang)*Ts/(2*pi);
 tf = matlabFunction(ts, 'vars', {phi, fs}); %criar funcao para definir os tempos
-
-% syms real
-% ucl = sym('ucl_', [4,1], 'real');
-% dcl = sym('dcl_', [4,1], 'real');
-% 
-% ducl = B*ucl == dcl;
-% 
-% solve(ducl, dcl)
-% 
-% 
-% solve(eq, dx,'Real',true,'IgnoreAnalyticConstraints',true)
-% dxs = struct2array(solve(eq, dx,'Real',true,'IgnoreAnalyticConstraints',true)).'
 
 %%
 
@@ -143,9 +127,6 @@ x0s = simplify(pinv(Tclx)*subs(xcl, x0, x0x));
 iSw = matlabFunction(x0s.', 'vars', {Ldab, L1, L2, M, phi, fs, Vi, d});
 
 derivadas = pinv(Tclx)*B*scl; %derivadas dos estados, indutor e trafo secundario
-
-
-
 
 %%
 color1 = [0.045 0.245 0.745]; % blue

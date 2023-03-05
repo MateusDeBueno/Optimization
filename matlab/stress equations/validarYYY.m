@@ -19,15 +19,14 @@ Vo = d*Vi;
 
 % Parametros para validacao numerica
 Vi_num = 400;
-d_num = 0.5;
+d_num = 1;
 fs_num = 100e3;
 Ldab_num = 61e-6;
-Ld1_num = 2e-6;
-Ld2_num = 0.6e-6;
-Lm_num = [700e-6, 1.4e-3, 10e-3];
+Ld1_num = 10e-6;
+Ld2_num = 6e-6;
+Lm_num = [700e-6, 1.4e-3 10e-3];
 phi_num = deg2rad(50);  %[MUDAR]
 n_num = 5/9;
-% Vo_num = d_num*Vi_num;
 Po_num = 2000;
 pi_num = 3.141592653589793;
 
@@ -237,7 +236,7 @@ cmap = f_create_cmap(2, color2, color1);
 colormap(cmap)
 jetcustom = cmap;
 M1 = [1; 0; 0; 0; 0; 0];
-M2 = [0; 0; 0; 1; 0; 0];
+M2 = [0; 0; 0; -1; 0; 0];
 is1 = iSw(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num(1), phi_num, fs_num, Vi_num, d_num)*M1;
 is2 = iSw(Ldab_num, n_num, Ld1_num, Ld2_num, Lm_num(1), phi_num, fs_num, Vi_num, d_num)*M2;
 figure

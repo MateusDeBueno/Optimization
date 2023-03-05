@@ -16,8 +16,8 @@ Vi_num = 400;
 d_num = 1;
 fs_num = 100e3;
 Ldab_num = 61e-6;
-Ld1_num = 2e-6;
-Ld2_num = 0.6e-6;
+Ld1_num = 10e-6;
+Ld2_num = 6e-6;
 Lm_num = 700e-6;
 phi_num = deg2rad(50);  %[MUDAR]
 n_num = 5/9;
@@ -44,29 +44,27 @@ ild = [ild; -sum(ild)];
 dild = dx(1:2);
 dild = [dild; -sum(dild)];
 
+%corrente no primario do trafo
+il = (ild - [ild(2:3); ild(1)])/3;
+dil = (dild - [dild(2:3); dild(1)])/3;
+
 %corrente no secundario do trafo
 iL = x(4:5);
 iL = [iL; -sum(iL)];
 diL = dx(4:5);
 diL = [diL; -sum(diL)];
 
-%corrente no primario do trafo
-il = (ild - [ild(2:3); ild(1)])/3;
-dil = (dild - [dild(2:3); dild(1)])/3;
-
 %definicao das tensoes do indutor acoplado
-vP = + L1*dil - M*diL;
-vS = - M*dil + L2*diL;
+vP = + L1*dil + M*diL;
+vS = + M*dil + L2*diL;
+
 %definicao das tensoes nos indutores do dab
 vLdab = Ldab*dild;
 
-
 Tdiff = [1 -1 0; 0 1 -1; -1 0 1];
 
-m_p = -Tdiff*u(1:3) + Tdiff*vLdab + vP  == 0; %malha primario
-m_s = -Tdiff*u(4:6) - Tdiff*vS == 0; %malha secundario
-
-
+m_p = Tdiff*u(1:3) == Tdiff*vLdab + vP; %malha primario
+m_s = Tdiff*u(4:6) == Tdiff*vS; %malha secundario
 
 eq(1:2) = m_p(1:2);
 eq(3:4) = m_s(1:2);
@@ -88,8 +86,6 @@ Tclm = Tcl(1:2,:); %ignorar nivel zero
 Tclxz = kron(eye(2), Tcl);
 Tclx = kron(eye(2), Tclm);
 
-% A = simplify(Tclx*As*pinv(Tclx));
-% B = simplify(Tclx*Bs*pinv(Tclx));
 Axx = simplify(Tclxz*As*inv(Tclxz));
 Bxx = simplify(Tclxz*Bs*inv(Tclxz)); %a pinv deixa uns numeros feios
 Ax = [Axx(:,1:2),Axx(:,4:5)];
@@ -104,18 +100,6 @@ scl = kron(eye(2), Tclm)*sf; %estados de comutacao, a1b1c1-a2b2c2 to alpha1beta1
 
 ts = simplify(ang)*Ts/(2*pi);
 tf = matlabFunction(ts, 'vars', {phi, fs}); %criar funcao para definir os tempos
-
-% syms real
-% ucl = sym('ucl_', [4,1], 'real');
-% dcl = sym('dcl_', [4,1], 'real');
-% 
-% ducl = B*ucl == dcl;
-% 
-% solve(ducl, dcl)
-% 
-% 
-% solve(eq, dx,'Real',true,'IgnoreAnalyticConstraints',true)
-% dxs = struct2array(solve(eq, dx,'Real',true,'IgnoreAnalyticConstraints',true)).'
 
 %%
 
@@ -148,9 +132,6 @@ iSw = matlabFunction(x0s.', 'vars', {Ldab, L1, L2, M, phi, fs, Vi, d});
 
 derivadas = pinv(Tclx)*B*scl; %derivadas dos estados, indutor e trafo secundario
 
-
-
-
 %%
 color1 = [0.045 0.245 0.745]; % blue
 color2 = [0.635 0.635 0.635]; % gray
@@ -175,102 +156,3 @@ hold off
 grid on
 grid minor
 xlim([0 1/fs_num])
-
-
-%%
-% 
-% 
-% 
-% clear; close all; clc;
-% 
-% addpath('utils')
-% addpath('utils_transf')
-% 
-% % Parametros para validacao numerica
-% Vi_num = 400;
-% d_num = 0.5;
-% fs_num = 100e3;
-% Ldab_num = 61e-6;
-% Ld1_num = 2e-6;
-% Ld2_num = 0.6e-6;
-% Lm_num = 700e-6;
-% phi_num = deg2rad(50);  %[MUDAR]
-% n_num = 5/9;
-% Po_num = 2000;
-% pi_num = 3.141592653589793;
-% M_num = Lm_num*n_num;
-% L1_num = Ld1_num + Lm_num;
-% L2_num = Ld2_num + n_num*n_num*Lm_num;
-% k_num = M_num/sqrt(L1_num*L2_num);
-% 
-% 
-% 
-% 
-% syms L1 L2 Ldab M real positive
-% 
-% x = sym('x_', [6,1], 'real');
-% dx = sym('dx_', [6,1], 'real');
-% eq = sym('eq_', [4,1], 'real');
-% u = sym('u_', [6,1], 'real');
-% 
-% iLp = x(1:2);
-% iLp = [iLp; -sum(iLp)];
-% diLp = dx(1:2);
-% diLp = [diLp; -sum(diLp)];
-% 
-% iLs = x(4:5);
-% iLs = [iLs; -sum(iLs)];
-% diLs = dx(4:5);
-% diLs = [diLs; -sum(diLs)];
-% 
-% %corrente na bobina do primario
-% ii = (iLp(1:2) - iLp(2:3))/3;
-% ii = [ii; -sum(ii)];
-% dii = (diLp(1:2) - diLp(2:3))/3;
-% dii = [dii; -sum(dii)];
-% 
-% 
-% %definicao das tensoes do indutor acoplado
-% vP = + L1*dii - M*diLs;
-% vS = - M*dii + L2*diLs;
-% 
-% %definicao das tensoes nos indutores
-% vLdab = Ldab*diLp;
-% 
-% 
-% Tdiff = [1 -1 0; 0 1 -1; -1 0 1];
-% m_p = -Tdiff*u(1:3) + Tdiff*vLdab + vP  == 0;
-% m_s = -Tdiff*u(4:6) - Tdiff*vS == 0;
-% 
-% eq(1:2) = m_p(1:2);
-% eq(3:4) = m_s(1:2);
-% 
-% 
-% dxs = struct2array(solve(eq, dx,'Real',true,'IgnoreAnalyticConstraints',true)).';
-% 
-% dxs(3) = -sum(dxs(1) + dxs(2));
-% dxs(6) = -sum(dxs(4) + dxs(5));
-% dxs = simplify(dxs);
-% Ms = equationsToMatrix(dxs, [x;u]);
-% 
-% As = Ms(:,1:6);
-% Bs = Ms(:,7:12);
-% 
-% %% converter alpha beta
-% Tcl = 1/3*[2 -1 -1; 0 sqrt(2) -sqrt(2); 1 1 1]; %Transformada de clark
-% Tclx = kron(eye(2), Tcl);
-% 
-% Ax = Tclx*As*Tclx^-1;
-% Bx = Tclx*Bs*Tclx^-1;
-% 
-% 
-% syms a1 b1 z1 a2 b2 z2 real
-% syms xa1 xb1 xz1 xa2 xb2 xz2 real
-% 
-% 
-% ucl = [a1 b1 z1 a2 b2 z2]';
-% xcl = [xa1 xb1 xz1 xa2 xb2 xz2]';
-% 
-% dabz = simplify(Ax*xcl + Bx*ucl);
-% 
-% 

@@ -24,10 +24,10 @@ Plecs {
   AlgebraicLoopWithStateMachineMsg "3"
   AssertionAction "1"
   InitializationCommands "V_dc = 400;\nd = 1;\nfs = 100e3;\nLdab = 61e-6;\nLd1"
-" = 2e-6;\nLd2 = 0.6e-6;\nLm = 700e-6;\nphi_deg = -72.366;\nn = 5/9;\n\n\nV_ou"
-"t = d*V_dc;\nTs = 1/fs;\ntdb = 0;\non_percent = 0.5-tdb/Ts;\nphi_time = phi_d"
-"eg/(fs*360)\n\nRL = 6e-3;\nTa = Ts/10;\n\n\nM = Lm*n;\nL1 = Ld1 + Lm;\nL2 = L"
-"d2 + n*n*Lm;"
+" = 10e-6;\nLd2 = 6e-6;\nLm = 700e-6;\nphi_deg = -72.366;\nn = 5/9;\n\n\nV_out"
+" = d*V_dc;\nTs = 1/fs;\ntdb = 0;\non_percent = 0.5-tdb/Ts;\nphi_time = phi_de"
+"g/(fs*360)\n\nRL = 6e-3;\nTa = Ts/10;\n\n\nM = Lm*n;\nL1 = Ld1 + Lm;\nL2 = Ld"
+"2 + n*n*Lm;"
   InitialState  "1"
   SystemState   ""
   TaskingMode   "1"
@@ -51,9 +51,9 @@ Plecs {
   ScriptsDialogGeometry ""
   ScriptsDialogSplitterPos "0"
   Schematic {
-    Location      [-1920, 23; -384, 769]
-    ZoomFactor    1.49863
-    SliderPosition [0, 0]
+    Location      [0, 27; 1536, 773]
+    ZoomFactor    1.71499
+    SliderPosition [0, 94]
     ShowBrowser   off
     BrowserWidth  100
     Component {
@@ -443,7 +443,7 @@ Plecs {
       }
       Parameter {
         Variable      "L"
-        Value         "[L1 -M; -M L2]"
+        Value         "[L1 M; M L2]"
         Show          off
       }
       Parameter {
@@ -762,10 +762,10 @@ Plecs {
       Type          Display
       Name          "Erro"
       Show          on
-      Position      [855, 340]
+      Position      [825, 340]
       Direction     up
       Flipped       off
-      Frame         [-86, -11; 86, 11]
+      Frame         [-56, -11; 56, 11]
       LabelPosition [0, 14]
       LabelAlign    up
       Parameter {
@@ -775,7 +775,7 @@ Plecs {
       }
       Parameter {
         Variable      "Precision"
-        Value         "4"
+        Value         "10"
         Show          off
       }
     }
@@ -794,9 +794,9 @@ Plecs {
 "BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
 "AAAAA=="
       SavedViews    "AAAAAgAAAAA="
-      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL/gMAAAAJAAAAC"
-"AAAAGQAAAAJAAAAZAAAAAIAAABkAAAAAwAAAGQAAAABAAAAZAAAAAYAAABkAAAABwAAAGQAAAAEAA"
-"AAZAAAAAUAAABkAAAAlQAAAAsBAAABAAAAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAABxAAA"
+      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL/gMAAAAJAAAAA"
+"QAAAGQAAAAIAAAAZAAAAAkAAABkAAAABgAAAGQAAAAHAAAAZAAAAAQAAABkAAAABQAAAGQAAAACAA"
+"AAZAAAAAMAAABkAAAAlQAAAAsBAAABAAAAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAABxAAA"
 "AAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAA"
 "AAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAA"
 "AAkAAAAAQAAAAAAAAPoAAAAACQ="
@@ -983,38 +983,6 @@ Plecs {
       }
     }
     Connection {
-      Type          Wire
-      SrcComponent  "R2"
-      SrcTerminal   1
-      Points        [445, 380]
-      Branch {
-        Points        [540, 380]
-        DstComponent  "Vm3"
-        DstTerminal   1
-      }
-      Branch {
-        Points        [390, 380; 390, 420]
-        DstComponent  "M2"
-        DstTerminal   4
-      }
-    }
-    Connection {
-      Type          Wire
-      SrcComponent  "L8"
-      SrcTerminal   1
-      Points        [445, 460]
-      Branch {
-        Points        [540, 460]
-        DstComponent  "Vm3"
-        DstTerminal   2
-      }
-      Branch {
-        Points        [370, 460; 370, 380]
-        DstComponent  "M2"
-        DstTerminal   3
-      }
-    }
-    Connection {
       Type          Signal
       SrcComponent  "Vm1"
       SrcTerminal   3
@@ -1153,6 +1121,37 @@ Plecs {
         Points        [740, 420]
         DstComponent  "Scope2"
         DstTerminal   1
+      }
+    }
+    Connection {
+      Type          Wire
+      SrcComponent  "R2"
+      SrcTerminal   1
+      Points        [445, 380]
+      Branch {
+        Points        [540, 380]
+        DstComponent  "Vm3"
+        DstTerminal   1
+      }
+      Branch {
+        DstComponent  "M2"
+        DstTerminal   3
+      }
+    }
+    Connection {
+      Type          Wire
+      SrcComponent  "L8"
+      SrcTerminal   1
+      Points        [445, 460]
+      Branch {
+        Points        [540, 460]
+        DstComponent  "Vm3"
+        DstTerminal   2
+      }
+      Branch {
+        Points        [340, 460]
+        DstComponent  "M2"
+        DstTerminal   4
       }
     }
   }
