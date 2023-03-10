@@ -8,7 +8,7 @@ function [x_rms,x_mean] = rms_and_mean(derivadas,x0s,ts,estados,estados_divisao)
         total_time = total_time + dt;
     end    
     
-    [M,N] = size(derivadas);
+    [M,~] = size(derivadas);
 
     % calcula rms
     x_rms = zeros(M,1);

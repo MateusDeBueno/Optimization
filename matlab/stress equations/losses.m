@@ -5,6 +5,38 @@ addpath('utils_transf')
 
 load('trafo.mat')
 
+syms phi real
+syms fs Vi d Ldab Ld1 Ld2 Lm n Po dt t real positive
+
+
+Vi_num = 400;
+d_num = 1;
+Vo_num = Vi_num*d_num;
+fs_num = 100e3;
+Ldab_num = 61e-6;
+Ld1_num = 10e-6;
+Ld2_num = 6e-6;
+Lm_num = 700e-6;
+phi_num = deg2rad(50);  %[MUDAR]
+n_num = 5/9;
+Po_num = 2000;
+M_num = Lm_num*n_num;
+L1_num = Ld1_num + Lm_num;
+L2_num = Ld2_num + n_num*n_num*Lm_num;
+% k_num = M_num/sqrt(L1_num*L2_num);
+
+
+%% gerar graficos
+
+out = trafo.DinD.str.f3;
+
+out(Ldab_num,n_num,Ld1_num,Ld2_num,Lm_num,phi_num,fs_num,Vi_num,Vo_num)
+
+[IL_rms,Itrfsec_rms,Iin_med,Iin_rms,Iout_med,Iout_rms,Isw_p_rms,Isw_s_rms,Ip,Is]
+
+out()
+%%
+
 Vi_num = 400;
 d_num = 1;
 fs_num = 100e3;

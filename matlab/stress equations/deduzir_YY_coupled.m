@@ -8,6 +8,8 @@ syms xa1 xb1 xz1 xa2 xb2 xz2 real
 syms phi real
 syms Ld1 Ld2 n Lm real positive
 
+
+
 Vo = Vi*d;
 Ts = 1/fs;
 
@@ -35,8 +37,29 @@ eq = sym('eq_', [4,1], 'real');
 u = sym('u_', [6,1], 'real');
 s = sym('s_', [6,1], 'real');
 
-u(1:3) = s(1:3)*Vi;
-u(4:6) = s(4:6)*Vo;
+% u(1:3) = s(1:3)*Vi;
+% u(4:6) = s(4:6)*Vo;
+%%
+% dil = sym('dil_', [3,1], 'real');
+% diL = sym('diL_', [3,1], 'real');
+
+syms dil diL
+
+%definicao das tensoes do indutor acoplado
+vP = + L1*dil + M*diL;
+vS = + M*dil + L2*diL;
+
+MM = equationsToMatrix([vP; vS], [dil;diL]);
+
+MMinv = inv(MM);
+
+eq1 = [dil;diL] == MMinv*[vP vS]';
+eq2 = n == vS/vP;
+
+
+solve([eq1;eq2], [n,diL,dil],'Real',true,'IgnoreAnalyticConstraints',true)
+
+%%
 
 %corrente no primario do trafo
 il = x(1:2);
@@ -71,7 +94,7 @@ dxs = struct2array(solve(eq, dx,'Real',true,'IgnoreAnalyticConstraints',true)).'
 dxs(3) = -sum(dxs(1) + dxs(2));
 dxs(6) = -sum(dxs(4) + dxs(5));
 dxs = simplify(dxs);
-Ms = equationsToMatrix(dxs, [x;s]);
+Ms = equationsToMatrix(dxs, [x;u]);
 
 As = Ms(:,1:6);
 Bs = Ms(:,7:12);
@@ -88,6 +111,25 @@ Ax = [Axx(:,1:2),Axx(:,4:5)];
 Bx = [Bxx(:,1:2),Bxx(:,4:5)];
 A = [Ax(1:2,:);Ax(4:5,:)];
 B = [Bx(1:2,:);Bx(4:5,:)];
+
+%% equivalent circuit
+
+syms dxa1 dxb1 dxa2 dxb2 real 
+syms xa1 xb1 xa2 xb2 real 
+syms ua1 ub1 ua2 ub2 real 
+
+dxc = [dxa1 dxb1 n*dxa2 n*dxb2]';
+xc = [xa1 xb1 n*xa2 n*xb2]';
+uc = [ua1 ub1 ua2/n ub2/n]';
+
+eq_cl = dxc == A*xc+B*uc;
+
+eq_c = solve(eq_cl, [ua1 ub1 ua2 ub2],'Real',true,'IgnoreAnalyticConstraints',true)
+
+sys1 = eq_c([1 3])
+
+
+% dxs = struct2array(solve(eq, dx,'Real',true,'IgnoreAnalyticConstraints',true)).';
 %%
 
 [sf_p, sf_s, sf, ang, sec_switch] = times_and_commutation(phi_num,pi);

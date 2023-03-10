@@ -46,6 +46,7 @@ ts = simplify(ang)*Ts/(2*pi);
 tf = matlabFunction(ts, 'vars', {phi, fs}); %criar funcao para definir os tempos
 
 %% Resolvendo circuito monofasico equivalente [MUDAR]
+
 L = [Ldab+Ld1; Ld2/n^2];
 Udc = [Vi; Vo];
 u = Udc.*[1; 1/n];
