@@ -37,12 +37,15 @@ Ld1_num = 2e-6;
 n_num = 1;
 Ld2_num = Ld1_num*n_num*n_num;
 Lm_num = [700e-6, 1.4e-3 10e-3];
-phi_num = [deg2rad(-30),deg2rad(30)];  %[MUDAR]
 M_num = Lm_num*n_num;
 L1_num = Ld1_num + Lm_num;
 L2_num = Ld2_num + n_num*n_num*Lm_num;
 k_num = M_num/sqrt(L1_num.*L2_num);
 
+phi_num = [deg2rad(-30),deg2rad(30)];  %[MUDAR]
+%cria intervalo de angulo
+intervalo.f1 = [deg2rad(-30) 0];
+intervalo.f2 = [0 deg2rad(60)];
 
 [x0s.f1, ts.f1, idab.f1, hb.f1, HB.f1, Ip.f1, Is.f1, iME.f1, idrm.f1, ilrm.f1, iLrm.f1, iSwPrm.f1, iSwSrm.f1,B.f1] = simplify_DfY(phi_num(1));
 [x0s.f2, ts.f2, idab.f2, hb.f2, HB.f2, Ip.f2, Is.f2, iME.f2, idrm.f2, ilrm.f2, iLrm.f2, iSwPrm.f2, iSwSrm.f2,B.f2] = simplify_DfY(phi_num(2));
@@ -50,10 +53,6 @@ k_num = M_num/sqrt(L1_num.*L2_num);
 
 
 %%
-
-%cria intervalo de angulo
-intervalo.f1 = [deg2rad(-30) 0];
-intervalo.f2 = [0 deg2rad(60)];
 
 %passo para plot
 pr = 200; %precision
@@ -65,6 +64,15 @@ fx0s.f1 = matlabFunction(x0s.f1, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
 fx0s.f2 = matlabFunction(x0s.f2, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
 fts.f1 = matlabFunction(ts.f1, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
 fts.f2 = matlabFunction(ts.f2, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+
+fIp.f1 = matlabFunction(Ip.f1, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+fIp.f2 = matlabFunction(Ip.f2, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+fIs.f1 = matlabFunction(Is.f1, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+fIs.f2 = matlabFunction(Is.f2, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+
+mag = 1;
+fIp.f1(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,deg2rad(-5))
+fIs.f1(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,deg2rad(-5))
 
 %equacao_limite
 Ip_eq.f1 = Ip.f1 == 0;
@@ -97,6 +105,20 @@ fiLrm.f2 = matlabFunction(iLrm.f2, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
 fiSwPrm.f2 = matlabFunction(iSwPrm.f2, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
 fiSwSrm.f2 = matlabFunction(iSwSrm.f2, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
 
+fIp.f1 = matlabFunction(Ip.f1, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+fIs.f1 = matlabFunction(Is.f1, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+fIp.f2 = matlabFunction(Ip.f2, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+fIs.f2 = matlabFunction(Is.f2, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+
+mag=1;
+
+fIp.f1(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,phi_num(1))
+fIs.f1(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,phi_num(1))
+fpot_eq.f1(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,phi_num(1))
+
+fIp.f2(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,phi_num(2))
+fIs.f2(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,phi_num(2))
+fpot_eq.f2(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,phi_num(2))
 
 
 
@@ -122,7 +144,7 @@ hold on
 plot(equat_ts.f2*1e6,equat.f2(1,:),'Color',jetcustom(1,:),'LineWidth',1.5)
 plot(equat_ts.f2*1e6,-equat.f2(4,:), '-.','Color',jetcustom(2,:),'LineWidth',1.5)
 hold off
-xlim([0 max(equat_ts.f1)*1e6])
+xlim([0 max(equat_ts.f2)*1e6])
 grid on
 grid minor
 legend({'$i_l$','$-i_L$'},'Location','best','FontSize', 14)
@@ -130,33 +152,6 @@ set(gca, 'FontSize', 20)
 xlabel('$t[\mu$s]')
 ylabel('$i\,$[A]')
 f_save_figure(append('figure\DYf_i',string(mag),'_ilIL.pdf'))
-
-
-%% variar Lm
-
-
-% LLm_num = min(Lm_num):(max(Lm_num)-min(Lm_num))/100:max(Lm_num);
-% MM_num = LLm_num*n_num;
-% LL1_num = Ld1_num + LLm_num;
-% LL2_num = Ld2_num + n_num*n_num*LLm_num;
-% 
-% count = 0;
-% for phi_ii = vec_ph.f1
-%     for Lm_ii = LLm_num
-%         count = count + 1;
-% 
-%         MM_num = Lm_ii*n_num;
-%         LL1_num = Ld1_num + Lm_ii;
-%         LL2_num = Ld2_num + n_num*n_num*Lm_ii;   
-% 
-%         v_Lm.f1(count) = Lm_ii;
-%         v_phi.f1(count) = phi_ii;
-%         v_ilrm.f1(count) = filrm.f1(LL1_num,LL2_num,Ldab_num,MM_num,Vi_num,d_num,fs_num,phi_ii);
-%         v_iLrm.f1(count) = fiLrm.f1(LL1_num,LL2_num,Ldab_num,MM_num,Vi_num,d_num,fs_num,phi_ii);
-%     end
-% end
-%%
-
 
 %%
 

@@ -67,12 +67,14 @@ function [x0s, ts, idab, hb, HB, Ip, Is, iME, idrm, ilrm, iLrm, iSwPrm, iSwSrm,B
     Tclxz = kron(eye(2), Tcl);
     Tclx = kron(eye(2), Tclm);
     
-    Axx = simplify(Tclxz*As*inv(Tclxz));
-    Bxx = simplify(Tclxz*Bs*inv(Tclxz)); %a pinv deixa uns numeros feios
-    Ax = [Axx(:,1:2),Axx(:,4:5)];
-    Bx = [Bxx(:,1:2),Bxx(:,4:5)];
-    A = [Ax(1:2,:);Ax(4:5,:)];
-    B = [Bx(1:2,:);Bx(4:5,:)];
+%     Axx = simplify(Tclxz*As*inv(Tclxz));
+%     Bxx = simplify(Tclxz*Bs*inv(Tclxz)); %a pinv deixa uns numeros feios
+%     Ax = [Axx(:,1:2),Axx(:,4:5)];
+%     Bx = [Bxx(:,1:2),Bxx(:,4:5)];
+%     A = [Ax(1:2,:);Ax(4:5,:)];
+%     B = [Bx(1:2,:);Bx(4:5,:)];
+    A = Tclx*As*pinv(Tclx);
+    B = Tclx*Bs*pinv(Tclx);
     
     %% obter funcao de comutacao, depende de phi
     
@@ -99,18 +101,7 @@ function [x0s, ts, idab, hb, HB, Ip, Is, iME, idrm, ilrm, iLrm, iSwPrm, iSwSrm,B
     x0x = struct2array(solve(xcl(:,1) == -xcl(:,7), x0)).';
     x0s = simplify(pinv(Tclx)*subs(xcl, x0, x0x));
     dx0s = pinv(Tclx)*B*scl; %derivadas dos estados, indutor e trafo secundario
-
-    %% corrente rms e mean dos estados
-%     [x_rms,~] = rms_and_mean(dx0s,x0s,ts,(1:12),(1:12));
-%     IL_rms = x_rms(1);
-%     Itrfsec_rms = x_rms(4);
-%     
-%     f_IL_rms = matlabFunction(IL_rms, 'vars', {Ldab,L1,L2,M,phi,fs,Vi,d});
-%     f_Itrfsec_rms = matlabFunction(Itrfsec_rms, 'vars', {Ldab,L1,L2,M,phi,fs,Vi,d});
-%     
-%     f_IL_rms(Ldab_num, L1_num(1), L2_num(1), M_num(1), phi_num, fs_num, Vi_num, d_num)
-%     f_Itrfsec_rms(Ldab_num, L1_num(1), L2_num(1), M_num(1), phi_num, fs_num, Vi_num, d_num)
-
+    
     %% 
     %obtido os valores de corrente na bobina do primario e secundario
     %eh obtido todas as outras corrente
@@ -131,21 +122,21 @@ function [x0s, ts, idab, hb, HB, Ip, Is, iME, idrm, ilrm, iLrm, iSwPrm, iSwSrm,B
     
     %% Corrente nos estados
     [ilrm,~] = rms_and_mean(dx0s(1,:),x0s(1,:),ts,[1:12],[1:12]);
-    [iLrm,~] = rms_and_mean(dx0s(4,:),x0s(4,:),ts,[1:12],[1:12]);
+    [iLrm,~] = rms_and_mean(dx0s(4,:),x0s(4,:),ts,1:12,1:12);
 
     %% Corrente de entrada
-    target = [1;0;0];
-    [etapas] = pega_etapa(sf_p,target);
-    [irm,ime] = rms_and_mean(d_hb(1,:),hb(1,:),ts,etapas,etapas);
+%     target = [1;0;0];
+%     [etapas] = pega_etapa(sf_p,target);
+%     [irm,ime] = rms_and_mean(d_hb(1,:),hb(1,:),ts,etapas,etapas);
     
     %% Corrente de saida
     target = [1;0;0];
     [etapas] = pega_etapa(sf_s,target);
-    [iRM,iME] = rms_and_mean(d_HB(1,:),HB(1,:),ts,etapas,etapas);
+    [~,iME] = rms_and_mean(d_HB(1,:),HB(1,:),ts,etapas,etapas);
     
     %% Corrente nas chaves
-    [iSwPrm,~] = rms_and_mean(d_hb(1,:),hb(1,:),ts,[1:6],[1:12]);
-    [iSwSrm,~] = rms_and_mean(d_HB(1,:),HB(1,:),ts,[1:6],[1:12]);  
+    [iSwPrm,~] = rms_and_mean(d_hb(1,:),hb(1,:),ts,1:6,1:12);
+    [iSwSrm,~] = rms_and_mean(d_HB(1,:),HB(1,:),ts,1:6,1:12);  
 
     %% corrente de comutacao
     Ip = hb(1,1);
