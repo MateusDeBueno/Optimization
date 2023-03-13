@@ -272,7 +272,7 @@ plot(rad2deg(vec_ph.f1),lim_pot.f1,'Color',jetcustom(3,:),'LineWidth',1.5)
 plot(rad2deg(vec_ph.f2),lim_pot.f2,'Color',jetcustom(3,:),'LineWidth',1.5)
 
 hold off
-ylim([0 2500])
+ylim([0 8000])
 xlim([min(intervalo.f1) max(intervalo.f2)]*180/pi)
 grid on
 grid minor
@@ -295,9 +295,9 @@ L1 = plot(nan, nan,'Color',jetcustom(1,:),'LineWidth',1.5);
 L2 = plot(nan, nan,'Color',jetcustom(2,:),'LineWidth',1.5);
 L3 = plot(nan, nan,'Color',jetcustom(3,:),'LineWidth',1.5);
 
-text(300,2.5,'HS in primary','Interpreter', 'Latex','FontSize', 14) 
+text(800,1.7,'HS in primary','Interpreter', 'Latex','FontSize', 14) 
 text(800,0.35,'HS in secondary','Interpreter', 'Latex','FontSize', 14) 
-text(1000,1.55,'SS in both','Interpreter', 'Latex','FontSize', 14) 
+text(4000,1,'SS in both','Interpreter', 'Latex','FontSize', 14) 
 
 lim_p.f1 = ones(1,length(vec_ph.f1)).*fIp_eq.f1(L1_num(1),L2_num(1),Ldab_num,M_num(1),Vi_num,d_num,fs_num,vec_ph.f1);
 lim_s.f1 = ones(1,length(vec_ph.f1)).*fIs_eq.f1(L1_num(1),L2_num(1),Ldab_num,M_num(1),Vi_num,d_num,fs_num,vec_ph.f1);

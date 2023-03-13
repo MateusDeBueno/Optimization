@@ -176,28 +176,38 @@ intervalo = [0 deg2rad(60)];
 
     wbpk_L = max(wb_L); %wb_L peak
     for ii=1:length(ts)-1
-        v_dts(ii) = ts(ii+1) - ts(ii);
+        dts(ii) = ts(ii+1) - ts(ii);
     end
-    DwbDts_L = dwb_L./v_dts; %Delta.Wb / Delta.ts
+    DwbDts = dwb_L./dts; %Delta.Wb / Delta.ts
+
     
     %% perdas sobre tensao no secundario
     for ii=1:length(x0s)-1
-        vSS(ii) = subs(vS(1),dx,dx0s(:,ii));
+        vSS(:,ii) = subs(vS(1),dx,dx0s(:,ii));
     end
     vSS = simplify(vSS);
 
     %%
     
     wbs = sym('wbs_',[12,1], 'real');
-    wbs(1) = 0; %ta com nivel medio errado
+    wb0_s = sym('wb0_',[12,1], 'real');
 
     for ii=1:length(x0s)-1
         wbs(ii+1) = wbs(ii) + vSS(ii)*(ts(ii+1)-ts(ii));
     end
-    wbs = simplify(wbs)';
+    wbs = simplify(wbs);
+
+    [x_rms,x_mean] = rms_and_mean(vSS,wbs',ts,1:12,1:12)
+
+    fwb_s = matlabFunction(wb_s);
+    fx_mean = matlabFunction(x_mean);
+    fx_rms = matlabFunction(x_rms);
+    %% rms_and_mean(didab(1,:),idab(1,:),ts,1:12,1:12);
+%     [x_rms,x_mean] = rms_and_mean(vSS,wb0_s',ts,1:12,1:12)
+
+%%
+
     
-    wbpk_s = (max(wbs)-min(wbs))/2;
-    DwbDts_s = wbpk_s./v_dts;
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % syms wbs_1 real
@@ -227,8 +237,6 @@ mag=1;
 fIp(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,phi_num(1))
 fIs(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,phi_num(1))
 
-fidab = matlabFunction(idab, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
-
 
 %%
 fwb_L = matlabFunction(wb_L, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
@@ -236,22 +244,21 @@ fwb_L = matlabFunction(wb_L, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
 % mag = 1;
 % q = fwb_L(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,phi_num(1));
 
-equat_wb_L = fwb_L(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,phi_num(1));
-equat_idab = fidab(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,phi_num(1));
+equat = fwb_L(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,phi_num(1));
+equat_ts = fts(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,phi_num(1));
 
 figure
 cmap = f_create_cmap(2, color2, color1);
 colormap(cmap);
 jetcustom = cmap;
 hold on
-plot(equat_idab,'Color',jetcustom(1,:),'LineWidth',1.5)
-plot(equat_wb_L, '-.','Color',jetcustom(2,:),'LineWidth',1.5)
+plot(equat_ts*1e6,[equat, equat(1)],'Color',jetcustom(1,:),'LineWidth',1.5)
+% plot(equat_ts*1e6,-equat(4,:), '-.','Color',jetcustom(2,:),'LineWidth',1.5)
 hold off
-% xlim([0 max(equat_ts)*1e6])
+xlim([0 max(equat_ts)*1e6])
 
-%%
-figure
-plot()
+
+
 
 
 
