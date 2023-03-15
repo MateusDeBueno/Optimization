@@ -32,9 +32,9 @@ out = trafo.DinD.str.f3;
 
 out(Ldab_num,n_num,Ld1_num,Ld2_num,Lm_num,phi_num,fs_num,Vi_num,Vo_num)
 
-[IL_rms,Itrfsec_rms,Iin_med,Iin_rms,Iout_med,Iout_rms,Isw_p_rms,Isw_s_rms,Ip,Is]
-
-out()
+% [IL_rms,Itrfsec_rms,Iin_med,Iin_rms,Iout_med,Iout_rms,Isw_p_rms,Isw_s_rms,Ip,Is]
+% 
+% out()
 %%
 
 Vi_num = 400;

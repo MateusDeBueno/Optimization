@@ -1,4 +1,4 @@
-function [Rind] = f_get_resistance_ind(f,N,d_l)
+function Rind = f_get_resistance_ind(f,N,d_l)
     cu = 1.72e-8; % [ohm*m]
     
     MLT = 140*1e-3; % [m]

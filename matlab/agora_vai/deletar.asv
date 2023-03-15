@@ -12,28 +12,104 @@ for i = 1:length(index_interpreter)
     set(groot, default_name,'latex');
 end
 
-addpath('utils\')
-addpath('utils_transf\')
 
-Vi_num = 400;
-d_num = 1;
-fs_num = 100e3;
-Ldab_num = 61e-6;
-Ld1_num = 2e-6;
-n_num = 1;
-Ld2_num = Ld1_num*n_num*n_num;
-Lm_num = 700e-6;
-phi_num = deg2rad(30);  %[MUDAR]
+
+addpath('utils')
+addpath('utils_transf')
+addpath('utils_loss')
+addpath('data');
+
+awg_data = readtable('awg_table.txt');
+awg_wires = awg_data.Var3; %all wires in mm %wires between awg1 and awg32
+
+l.eq = load('YY.mat');
+l.sw = load('f_fitted_off.mat');
+l.sw = load('f_fitted_on.mat');
+l.sw.Ronp = 90e-3;
+l.sw.Rons = 90e-3;
+
+
+l.L.a = 1.394;
+l.L.b = 2.248;
+l.L.kc = 2.448;
+l.L.int_ki = integral(@(theta) abs(cos(theta)).^l.L.a,0,2*pi);
+l.L.ki = l.L.kc/(2^(l.L.b-l.L.a)*(2*pi)^(l.L.a-1)*l.L.int_ki);
+l.L.Ac = 421.3e-6;
+l.L.Ve = 52.1e-6;
+l.L.N = 14;
+l.L.strand = 180;
+l.L.awg = 38;
+l.L.dl = awg_wires(l.L.awg)*1e-3; % [m]
+l.L.MLT = 140*1e-3; % [m]
+l.L.Nl = 1;
+
+l.tr.a = 1.585;
+l.tr.b = 2.756;
+l.tr.kc = 0.402;
+l.tr.int_ki = integral(@(theta) abs(cos(theta)).^l.tr.a,0,2*pi);
+l.tr.ki = l.tr.kc/(2^(l.tr.b-l.tr.a)*(2*pi)^(l.tr.a-1)*l.tr.int_ki);
+l.tr.Ac = 683e-6;
+l.tr.Ve = 146.79e-6;
+l.tr.Np = 9;
+l.tr.Ns = 5;
+l.tr.Sp = 2;
+l.tr.Ss = 3;
+l.tr.N = l.tr.Ns;
+l.tr.strand = 180;
+l.tr.awg = 38;
+l.tr.dl = awg_wires(l.tr.awg)*1e-3; % [m]
+l.tr.MLT = 230*1e-3; % [m]
+
+l.sC.Rac100 = 4.3e-3;
+
+
+l.pr.dt = 440e-9;
+l.pr.phi = deg2rad(67);
+l.pr.Vi = 400;
+l.pr.d = 1;
+l.pr.fs = 100e3;
+l.pr.Ldab = 61e-6;
+l.pr.Ld1 = 1e-12;
+l.pr.n = l.tr.Ns/l.tr.Np;
+l.pr.Ld2 = l.pr.Ld1*l.pr.n*l.pr.n;
+l.pr.Lm = 700000000e-6;
+l.pr.M = l.pr.Lm*l.pr.n;
+l.pr.L1 = l.pr.Ld1 + l.pr.Lm;
+l.pr.L2 = l.pr.Ld2 + l.pr.n*l.pr.n*l.pr.Lm;
+l.pr.k = l.pr.M/sqrt(l.pr.L1.*l.pr.L2);
+
+
+
+Vi_num = l.pr.Vi;
+d_num = l.pr.d;
+fs_num = l.pr.fs;
+Ldab_num = l.pr.Ldab;
+Ld1_num = l.pr.Ld1;
+n_num = l.pr.n;
+Ld2_num = l.pr.Ld1;
+Lm_num = l.pr.Lm;
+phi_num = l.pr.phi;  %[MUDAR]
 M_num = Lm_num*n_num;
 L1_num = Ld1_num + Lm_num;
 L2_num = Ld2_num + n_num*n_num*Lm_num;
 k_num = M_num/sqrt(L1_num.*L2_num);
+
+
+
+
+
+
+
+
+
+
 
 %cria intervalo de angulo
 intervalo = [0 deg2rad(60)];
 
 
 %% aqui comeca
+
     syms L1 L2 Ldab M real positive
     syms fs Vi d dt real positive
     syms phi real
@@ -133,34 +209,43 @@ intervalo = [0 deg2rad(60)];
     x0x = struct2array(solve(xcl(:,1) == -xcl(:,7), x0)).';
     x0s = simplify(pinv(Tclx)*subs(xcl, x0, x0x));
     dx0s = pinv(Tclx)*B*scl; %derivadas dos estados, indutor e trafo secundario
-        
+    
     %% Corrente nos estados
     [ilrm,~] = rms_and_mean(dx0s(1,:),x0s(1,:),ts,1:12,1:12);
     [iLrm,~] = rms_and_mean(dx0s(4,:),x0s(4,:),ts,1:12,1:12);
+    
+    %fourier dos estados
+%     syms nn
+%     ilrm_cn = ck_fourier(ts,dx0s(1,:),x0s(1,:)); %DESCOMENTAR
+%     iLrm_cn = ck_fourier(ts,dx0s(4,:),x0s(4,:)); %DESCOMENTAR  
     
     %% Corrente hb
     for ii=1:length(x0s)-1
         hb(:,ii) = subs(ihb(1),x,x0s(:,ii));
         dhb(:,ii) = subs(dihb(1),dx,dx0s(:,ii));
     end
+    [hbrm,~] = rms_and_mean(dhb(1,:),hb(1,:),ts,1:12,1:12);
     
     %% Corrente HB
     for ii=1:length(x0s)-1
         HB(:,ii) = subs(iHB(1),x,x0s(:,ii));
         dHB(:,ii) = subs(diHB(1),dx,dx0s(:,ii));
     end
-
+    [HBrm,~] = rms_and_mean(dHB(1,:),HB(1,:),ts,1:12,1:12);
+    
     %% Corrente de saida
     target = [1;0;0];
     [etapas] = pega_etapa(sf_s,target);
     [~,iME] = rms_and_mean(dHB(1,:),HB(1,:),ts,etapas,etapas);
-
+    Pm = Vo*iME;
+    
     %% Corrente Ldab
     for ii=1:length(x0s)-1
         idab(:,ii) = subs(ild(1),x,x0s(:,ii));
         didab(:,ii) = subs(dild(1),dx,dx0s(:,ii));
     end
     [idrm,~] = rms_and_mean(didab(1,:),idab(1,:),ts,1:12,1:12);
+    idrm_cn = ck_fourier(ts,didab(1,:),idab(1,:)); %DESCOMENTAR
     
     %% Corrente nas chaves
     [iSwPrm,~] = rms_and_mean(dhb(1,:),hb(1,:),ts,1:6,1:12);
@@ -168,137 +253,86 @@ intervalo = [0 deg2rad(60)];
     
     %% corrente de comutacao
     Ip = hb(1,1);
-    Is = HB(1,sec_switch);
+    Is = -HB(1,sec_switch);
     
     %% inductor core loss
+    syms ki_L b_L a_L Ac_L N_L Ve_L real positive
+    
     wb_L = Ldab*idab;
     dwb_L = Ldab*didab;
-
-    wbpk_L = max(wb_L); %wb_L peak
-    for ii=1:length(ts)-1
-        dts(ii) = ts(ii+1) - ts(ii);
-    end
-    DwbDts = dwb_L./dts; %Delta.Wb / Delta.ts
-
+    B_L = wb_L/(N_L*Ac_L);
+    dB_L = dwb_L/(N_L*Ac_L);
     
-    %% perdas sobre tensao no secundario
+    integrais = sym('integrais_',[1,length(ts)-1], 'real');
+    for ii=1:length(ts)-1
+        dts = (ts(ii+1)-ts(ii));
+        integrais(ii) = dts*abs(dB_L(ii))^a_L;
+    end
+    integrais = simplify(integrais);
+    sum_int = simplify(sum(integrais));
+    
+    Bpk_L = max(simplify(B_L));
+    Bppk_L = 2*Bpk_L;
+    
+    Pv_L = simplify(ki_L*fs*sum_int)*Bppk_L^(b_L-a_L);
+    P_core_L = Pv_L*Ve_L;
+    
+    %% secondary core loss
+    syms ki_tr b_tr a_tr Ac_tr N_tr Ve_tr real positive
+    
     for ii=1:length(x0s)-1
-        vSS(:,ii) = subs(vS(1),dx,dx0s(:,ii));
+        vSS(ii) = subs(vS(1),dx,dx0s(:,ii));
     end
     vSS = simplify(vSS);
-
-    %%
     
-    wbs = sym('wbs_',[12,1], 'real');
-    wb0_s = sym('wb0_',[12,1], 'real');
-
-    for ii=1:length(x0s)-1
-        wbs(ii+1) = wbs(ii) + vSS(ii)*(ts(ii+1)-ts(ii));
+    dB_tr = vSS/(N_tr*Ac_tr);
+    
+    integrais = sym('integrais_',[1,length(ts)-1], 'real');
+    B_tr = sym('B_tr_',[1,length(ts)-1], 'real');
+    B_tr(1) = 0;
+    for ii=1:length(ts)-1
+        dts = (ts(ii+1)-ts(ii));
+        integrais(ii) = dts*abs(dB_tr(ii))^a_tr;
+        B_tr(ii+1) = B_tr(ii) + dB_tr(ii)*dts;
     end
-    wbs = simplify(wbs);
-
-    [x_rms,x_mean] = rms_and_mean(vSS,wbs',ts,1:12,1:12)
-
-    fwb_s = matlabFunction(wb_s);
-    fx_mean = matlabFunction(x_mean);
-    fx_rms = matlabFunction(x_rms);
-    %% rms_and_mean(didab(1,:),idab(1,:),ts,1:12,1:12);
-%     [x_rms,x_mean] = rms_and_mean(vSS,wb0_s',ts,1:12,1:12)
-
-%%
-
+    integrais = simplify(integrais);
+    sum_int_tr = simplify(sum(integrais));
+    B_tr = simplify(B_tr);
     
-
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% syms wbs_1 real
-fvSS = matlabFunction(vSS, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
-
-
+    Bppk_tr = max(B_tr)-min(B_tr);
+    Bpk_tr = Bppk_tr/2;
+    
+    Pv_tr = simplify(ki_tr*fs*sum_int_tr)*Bppk_tr^(b_tr-a_tr);
+    P_core_tr = Pv_tr*Ve_tr;
 
 %%
 
-pr = 200; %precision
-vec_ph = min(intervalo):(max(intervalo)-min(intervalo))/pr:max(intervalo);
-
-fx0s = matlabFunction(x0s, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
-fts = matlabFunction(ts, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
-
+fhbrm = matlabFunction(hbrm, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+fHBrm = matlabFunction(HBrm, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+fIp = matlabFunction(Ip, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+fIs = matlabFunction(Is, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+fPm = matlabFunction(Pm, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
 fidrm = matlabFunction(idrm, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
 filrm = matlabFunction(ilrm, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
 fiLrm = matlabFunction(iLrm, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
 fiSwPrm = matlabFunction(iSwPrm, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
 fiSwSrm = matlabFunction(iSwSrm, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+fP_core_tr = matlabFunction(P_core_tr, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi,N_tr,Ac_tr,Ve_tr,a_tr,b_tr,ki_tr});
+fBpk_tr = matlabFunction(Bpk_tr, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi,N_tr,Ac_tr});
+fP_core_L = matlabFunction(P_core_L, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi,N_L,Ac_L,Ve_L,a_L,b_L,ki_L});
+fBpk_L = matlabFunction(Bpk_L, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi,N_L,Ac_L});
 
-fIp = matlabFunction(Ip, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
-fIs = matlabFunction(Is, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
-
-mag=1;
-
-fIp(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,phi_num(1))
-fIs(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,phi_num(1))
-
-
-%%
-fwb_L = matlabFunction(wb_L, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
-
-% mag = 1;
-% q = fwb_L(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,phi_num(1));
-
-equat = fwb_L(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,phi_num(1));
-equat_ts = fts(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,phi_num(1));
-
-figure
-cmap = f_create_cmap(2, color2, color1);
-colormap(cmap);
-jetcustom = cmap;
-hold on
-plot(equat_ts*1e6,[equat, equat(1)],'Color',jetcustom(1,:),'LineWidth',1.5)
-% plot(equat_ts*1e6,-equat(4,:), '-.','Color',jetcustom(2,:),'LineWidth',1.5)
-hold off
-xlim([0 max(equat_ts)*1e6])
-
-
-
-
-
-
-
-%%
-equat = fx0s(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,phi_num(1));
-equat_ts = fts(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,phi_num(1));
-
-figure
-cmap = f_create_cmap(2, color2, color1);
-colormap(cmap);
-jetcustom = cmap;
-hold on
-plot(equat_ts*1e6,equat(1,:),'Color',jetcustom(1,:),'LineWidth',1.5)
-plot(equat_ts*1e6,-equat(4,:), '-.','Color',jetcustom(2,:),'LineWidth',1.5)
-hold off
-xlim([0 max(equat_ts)*1e6])
-grid on
-grid minor
-legend({'$i_l$','$-i_L$'},'Location','best','FontSize', 14)
-set(gca, 'FontSize', 20)
-xlabel('$t[\mu$s]')
-ylabel('$i\,$[A]')
-
-%%
-equat = fvSS(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,phi_num(1));
-
-figure
-cmap = f_create_cmap(2, color2, color1);
-colormap(cmap);
-jetcustom = cmap;
-hold on
-plot(equat_ts*1e6,[equat(1,:),equat(1,1)],'Color',jetcustom(1,:),'LineWidth',1.5)
-hold off
-xlim([0 max(equat_ts)*1e6])
-grid on
-grid minor
-set(gca, 'FontSize', 20)
-xlabel('$t[\mu$s]')
-ylabel('$i\,$[A]')
-
-
-
+fhbrm(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num)
+fHBrm(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num)
+fIp(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num)
+fIs(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num)
+fPm(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num)
+fidrm(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num)
+filrm(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num)
+fiLrm(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num)
+fiSwPrm(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num)
+fiSwSrm(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num)
+fP_core_tr(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num,l.tr.N,l.tr.Ac,l.tr.Ve,l.tr.a,l.tr.b,l.tr.ki)
+fBpk_tr(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num,l.tr.N,l.tr.Ac)
+fP_core_L(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num,l.L.N,l.L.Ac,l.L.Ve,l.L.a,l.L.b,l.L.ki)
+fBpk_L(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num,l.L.N,l.L.Ac)

@@ -15,7 +15,7 @@ fs = 100e3;
 ang_min = 40*pi/180;
 ang_max = 70*pi/180;
 counter = 0;
-for phi=ang_min:(ang_max-ang_min)/40:ang_max
+for phi=ang_min:(ang_max-ang_min)/10:ang_max
     counter = counter + 1;
     [P_med(counter), efficiency(counter), Ptotal] = YY_losses(Vp,L,n,d,fs,phi);
     vector_phi(counter) = phi;
@@ -34,4 +34,11 @@ hold on
 scatter(vector_phi*180/pi,efficiency,'filled')
 scatter(phi_exp,n_exp/100,'filled')
 hold off
+grid on
+
+
+
+figure
+scatter(vector_phi*180/pi,P_med,'filled')
+% scatter(phi_exp,n_exp/100,'filled')
 grid on

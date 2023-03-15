@@ -21,14 +21,13 @@ Vo = Vi*d;
 Ts = 1/fs;
 
 phi_num = [deg2rad(10),deg2rad(80)];  %[MUDAR]
-[x0s.f1, ts.f1, idab.f1, hb.f1, HB.f1, Ip.f1, Is.f1, iME.f1, idrm.f1, ilrm.f1, iLrm.f1, iSwPrm.f1, iSwSrm.f1] = simplify_YY(phi_num(1));
-[x0s.f2, ts.f2, idab.f2, hb.f2, HB.f2, Ip.f2, Is.f2, iME.f2, idrm.f2, ilrm.f2, iLrm.f2, iSwPrm.f2, iSwSrm.f2] = simplify_YY(phi_num(2));
-% [x0s, ts, idab, hb, HB, Ip, Is, iME, idrm, ilrm, iLrm, iSwPrm, iSwSrm, wbpk_L, DwbDts_L, wbpk_s, DwbDts_s] = full_YY(phi_num(1))
-% [x0s, ts, idab, hb, HB, Ip, Is, iME, idrm, ilrm, iLrm, iSwPrm, iSwSrm, wbpk_L, DwbDts_L, wbpk_s, DwbDts_s] = full_YY(phi_num(2))
-
+% [x0s.f1, ts.f1, idab.f1, hb.f1, HB.f1, Ip.f1, Is.f1, iME.f1, idrm.f1, ilrm.f1, iLrm.f1, iSwPrm.f1, iSwSrm.f1] = simplify_YY(phi_num(1));
+% [x0s.f2, ts.f2, idab.f2, hb.f2, HB.f2, Ip.f2, Is.f2, iME.f2, idrm.f2, ilrm.f2, iLrm.f2, iSwPrm.f2, iSwSrm.f2] = simplify_YY(phi_num(2));
+[x0s.f1, ts.f1, idab.f1, hb.f1, HB.f1, Ip.f1, Is.f1, iME.f1, idrm.f1, ilrm.f1, iLrm.f1, iSwPrm.f1, iSwSrm.f1, wbpk_L.f1, DwbDts_L.f1, DwbDts_L.f1, wbpk_s.f1, DwbDts_s.f1] = full_YY(phi_num(1));
+[x0s.f2, ts.f2, idab.f2, hb.f2, HB.f2, Ip.f2, Is.f2, iME.f2, idrm.f2, ilrm.f2, iLrm.f2, iSwPrm.f2, iSwSrm.f2, wbpk_L.f2, DwbDts_L.f2, wbpk_s.f2, DwbDts_s.f2] = full_YY(phi_num(2));
 
 trafo = 'YY';
-
+ftjjj
 Vi_num = 400;
 d_num = 1;
 fs_num = 100e3;
@@ -364,33 +363,3 @@ xlabel('$P_o$[W]')
 ylabel('$d$')
 set(gca, 'FontSize', 20)
 f_save_figure(append('figure\',string(trafo),'_d_Po.pdf'))
-
-
-
-
-%% verificar corrente de comutacao
-l.pr.phi = deg2rad(80);
-l.pr.Vi = 400;
-l.pr.d = 1;
-l.pr.fs = 100e3;
-l.pr.Ldab = 61e-6;
-l.pr.Ld1 = 2e-6;
-l.pr.n = 1;
-l.pr.Ld2 = l.pr.Ld1*l.pr.n*l.pr.n;
-l.pr.Lm = 700e-6;
-l.pr.M = l.pr.Lm*l.pr.n;
-l.pr.L1 = l.pr.Ld1 + l.pr.Lm;
-l.pr.L2 = l.pr.Ld2 + l.pr.n*l.pr.n*l.pr.Lm;
-l.pr.k = l.pr.M/sqrt(l.pr.L1.*l.pr.L2);
-
-fIs.f2(l.pr.L1,l.pr.L2,l.pr.Ldab,l.pr.M,l.pr.Vi,l.pr.d,l.pr.fs,l.pr.phi)
-fIp.f2(l.pr.L1,l.pr.L2,l.pr.Ldab,l.pr.M,l.pr.Vi,l.pr.d,l.pr.fs,l.pr.phi)
-
-fiSwSrm.f2(l.pr.L1,l.pr.L2,l.pr.Ldab,l.pr.M,l.pr.Vi,l.pr.d,l.pr.fs,l.pr.phi)
-fiSwPrm.f2(l.pr.L1,l.pr.L2,l.pr.Ldab,l.pr.M,l.pr.Vi,l.pr.d,l.pr.fs,l.pr.phi)
-
-
-
-fiSwPrm.f1 = matlabFunction(iSwPrm.f1, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
-fiSwSrm.f1 = matlabFunction(iSwSrm.f1, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
-

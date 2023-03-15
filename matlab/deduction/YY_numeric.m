@@ -21,11 +21,11 @@ d_l = awg_wires(awg_chosen)*1e-3; % [m]
 
 
 Vp = 400;
-L = 67e-6;
+L = 61e-6;
 n = 5/9;
 d = 1;
 fs = 100e3;
-phi = 60*pi/180;
+phi = 67*pi/180;
 k = 1;
 
 
