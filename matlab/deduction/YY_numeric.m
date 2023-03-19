@@ -5,11 +5,8 @@ load('f_YY_harmonic_menor60.mat')
 load('f_YY_maior60.mat')
 load('f_YY_harmonic_maior60.mat')
 
-
-
 addpath('utils');
 addpath('data');
-
 
 % wire data
 awg_data = readtable('awg_table.txt');

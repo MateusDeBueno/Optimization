@@ -9,10 +9,11 @@ awg_data = readtable('awg_table.txt');
 awg_wires = awg_data.Var3; %all wires in mm %wires between awg1 and awg32
 
 l.eq = load('YY.mat');
+l.eq = load('DiY.mat');
 l.sw = load('f_fitted_off.mat');
 l.sw = load('f_fitted_on.mat');
-l.sw.Ronp = 90e-3;
-l.sw.Rons = 90e-3;
+l.sw.Ronp = 102e-3;
+l.sw.Rons = 102e-3;
 
 
 l.L.a = 1.394;
@@ -31,7 +32,7 @@ l.L.Nl = 1;
 
 l.tr.a = 1.585;
 l.tr.b = 2.756;
-l.tr.kc = 0.402;
+l.tr.kc = 0.522;
 l.tr.int_ki = integral(@(theta) abs(cos(theta)).^l.tr.a,0,2*pi);
 l.tr.ki = l.tr.kc/(2^(l.tr.b-l.tr.a)*(2*pi)^(l.tr.a-1)*l.tr.int_ki);
 l.tr.Ac = 683e-6;
@@ -47,27 +48,29 @@ l.tr.dl = awg_wires(l.tr.awg)*1e-3; % [m]
 l.tr.MLT = 230*1e-3; % [m]
 
 l.sC.Rac100 = 4.3e-3;
+l.C.Rb_ac10k = 4.2e-3;
 
 
-l.pr.dt = 440e-9;
-l.pr.phi = deg2rad(67);
+l.pr.dt = 0e-9;
+l.pr.phi = deg2rad(-27);
 l.pr.Vi = 400;
 l.pr.d = 1;
 l.pr.fs = 100e3;
 l.pr.Ldab = 61e-6;
-l.pr.Ld1 = 1e-12;
+l.pr.Ld1 = 1.4e-6;
 l.pr.n = l.tr.Ns/l.tr.Np;
 l.pr.Ld2 = l.pr.Ld1*l.pr.n*l.pr.n;
-l.pr.Lm = 700000000e-6;
+l.pr.Lm = 700e-6;
 l.pr.M = l.pr.Lm*l.pr.n;
 l.pr.L1 = l.pr.Ld1 + l.pr.Lm;
 l.pr.L2 = l.pr.Ld2 + l.pr.n*l.pr.n*l.pr.Lm;
 l.pr.k = l.pr.M/sqrt(l.pr.L1.*l.pr.L2);
 
 %% equations
-out = f_equationsYY(l);
+% out = f_equationsYY(l);
+out = f_equationsDiY(l);
 C = num2cell(out);
-[hbrm,HBrm,Ip,Is,Pm,idrm,ilrm,iLrm,iSwPrm,iSwSrm,P_core_tr,Bpk_tr,P_core_L,Bpk_L] = C{:};
+[hbrm,HBrm,Ip,Is,iiRMS,iiME,ioRMS,ioME,Pm,idrm,ilrm,iLrm,iSwPrm,iSwSrm,P_core_tr,Bpk_tr,P_core_L,Bpk_L] = C{:};
 
 %% semi conductor loss
 
@@ -85,7 +88,7 @@ for nn=1:100
     [R_ac_p, R_ac_s] = f_get_resistance_trf(nn,0.8,l);
     RacL = f_get_resistance_ind(nn,0.8,l);
     
-    out = fh_equationsYY(l,nn);
+    out = fh_equationsDiY(l,nn);
     C = num2cell(out);
     [ilrm_cn,iLrm_cn,idrm_cn] = C{:};
     
@@ -101,11 +104,17 @@ PiLd_cu = 3*PiLd_cu;
 %% serie capacitor
 Psc = 3*l.sC.Rac100*hbrm^2 + 3*l.sC.Rac100*HBrm^2;
 
+%% bus capacitor
+ic_i = sqrt(iiRMS^2 - iiME^2);
+Pbusi = ic_i*ic_i*l.C.Rb_ac10k;
 
+ic_o = sqrt(ioRMS^2 - ioME^2);
+Pbuso = ic_o*ic_o*l.C.Rb_ac10k;
 %%
 
-ptot = cSw_p+cSw_s+sSw_p+sSw_s+Pil_cu+PiL_cu+PiLd_cu+P_core_L+P_core_tr+Psc;
+ptot = cSw_p+cSw_s+sSw_p+sSw_s+Pil_cu+PiL_cu+PiLd_cu+3*P_core_L+P_core_tr+Psc + Pbusi + Pbuso;
 
-efc = (Pm-ptot)/Pm;
+Pm
+efc = (Pm-ptot)/Pm
 
 

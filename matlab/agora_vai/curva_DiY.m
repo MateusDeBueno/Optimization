@@ -85,18 +85,20 @@ l.pr.L2 = l.pr.Ld2 + l.pr.n*l.pr.n*l.pr.Lm;
 l.pr.k = l.pr.M/sqrt(l.pr.L1.*l.pr.L2);
 
 %% TRAFOOOOOOOOOOOOOO
-trafoo = 'YY';
+trafoo = 'DiY';
 
 %%
 
 color1 = [0.045 0.245 0.745]; % blue
 color2 = [0.635 0.635 0.635]; % gray
 
-pr = 200; %precision
-ang_min = 1*pi/180;
-ang_max = 90*pi/180;
+pr = 100; %precision
+% pr = 20; %precision
+ang_min = -29*pi/180;
+ang_max = 60*pi/180;
 vec_ph = ang_min:(ang_max-ang_min)/pr:ang_max;
-vec_d = 0.25:0.01:1.13;
+vec_d = 0.25:0.1:1.13;
+% vec_d = 0.2:0.1:1.2;
 
 n_points = length(vec_d)*length(vec_ph)
 
@@ -110,7 +112,7 @@ for kk=1:length(vec_ph)
 
         l.pr.phi = phii(k);
         l.pr.d = dd(k);
-        
+
         if (trafoo == "YY")
             out = f_equationsYY_dt(l);
         elseif (trafoo == "YD")
@@ -129,7 +131,6 @@ for kk=1:length(vec_ph)
     end
 end
 
-
 %%
 
 
@@ -144,11 +145,13 @@ n = 200;
 
 
 figure
-contourLevels = [0 0.9 0.92 0.94 0.96];
+contourLevels = [0 0.92 0.94 0.96];
 colors = f_create_cmap(length(contourLevels), color1, color2);
 [~, hCont] = contourf(X,Y*l.pr.Vi,griddata(x,y,z,X,Y),contourLevels, 'LineStyle', 'none');
+
 cmap = interp1(contourLevels, colors, linspace(min(contourLevels), max(contourLevels), 256));
 colormap(cmap);
+
 leg = contourLegend(hCont);
 leg.FontSize = 14;
 grid on
@@ -157,6 +160,34 @@ set(gca, 'FontSize', 20)
 ylabel('$V_o\,$[V]')
 xlabel('$\phi\,[^{\circ}]$')
 f_save_figure(append('figure\Vo_phi_efc_',string(trafoo),'.pdf'))
+
+%%
+
+figure
+% Find unique values of dd
+unique_dd = unique(dd);
+
+% Loop through unique values of dd and find the maximum value of Pm for each
+max_Pm = zeros(size(unique_dd));
+for i = 1:length(unique_dd)
+    idx = (dd == unique_dd(i));
+    max_Pm(i) = max(Pm(idx));
+end
+
+y = dd;
+x = Pm;
+z = efc;
+n = 1000;
+
+
+% Create a grid of X and Y values
+[X, Y] = meshgrid(x, y);
+
+% Interpolate the Z values
+Z = griddata(x, y, z, X, Y);
+
+% Plot the contour plot
+contour(X, Y, Z, 10, 'LineColor', 'red');
 
 %%
 
@@ -173,23 +204,23 @@ end
 y = dd;
 x = Pm;
 z = efc;
-n = 200;
-
+n = 500;
 
 %Create regular grid across data space
 [X,Y] = meshgrid(linspace(min(x),max(x),n), linspace(min(y),max(y),n));
 
 figure
 hold on
-contourLevels = [0 0.9 0.92 0.94 0.96];
+contourLevels = [0 0.92 0.94 0.96];
 colors = f_create_cmap(length(contourLevels), color1, color2);
-[~, hCont] = contourf(X,Y*l.pr.Vi,griddata(x,y,z,X,Y),contourLevels, 'LineStyle', 'none');
+[~, h] = contourf(X,Y*l.pr.Vi,griddata(x,y,z,X,Y), contourLevels, 'LineStyle', 'none');
+
 cmap = interp1(contourLevels, colors, linspace(min(contourLevels), max(contourLevels), 256));
 colormap(cmap);
-leg = contourLegend(hCont);
+
+leg = contourLegend(h);
 leg.FontSize = 14;
 leg.AutoUpdate = 'off';
-
 %p max
 plot(max_Pm, unique_dd*l.pr.Vi,'LineWidth',1.5, 'Color', [0 0 0])
 xlabel('dd')
@@ -203,50 +234,9 @@ grid minor
 ylabel('$V_o\,$[V]')
 xlabel('$P_o\,$[W]')
 set(gca, 'FontSize', 20)
-text(1.05*max_Pm(ceil(length(unique_dd)/2)),unique_dd(ceil(length(unique_dd)/2))*l.pr.Vi,'$\leftarrow\, P_{o-limit}$','Interpreter', 'Latex','FontSize', 14) 
+% text(1.05*max_Pm(ceil(length(unique_dd)/2)),unique_dd(ceil(length(unique_dd)/2))*l.pr.Vi,'$\leftarrow\, P_{o-limit}$','Interpreter', 'Latex','FontSize', 14) 
+xlim([0 5000])
 f_save_figure(append('figure\Vo_P_efc_',string(trafoo),'.pdf'))
 
 
-
-%% analise com 400v
-
-% Get indices where d==400
-idx = (round(dd,2) == 1);
-
-% Get values where d==400
-phi_400 = phii(idx);
-Pm_400 = Pm(idx);
-efc_400 = efc(idx);
-
-figure
-plot(Pm_400,efc_400,'LineWidth',1.5)
-grid on
-grid minor
-xlim([0 4500])
-ylim([0.7 1])
-
-%% analise das perdas
-
-pswitch = cSw_p + cSw_s + sSw_p + sSw_s;
-
-y = dd;
-x = Pm;
-z = pswitch;
-
-n = 200;
-%Create regular grid across data space
-[X,Y] = meshgrid(linspace(min(x),max(x),n), linspace(min(y),max(y),n));
-
-
-figure
-contourLevels = [0 20 40 60 80 100];
-colors = f_create_cmap(length(contourLevels), color1, color2);
-[~, hCont] = contourf(X,Y*l.pr.Vi,griddata(x,y,z,X,Y),contourLevels, 'LineStyle', 'none');
-% [~, hCont] = contourf(X,Y*l.pr.Vi,griddata(x,y,z,X,Y), 'LineStyle', 'none');
-cmap = interp1(contourLevels, colors, linspace(min(contourLevels), max(contourLevels), 256));
-colormap(cmap);
-leg = contourLegend(hCont);
-leg.FontSize = 14;
-grid on
-grid minor
 

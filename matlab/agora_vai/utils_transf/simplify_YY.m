@@ -98,7 +98,7 @@ function [x0s, ts, idab, hb, HB, Ip, Is, iME, idrm, ilrm, iLrm, iSwPrm, iSwSrm] 
     x0x = struct2array(solve(xcl(:,1) == -xcl(:,7), x0)).';
     x0s = simplify(pinv(Tclx)*subs(xcl, x0, x0x));
     dx0s = pinv(Tclx)*B*scl; %derivadas dos estados, indutor e trafo secundario
-        
+    
     %% Corrente nos estados
     [ilrm,~] = rms_and_mean(dx0s(1,:),x0s(1,:),ts,1:12,1:12);
     [iLrm,~] = rms_and_mean(dx0s(4,:),x0s(4,:),ts,1:12,1:12);

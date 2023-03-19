@@ -233,10 +233,15 @@ intervalo = [0 deg2rad(60)];
     end
     [HBrm,~] = rms_and_mean(dHB(1,:),HB(1,:),ts,1:12,1:12);
     
+    %% Corrente de entrada
+    target = [1;0;0];
+    [etapas] = pega_etapa(sf_p,target);
+    [iiRMS,iiME] = rms_and_mean(dhb(1,:),hb(1,:),ts,etapas,etapas);
+    
     %% Corrente de saida
     target = [1;0;0];
     [etapas] = pega_etapa(sf_s,target);
-    [~,iME] = rms_and_mean(dHB(1,:),HB(1,:),ts,etapas,etapas);
+    [ioRMS,iME] = rms_and_mean(dHB(1,:),HB(1,:),ts,etapas,etapas);
     Pm = Vo*iME;
     
     %% Corrente Ldab
@@ -307,6 +312,9 @@ intervalo = [0 deg2rad(60)];
 
 %%
 
+fts = matlabFunction(ts, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+fHB = matlabFunction(HB, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+fhb = matlabFunction(hb, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
 fhbrm = matlabFunction(hbrm, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
 fHBrm = matlabFunction(HBrm, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
 fIp = matlabFunction(Ip, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
@@ -317,10 +325,22 @@ filrm = matlabFunction(ilrm, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
 fiLrm = matlabFunction(iLrm, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
 fiSwPrm = matlabFunction(iSwPrm, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
 fiSwSrm = matlabFunction(iSwSrm, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+
+fiiRMS = matlabFunction(iiRMS, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+fiiME = matlabFunction(iiME, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+fioRMS = matlabFunction(ioRMS, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+
 fP_core_tr = matlabFunction(P_core_tr, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi,N_tr,Ac_tr,Ve_tr,a_tr,b_tr,ki_tr});
 fBpk_tr = matlabFunction(Bpk_tr, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi,N_tr,Ac_tr});
 fP_core_L = matlabFunction(P_core_L, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi,N_L,Ac_L,Ve_L,a_L,b_L,ki_L});
 fBpk_L = matlabFunction(Bpk_L, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi,N_L,Ac_L});
+
+
+
+
+fsum_int_tr = matlabFunction(sum_int_tr, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi,N_tr,Ac_tr,Ve_tr,a_tr,b_tr,ki_tr});
+
+
 
 fhbrm(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num)
 fHBrm(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num)
@@ -332,7 +352,30 @@ filrm(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num)
 fiLrm(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num)
 fiSwPrm(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num)
 fiSwSrm(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num)
+
+fiiRMS(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num)
+fiiME(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num)
+fioRMS(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num)
+
 fP_core_tr(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num,l.tr.N,l.tr.Ac,l.tr.Ve,l.tr.a,l.tr.b,l.tr.ki)
 fBpk_tr(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num,l.tr.N,l.tr.Ac)
 fP_core_L(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num,l.L.N,l.L.Ac,l.L.Ve,l.L.a,l.L.b,l.L.ki)
 fBpk_L(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num,l.L.N,l.L.Ac)
+
+Pse = l.tr.Ve*l.tr.kc*(l.pr.fs)^(l.tr.a)*fBpk_tr(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num,l.tr.N,l.tr.Ac)^(l.tr.b)
+
+
+
+
+%%
+xx = fts(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num);
+yy = fhb(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num);
+yy = [yy, yy(1)];
+
+figure
+plot(xx,yy, 'LineWidth',1.5)
+grid on
+grid off
+xlim([0 1/fs_num])
+
+

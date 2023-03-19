@@ -1,5 +1,4 @@
-function [f,fh] = full_YY(phi_num)
-
+function [f,fh] = full_DiD(phi_num)
     syms L1 L2 Ldab M real positive
     syms fs Vi d dt real positive
     syms phi real
@@ -41,19 +40,19 @@ function [f,fh] = full_YY(phi_num)
     ild = il;
     dild = dil;
     %corrente no HB
-    ihb = il;
-    dihb = dil;
+    ihb = il - [il(3); il(1:2)];
+    dihb = dil - [dil(3); dil(1:2)];
     %tensoes no Ldab
     vLdab = Ldab*dild;
     %malha primario
-    m_p = Td*u(1:3) == Td*vLdab + Td*vP; 
+    m_p = Td*u(1:3) == vLdab + vP; 
     
     %% definicoes secundario %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %corrente no HB
-    iHB = -iL;
-    diHB = -diL;
+    iHB = [iL(3); iL(1:2)]-iL;
+    diHB = [diL(3); diL(1:2)]-diL;
     %malha secundario
-    m_s = Td*u(4:6) == Td*vS; 
+    m_s = Td*u(4:6) == vS; 
     
     %% usa 4 malhas
     eq(1:2) = m_p(1:2);
@@ -99,7 +98,7 @@ function [f,fh] = full_YY(phi_num)
     x0x = struct2array(solve(xcl(:,1) == -xcl(:,7), x0)).';
     x0s = simplify(pinv(Tclx)*subs(xcl, x0, x0x));
     dx0s = pinv(Tclx)*B*scl; %derivadas dos estados, indutor e trafo secundario
-    
+        
     %% Corrente nos estados
     [ilrm,~] = rms_and_mean(dx0s(1,:),x0s(1,:),ts,1:12,1:12);
     [iLrm,~] = rms_and_mean(dx0s(4,:),x0s(4,:),ts,1:12,1:12);

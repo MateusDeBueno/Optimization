@@ -1,5 +1,14 @@
 clear; close all; clc;
 
+% https://www.mathworks.com/matlabcentral/answers/183311-setting-default-interpreter-to-latex
+list_factory = fieldnames(get(groot,'factory'));
+index_interpreter = find(contains(list_factory,'Interpreter'));
+for i = 1:length(index_interpreter)
+    default_name = strrep(list_factory{index_interpreter(i)},'factory','default');
+    set(groot, default_name,'latex');
+end
+
+
 addpath('utils')
 addpath('utils_transf')
 addpath('utils_loss')
@@ -8,11 +17,21 @@ addpath('data');
 awg_data = readtable('awg_table.txt');
 awg_wires = awg_data.Var3; %all wires in mm %wires between awg1 and awg32
 
-l.eq = load('YY.mat');
+load('YY.mat');
+load('YD.mat');
+load('DfD.mat');
+load('DiD.mat');
+load('DiY.mat');
+load('DfY.mat');
+
+% Combine the structs into a single struct
+l.eq = struct('YY', YY, 'YD', YD, 'DfD', DfD, ...
+              'DiD', DiD, 'DiY', DiY, 'DfY', DfY);
+
 l.sw = load('f_fitted_off.mat');
 l.sw = load('f_fitted_on.mat');
-l.sw.Ronp = 90e-3;
-l.sw.Rons = 90e-3;
+l.sw.Ronp = 112e-3;
+l.sw.Rons = 112e-3;
 
 
 l.L.a = 1.394;
@@ -47,65 +66,181 @@ l.tr.dl = awg_wires(l.tr.awg)*1e-3; % [m]
 l.tr.MLT = 230*1e-3; % [m]
 
 l.sC.Rac100 = 4.3e-3;
+l.C.Rb_ac10k = 4.2e-3;
 
 
-l.pr.dt = 440e-9;
+l.pr.dt = 0e-9;
 % l.pr.phi = deg2rad(67);
 l.pr.Vi = 400;
 l.pr.d = 1;
 l.pr.fs = 100e3;
 l.pr.Ldab = 61e-6;
-l.pr.Ld1 = 1e-12;
+l.pr.Ld1 = 1.4e-6;
 l.pr.n = l.tr.Ns/l.tr.Np;
 l.pr.Ld2 = l.pr.Ld1*l.pr.n*l.pr.n;
-l.pr.Lm = 700000000e-6;
+l.pr.Lm = 700e-6;
 l.pr.M = l.pr.Lm*l.pr.n;
 l.pr.L1 = l.pr.Ld1 + l.pr.Lm;
 l.pr.L2 = l.pr.Ld2 + l.pr.n*l.pr.n*l.pr.Lm;
 l.pr.k = l.pr.M/sqrt(l.pr.L1.*l.pr.L2);
 
+%% TRAFOOOOOOOOOOOOOO
+trafoo = 'YY';
 
+%%
 
+color1 = [0.045 0.245 0.745]; % blue
+color2 = [0.635 0.635 0.635]; % gray
 
+pr = 200; %precision
+ang_min = 1*pi/180;
+ang_max = 90*pi/180;
+vec_ph = ang_min:(ang_max-ang_min)/pr:ang_max;
+vec_d = 0.25:0.01:1.13;
 
-ang_min = 40*pi/180;
-ang_max = 70*pi/180;
-ii = 0;
-for phi=ang_min:(ang_max-ang_min)/40:ang_max
-    ii=ii+1;
-    l.pr.phi = phi;
-    l.pr.phi
-    vector_phi(ii) = phi*180/pi;
-    [efc(ii),ptot(ii),Pm(ii),cSw_p(ii),cSw_s(ii),sSw_p(ii),sSw_s(ii),Pil_cu(ii),PiL_cu(ii),PiLd_cu(ii),Psc(ii),P_core_L(ii),P_core_tr(ii)] = YY_loss(l);
-    l.pr.phi
+k = 0;
+for kk=1:length(vec_ph)
+    for ii = 1:length(vec_d)
+        k = k + 1;
+
+        phii(k) = vec_ph(kk);
+        dd(k) = vec_d(ii);
+
+        l.pr.phi = phii(k);
+        l.pr.d = dd(k);
+        
+        if (trafoo == "YY")
+            out = f_equationsYY_dt(l);
+        elseif (trafoo == "YD")
+            out = f_equationsYD_dt(l);
+        elseif (trafoo == "DfD")
+            out = f_equationsDfD_dt(l);
+        elseif (trafoo == "DiD")
+            out = f_equationsDiD_dt(l);
+        elseif (trafoo == "DiY")
+            out = f_equationsDiY_dt(l);
+        elseif (trafoo == "DfY")
+            out = f_equationsDfY_dt(l);
+        end
+
+        [efc(k),ptot(k),Pm(k),cSw_p(k),cSw_s(k),sSw_p(k),sSw_s(k),Pil_cu(k),PiL_cu(k),PiLd_cu(k),Psc(k),P_core_L(k),P_core_tr(k)] = f_loss(trafoo, out, l);
+    end
 end
 
-figure
-scatter(Pm,efc,'filled')
-grid on
 
-phi_exp = [67 64 60 50 40];
-n_exp = [94.56 94.63 94.23 93.78 92.62];
+%%
+
+
+y = dd;
+x = rad2deg(phii);
+z = efc;
+
+n = 200;
+%Create regular grid across data space
+[X,Y] = meshgrid(linspace(min(x),max(x),n), linspace(min(y),max(y),n));
+
+
+
+figure
+contourLevels = [0 0.9 0.92 0.94 0.96];
+colors = f_create_cmap(length(contourLevels), color1, color2);
+[~, hCont] = contourf(X,Y*l.pr.Vi,griddata(x,y,z,X,Y),contourLevels, 'LineStyle', 'none');
+cmap = interp1(contourLevels, colors, linspace(min(contourLevels), max(contourLevels), 256));
+colormap(cmap);
+leg = contourLegend(hCont);
+leg.FontSize = 14;
+grid on
+grid minor
+set(gca, 'FontSize', 20)
+ylabel('$V_o\,$[V]')
+xlabel('$\phi\,[^{\circ}]$')
+f_save_figure(append('figure\Vo_phi_efc_',string(trafoo),'.pdf'))
+
+%%
+
+% Find unique values of dd
+unique_dd = unique(dd);
+
+% Loop through unique values of dd and find the maximum value of Pm for each
+max_Pm = zeros(size(unique_dd));
+for i = 1:length(unique_dd)
+    idx = (dd == unique_dd(i));
+    max_Pm(i) = max(Pm(idx));
+end
+
+y = dd;
+x = Pm;
+z = efc;
+n = 200;
+
+
+%Create regular grid across data space
+[X,Y] = meshgrid(linspace(min(x),max(x),n), linspace(min(y),max(y),n));
 
 figure
 hold on
-scatter(vector_phi,efc,'filled')
-scatter(phi_exp,n_exp/100,'filled')
+contourLevels = [0 0.9 0.92 0.94 0.96];
+colors = f_create_cmap(length(contourLevels), color1, color2);
+[~, hCont] = contourf(X,Y*l.pr.Vi,griddata(x,y,z,X,Y),contourLevels, 'LineStyle', 'none');
+cmap = interp1(contourLevels, colors, linspace(min(contourLevels), max(contourLevels), 256));
+colormap(cmap);
+leg = contourLegend(hCont);
+leg.FontSize = 14;
+leg.AutoUpdate = 'off';
+
+%p max
+plot(max_Pm, unique_dd*l.pr.Vi,'LineWidth',1.5, 'Color', [0 0 0])
+xlabel('dd')
+ylabel('Max Pm')
+allChildren = get(gca, 'Children');                % list of all objects on axes
+displayNames = get(allChildren, 'DisplayName');    % list of all legend display names
+delete(allChildren(strcmp(displayNames, 'data1')))
 hold off
 grid on
+grid minor
+ylabel('$V_o\,$[V]')
+xlabel('$P_o\,$[W]')
+set(gca, 'FontSize', 20)
+text(1.05*max_Pm(ceil(length(unique_dd)/2)),unique_dd(ceil(length(unique_dd)/2))*l.pr.Vi,'$\leftarrow\, P_{o-limit}$','Interpreter', 'Latex','FontSize', 14) 
+f_save_figure(append('figure\Vo_P_efc_',string(trafoo),'.pdf'))
+
+
+
+%% analise com 400v
+
+% Get indices where d==400
+idx = (round() == 1);
+
+% Get values where d==400
+d_400 = dd(idx);
+phi_400 = phii(idx);
+Pm_400 = Pm(idx);
+efc_400 = efc(idx);
+
+
+
+%% analise das perdas
+
+pswitch = cSw_p + cSw_s + sSw_p + sSw_s;
+
+y = dd;
+x = Pm;
+z = pswitch;
+
+n = 200;
+%Create regular grid across data space
+[X,Y] = meshgrid(linspace(min(x),max(x),n), linspace(min(y),max(y),n));
 
 
 figure
-scatter(vector_phi,Pm,'filled')
+contourLevels = [0 20 40 60 80 100];
+colors = f_create_cmap(length(contourLevels), color1, color2);
+[~, hCont] = contourf(X,Y*l.pr.Vi,griddata(x,y,z,X,Y),contourLevels, 'LineStyle', 'none');
+% [~, hCont] = contourf(X,Y*l.pr.Vi,griddata(x,y,z,X,Y), 'LineStyle', 'none');
+cmap = interp1(contourLevels, colors, linspace(min(contourLevels), max(contourLevels), 256));
+colormap(cmap);
+leg = contourLegend(hCont);
+leg.FontSize = 14;
 grid on
-
-sw_p = cSw_p+sSw_p;
-sw_s = cSw_s+sSw_s;
-pcu_tr = Pil_cu+PiL_cu;
-pcu_L = PiLd_cu;
-P_core_L;
-P_core_tr;
-figure
-bar([sw_p',sw_s',pcu_tr',pcu_L'])
-grid on
+grid minor
 
