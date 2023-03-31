@@ -25,10 +25,10 @@ Plecs {
   AssertionAction "1"
   InitializationCommands "Vi_num = 500;\nd_num = 1;\nfs_num = 100e3;\nLdab_num"
 " = 61e-6;\nLd1_num = 1.4e-6;\nn_num = 5/9;\nLd2_num = Ld1_num*n_num*n_num;\nL"
-"m_num = 700e-6;\nphi_num = -30;\n\n\nV_dc = Vi_num;\nd = d_num;\nn = n_num;\n"
-"fs = fs_num;\nLdab = Ldab_num;\nLd1 = Ld1_num;\nLd2 = Ld2_num;\nLm = Lm_num;"
-"\nphi_deg = phi_num;\n\nV_out = d*V_dc;\nTs = 1/fs;\ntdb = 0e-9;\non_percent "
-"= 0.5-tdb/Ts;\nphi_time = phi_deg/(fs*360)\n\nRL = 6e-3;\nTa = Ts/10;"
+"m_num = 700e-6;\nphi_num = 50;\n\n\nV_dc = Vi_num;\nd = d_num;\nn = n_num;\nf"
+"s = fs_num;\nLdab = Ldab_num;\nLd1 = Ld1_num;\nLd2 = Ld2_num;\nLm = Lm_num;\n"
+"phi_deg = phi_num;\n\nV_out = d*V_dc;\nTs = 1/fs;\ntdb = 0e-9;\non_percent = "
+"0.5-tdb/Ts;\nphi_time = phi_deg/(fs*360)\n\nRL = 6e-3;\nTa = Ts/10;"
   InitialState  "1"
   SystemState   ""
   TaskingMode   "1"
@@ -52,9 +52,9 @@ Plecs {
   ScriptsDialogGeometry "[-1375 287 446 243]"
   ScriptsDialogSplitterPos "100"
   Schematic {
-    Location      [9, 32; 1911, 976]
-    ZoomFactor    0.763601
-    SliderPosition [139, 166]
+    Location      [0, 23; 1920, 985]
+    ZoomFactor    1.30956
+    SliderPosition [1834, -1]
     ShowBrowser   off
     BrowserWidth  100
     Component {
@@ -1809,9 +1809,9 @@ Plecs {
         Direction     left
       }
       Schematic {
-        Location      [2135, 143; 4055, 1103]
-        ZoomFactor    1.14437
-        SliderPosition [716, -1]
+        Location      [0, 26; 1920, 986]
+        ZoomFactor    1
+        SliderPosition [475, 93]
         ShowBrowser   off
         BrowserWidth  100
         Component {
@@ -4970,7 +4970,7 @@ Plecs {
       LabelAlign    up
       Parameter {
         Variable      "Value"
-        Value         "1"
+        Value         "0"
         Show          off
       }
       Parameter {
@@ -4991,7 +4991,7 @@ Plecs {
       LabelAlign    up
       Parameter {
         Variable      "Value"
-        Value         "1"
+        Value         "0"
         Show          off
       }
       Parameter {
@@ -5028,17 +5028,17 @@ Plecs {
       Position      [1105, 965]
       Direction     up
       Flipped       off
-      Location      [0, 27; 1920, 1016]
-      State         "AAAA/wAAAAD9AAAAAgAAAAAAAAHSAAADwvwCAAAAAfsAAAAUAEQAYQB0A"
-"GEAVwBpAGQAZwBlAHQBAAAALwAAA8IAAABbAP///wAAAAEAAACCAAADwvwCAAAAA/sAAAAQAFoAbw"
-"BvAG0AQQByAGUAYQEAAAAvAAADHAAAADQA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAA"
-"A/////wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMBAAADTwAAAKIAAABmAP///wAABSQAAAPCAAAA"
+      Location      [0, 30; 1539, 854]
+      State         "AAAA/wAAAAD9AAAAAgAAAAAAAAHSAAADHfwCAAAAAfsAAAAUAEQAYQB0A"
+"GEAVwBpAGQAZwBlAHQBAAAALwAAAx0AAABbAP///wAAAAEAAACWAAADHfwCAAAAA/sAAAAQAFoAbw"
+"BvAG0AQQByAGUAYQEAAAAvAAACkwAAADQA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAA"
+"A/////wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMBAAACxgAAAIYAAABmAP///wAAA5MAAAMdAAAA"
 "BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
 "AAAAA=="
       SavedViews    "AAAAAgAAAAA="
       HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL/gMAAAAJAAAAB"
-"QAAAE4AAAAEAAAATgAAAAkAAABOAAAACAAAAE4AAAADAAAATwAAAAIAAABOAAAAAQAAAE8AAAAHAA"
-"AATgAAAAYAAABOAAAB0gAAAAsBAAABAAAAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAACjAAA"
+"QAAAE4AAAAIAAAATgAAAAkAAABOAAAAAgAAAE4AAAADAAAATwAAAAEAAABPAAAABgAAAE4AAAAHAA"
+"AATgAAAAQAAABOAAAB0gAAAAsBAAABAAAAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAACjAAA"
 "AAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAA"
 "AAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAA"
 "AEvAAAAAQAAAAAAAAPoAAAAACQ="
@@ -5109,19 +5109,20 @@ Plecs {
       Position      [1425, 810]
       Direction     up
       Flipped       off
-      Location      [0, 23; 1920, 1012]
+      Location      [0, 27; 1540, 852]
       State         "AAAA/wAAAAD9AAAAAgAAAAEAAAAAAAAAAPwCAAAAA/sAAAAQAFoAbwBvA"
 "G0AQQByAGUAYQAAAAAA/////wAAADQA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAAA//"
-"///wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMAAAAAAP////8AAABmAP///wAAAAMAAAeAAAAAcPw"
-"BAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQBAAAAAAAAB4AAAABQAP///wAAB4AAAANOAAAA"
+"///wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMAAAAAAP////8AAABmAP///wAAAAMAAAYEAAAAcPw"
+"BAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQBAAAAAAAABgQAAABQAP///wAABgQAAAKqAAAA"
 "BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
 "AAAAA=="
       SavedViews    "AAAAAgAAAAA="
-      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAALeAIAAAAFAAAAB"
-"QAAAGQAAAAGAAAAZAAAAAkAAABkAAAAAwAAAGQAAAAEAAAAZAAAB4AAAAALAQAAAQAAAAAAAAAAAA"
-"AAAGT/////AAAAgQAAAAAAAAALAAAAtAAAAAEAAAAAAAAAZAAAAAEAAAAAAAAAZAAAAAEAAAAAAAA"
-"AAAAAAAEAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAEAAAAAAAAAZAAAAAEAAAAA"
-"AAAAZAAAAAEAAAAAAAAAAAAAAAEAAAAAAAAFPAAAAAEAAAAAAAAD6AAAAAAk"
+      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL/gMAAAAJAAAAC"
+"QAAAGQAAAAIAAAAZAAAAAcAAABkAAAABgAAAGQAAAAFAAAAZAAAAAQAAABkAAAAAwAAAGQAAAACAA"
+"AAZAAAAAEAAABkAAAGBAAAAAsBAAABAAAAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAAC0AAA"
+"AAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAA"
+"AAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAA"
+"AVQAAAAAQAAAAAAAAPoAAAAACQ="
       PlotPalettes  "AAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
       Axes          "1"
       TimeRange     "0.0"
@@ -5430,19 +5431,20 @@ Plecs {
       Position      [1875, 810]
       Direction     up
       Flipped       off
-      Location      [1920, 21; 3840, 1010]
+      Location      [0, 27; 1540, 852]
       State         "AAAA/wAAAAD9AAAAAgAAAAEAAAAAAAAAAPwCAAAAA/sAAAAQAFoAbwBvA"
 "G0AQQByAGUAYQAAAAAA/////wAAADQA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAAA//"
-"///wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMAAAAAAP////8AAABmAP///wAAAAMAAAeAAAAAcPw"
-"BAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQBAAAAAAAAB4AAAABQAP///wAAB4AAAANOAAAA"
+"///wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMAAAAAAP////8AAABmAP///wAAAAMAAAYEAAAAcPw"
+"BAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQBAAAAAAAABgQAAABQAP///wAABgQAAAKqAAAA"
 "BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
 "AAAAA=="
       SavedViews    "AAAAAgAAAAA="
-      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAALOAIAAAAEAAAAB"
-"QAAAGQAAAAJAAAAZAAAAAMAAABkAAAABAAAAGQAAAeAAAAACwEAAAEAAAAAAAAAAAAAAABk/////w"
-"AAAIEAAAAAAAAACwAAALQAAAABAAAAAAAAAGQAAAABAAAAAAAAAGQAAAABAAAAAAAAAAAAAAABAAA"
-"AAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAGQAAAABAAAAAAAAAGQAAAABAAAAAAAAAGQAAAAB"
-"AAAAAAAAAAAAAAABAAAAAAAABNgAAAABAAAAAAAAA+gAAAAAJA=="
+      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL/gMAAAAJAAAAC"
+"QAAAGQAAAAIAAAAZAAAAAcAAABkAAAABgAAAGQAAAAFAAAAZAAAAAQAAABkAAAAAwAAAGQAAAACAA"
+"AAZAAAAAEAAABkAAAGBAAAAAsBAAABAAAAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAAC0AAA"
+"AAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAA"
+"AAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAA"
+"AVQAAAAAQAAAAAAAAPoAAAAACQ="
       PlotPalettes  "AAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
       Axes          "1"
       TimeRange     "0.0"
@@ -5576,9 +5578,9 @@ Plecs {
 "BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
 "AAAAA=="
       SavedViews    "AAAAAgAAAAA="
-      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL/gMAAAAJAAAAA"
-"QAAAGQAAAADAAAAZAAAAAIAAABkAAAABQAAAGQAAAAEAAAAZAAAAAcAAABkAAAABgAAAGQAAAAJAA"
-"AAZAAAAAgAAABkAAAGAAAAAAsBAAABAAAAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAAC1AAA"
+      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL/gMAAAAJAAAAC"
+"QAAAGQAAAAIAAAAZAAAAAcAAABkAAAABgAAAGQAAAAFAAAAZAAAAAQAAABkAAAAAwAAAGQAAAACAA"
+"AAZAAAAAEAAABkAAAGAAAAAAsBAAABAAAAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAAC1AAA"
 "AAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAA"
 "AAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAA"
 "AVLAAAAAQAAAAAAAAPoAAAAACQ="
@@ -5730,7 +5732,7 @@ Plecs {
       Type          DCVoltageSource
       Name          "V_dc"
       Show          on
-      Position      [500, 360]
+      Position      [310, 360]
       Direction     down
       Flipped       on
       Parameter {
@@ -5743,7 +5745,7 @@ Plecs {
       Type          Ammeter
       Name          "Am5"
       Show          on
-      Position      [555, 235]
+      Position      [575, 235]
       Direction     left
       Flipped       off
     }
@@ -5751,7 +5753,7 @@ Plecs {
       Type          Goto
       Name          "Goto12"
       Show          off
-      Position      [590, 220]
+      Position      [610, 220]
       Direction     right
       Flipped       off
       Parameter {
@@ -5769,7 +5771,7 @@ Plecs {
       Type          Voltmeter
       Name          "Vm4"
       Show          on
-      Position      [590, 365]
+      Position      [610, 365]
       Direction     up
       Flipped       off
     }
@@ -5777,7 +5779,7 @@ Plecs {
       Type          Goto
       Name          "Goto14"
       Show          off
-      Position      [620, 365]
+      Position      [640, 365]
       Direction     right
       Flipped       off
       Parameter {
@@ -5795,7 +5797,7 @@ Plecs {
       Type          Ammeter
       Name          "Am4"
       Show          on
-      Position      [1930, 235]
+      Position      [1895, 235]
       Direction     left
       Flipped       off
     }
@@ -5803,7 +5805,7 @@ Plecs {
       Type          Goto
       Name          "Goto13"
       Show          off
-      Position      [1970, 220]
+      Position      [1935, 220]
       Direction     right
       Flipped       off
       Parameter {
@@ -6945,19 +6947,20 @@ Plecs {
       Position      [1640, 1235]
       Direction     up
       Flipped       off
-      Location      [1920, 21; 3840, 1010]
+      Location      [0, 27; 1540, 852]
       State         "AAAA/wAAAAD9AAAAAgAAAAEAAAAAAAAAAPwCAAAAA/sAAAAQAFoAbwBvA"
 "G0AQQByAGUAYQAAAAAA/////wAAANQA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAAA//"
-"///wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMAAAAAAP////8AAABmAP///wAAAAMAAAeAAAAA2Pw"
-"BAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQBAAAAAAAAB4AAAABQAP///wAAB4AAAALmAAAA"
+"///wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMAAAAAAP////8AAABmAP///wAAAAMAAAYEAAAA2Pw"
+"BAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQBAAAAAAAABgQAAABQAP///wAABgQAAAJCAAAA"
 "BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
 "AAAAA=="
       SavedViews    "AAAAAgAAAAA="
-      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAALeAIAAAAFAAAAB"
-"gAAAGQAAAAFAAAAZAAAAAQAAABkAAAAAwAAAGQAAAAJAAAAZAAAB4AAAAALAQAAAQAAAAAAAAAAAA"
-"AAAGT/////AAAAgQAAAAAAAAALAAAAtQAAAAEAAAAAAAAAZAAAAAEAAAAAAAAAZAAAAAEAAAAAAAA"
-"AAAAAAAEAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAEAAAAAAAAAZAAAAAEAAAAA"
-"AAAAZAAAAAEAAAAAAAAAAAAAAAEAAAAAAAAFOwAAAAEAAAAAAAAD6AAAAAAk"
+      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL/gMAAAAJAAAAC"
+"QAAAGQAAAAIAAAAZAAAAAcAAABkAAAABgAAAGQAAAAFAAAAZAAAAAQAAABkAAAAAwAAAGQAAAACAA"
+"AAZAAAAAEAAABkAAAGBAAAAAsBAAABAAAAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAAC1AAA"
+"AAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAA"
+"AAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAA"
+"AVPAAAAAQAAAAAAAAPoAAAAACQ="
       PlotPalettes  "AAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAA"
 "AEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
 "AAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAEAAAAAAAAAAAAAAAAAAAAAAAA"
@@ -8213,27 +8216,14 @@ Plecs {
     }
     Component {
       Type          Resistor
-      Name          "R1"
-      Show          on
-      Position      [2095, 330]
-      Direction     up
-      Flipped       off
-      Parameter {
-        Variable      "R"
-        Value         "13.1"
-        Show          on
-      }
-    }
-    Component {
-      Type          Resistor
       Name          "R2"
       Show          on
-      Position      [2095, 270]
-      Direction     up
-      Flipped       off
+      Position      [2045, 305]
+      Direction     down
+      Flipped       on
       Parameter {
         Variable      "R"
-        Value         "22.5"
+        Value         "22"
         Show          on
       }
     }
@@ -8294,19 +8284,6 @@ Plecs {
       }
     }
     Component {
-      Type          Resistor
-      Name          "R3"
-      Show          on
-      Position      [2095, 400]
-      Direction     up
-      Flipped       off
-      Parameter {
-        Variable      "R"
-        Value         "2.8"
-        Show          on
-      }
-    }
-    Component {
       Type          Display
       Name          "Display3"
       Show          on
@@ -8363,39 +8340,6 @@ Plecs {
       }
     }
     Component {
-      Type          Diode
-      Name          "D1"
-      Show          on
-      Position      [1880, 235]
-      Direction     left
-      Flipped       off
-      Parameter {
-        Variable      "Vf"
-        Value         "0"
-        Show          off
-      }
-      Parameter {
-        Variable      "Ron"
-        Value         "0"
-        Show          off
-      }
-      Parameter {
-        Variable      "thermal"
-        Value         ""
-        Show          off
-      }
-      Parameter {
-        Variable      "Rth"
-        Value         "0"
-        Show          off
-      }
-      Parameter {
-        Variable      "T_init"
-        Value         ""
-        Show          off
-      }
-    }
-    Component {
       Type          Product
       Name          "Product2"
       Show          off
@@ -8440,28 +8384,10 @@ Plecs {
       }
     }
     Component {
-      Type          Inductor
-      Name          "L1"
-      Show          on
-      Position      [2095, 460]
-      Direction     down
-      Flipped       off
-      Parameter {
-        Variable      "L"
-        Value         "30e-3"
-        Show          on
-      }
-      Parameter {
-        Variable      "i_init"
-        Value         "0"
-        Show          off
-      }
-    }
-    Component {
       Type          Capacitor
       Name          "C1"
       Show          on
-      Position      [2040, 360]
+      Position      [1955, 320]
       Direction     down
       Flipped       on
       Parameter {
@@ -8479,7 +8405,7 @@ Plecs {
       Type          Resistor
       Name          "R4"
       Show          on
-      Position      [2040, 420]
+      Position      [1955, 395]
       Direction     up
       Flipped       off
       Parameter {
@@ -8489,67 +8415,21 @@ Plecs {
       }
     }
     Component {
-      Type          Diode
-      Name          "D2"
-      Show          on
-      Position      [1985, 335]
-      Direction     down
-      Flipped       off
-      Parameter {
-        Variable      "Vf"
-        Value         "0"
-        Show          off
-      }
-      Parameter {
-        Variable      "Ron"
-        Value         "0"
-        Show          off
-      }
-      Parameter {
-        Variable      "thermal"
-        Value         ""
-        Show          off
-      }
-      Parameter {
-        Variable      "Rth"
-        Value         "0"
-        Show          off
-      }
-      Parameter {
-        Variable      "T_init"
-        Value         ""
-        Show          off
-      }
-    }
-    Component {
       Type          Capacitor
       Name          "C2"
       Show          on
-      Position      [2220, 310]
+      Position      [2220, 325]
       Direction     down
       Flipped       on
       Parameter {
         Variable      "C"
-        Value         "3.7e-3"
+        Value         "3.6e-3"
         Show          on
       }
       Parameter {
         Variable      "v_init"
         Value         "0"
         Show          off
-      }
-    }
-    Component {
-      Type          Resistor
-      Name          "R6"
-      Show          on
-      Position      [2220, 280]
-      Direction     up
-      Flipped       off
-      Parameter {
-        Variable      "R"
-        Value         "400e-3"
-        Show          on
       }
     }
     Component {
@@ -8561,7 +8441,7 @@ Plecs {
       Flipped       off
       Parameter {
         Variable      "R"
-        Value         "15e3"
+        Value         "3.3e3"
         Show          on
       }
     }
@@ -8569,31 +8449,18 @@ Plecs {
       Type          Capacitor
       Name          "C3"
       Show          on
-      Position      [2220, 425]
+      Position      [2220, 440]
       Direction     down
       Flipped       on
       Parameter {
         Variable      "C"
-        Value         "3.7e-3"
+        Value         "3.55e-3"
         Show          on
       }
       Parameter {
         Variable      "v_init"
         Value         "0"
         Show          off
-      }
-    }
-    Component {
-      Type          Resistor
-      Name          "R7"
-      Show          on
-      Position      [2220, 395]
-      Direction     up
-      Flipped       off
-      Parameter {
-        Variable      "R"
-        Value         "400e-3"
-        Show          on
       }
     }
     Component {
@@ -8605,7 +8472,7 @@ Plecs {
       Flipped       off
       Parameter {
         Variable      "R"
-        Value         "15e3"
+        Value         "3.3e3"
         Show          on
       }
     }
@@ -8688,22 +8555,1287 @@ Plecs {
         Show          off
       }
     }
+    Component {
+      Type          Scope
+      Name          "Scope"
+      Show          on
+      Position      [2840, 185]
+      Direction     up
+      Flipped       off
+      Location      [1920, 21; 3840, 1010]
+      State         "AAAA/wAAAAD9AAAAAgAAAAEAAAAAAAAAAPwCAAAAA/sAAAAQAFoAbwBvA"
+"G0AQQByAGUAYQAAAAAA/////wAAADQA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAAA//"
+"///wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMAAAAAAP////8AAABmAP///wAAAAMAAAAAAAAAAPw"
+"BAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQAAAAAAP////8AAABQAP///wAAB4AAAAPCAAAA"
+"BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
+"AAAAA=="
+      SavedViews    "AAAAAgAAAAA="
+      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL/gMAAAAJAAAAB"
+"QAAAGQAAAAIAAAAZAAAAAkAAABkAAAAAgAAAGQAAAADAAAAZAAAAAEAAABkAAAABgAAAGQAAAAHAA"
+"AAZAAAAAQAAABkAAAAxQAAAAsBAAABAAAAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAAChAAA"
+"AAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAA"
+"AAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAA"
+"AAkAAAAAQAAAAAAAAPoAAAAACQ="
+      PlotPalettes  "AAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      Axes          "1"
+      TimeRange     "0.0"
+      ScrollingMode "1"
+      SingleTimeAxis "1"
+      Open          "1"
+      Ts            "-1"
+      SampleLimit   "0"
+      XAxisLabel    ""
+      ShowLegend    "1"
+      Axis {
+        Name          ""
+        AutoScale     1
+        MinValue      0
+        MaxValue      1
+        Signals       {}
+        SignalTypes   [ ]
+        Untangle      0
+        KeepBaseline  off
+        BaselineValue 0
+      }
+      Fourier {
+        SingleXAxis       on
+        AxisLabel         "Frequency"
+        Scaling           0
+        PhaseDisplay      0
+        ShowFourierLegend off
+        Axis {
+          Name          ""
+          AutoScale     1
+          MinValue      0
+          MaxValue      1
+          Signals       {}
+          Untangle      0
+          KeepBaseline  off
+          BaselineValue 0
+        }
+      }
+    }
+    Component {
+      Type          Capacitor
+      Name          "C4"
+      Show          on
+      Position      [2365, 465]
+      Direction     down
+      Flipped       on
+      Parameter {
+        Variable      "C"
+        Value         "3.7e-3"
+        Show          on
+      }
+      Parameter {
+        Variable      "v_init"
+        Value         "0"
+        Show          off
+      }
+    }
+    Component {
+      Type          Resistor
+      Name          "R1"
+      Show          on
+      Position      [2365, 340]
+      Direction     up
+      Flipped       off
+      Parameter {
+        Variable      "R"
+        Value         "10"
+        Show          on
+      }
+    }
+    Component {
+      Type          Resistor
+      Name          "R6"
+      Show          on
+      Position      [2220, 280]
+      Direction     up
+      Flipped       off
+      Parameter {
+        Variable      "R"
+        Value         "400e-3"
+        Show          on
+      }
+    }
+    Component {
+      Type          Resistor
+      Name          "R7"
+      Show          on
+      Position      [2220, 400]
+      Direction     up
+      Flipped       off
+      Parameter {
+        Variable      "R"
+        Value         "400e-3"
+        Show          on
+      }
+    }
+    Component {
+      Type          PlecsProbe
+      Name          "Probe10"
+      Show          on
+      Position      [2420, 30]
+      Direction     right
+      Flipped       off
+    }
+    Component {
+      Type          Scope
+      Name          "Scope3"
+      Show          on
+      Position      [2535, 20]
+      Direction     up
+      Flipped       off
+      Location      [0, 27; 1536, 800]
+      State         "AAAA/wAAAAD9AAAAAgAAAAEAAAAAAAAAAPwCAAAAA/sAAAAQAFoAbwBvA"
+"G0AQQByAGUAYQAAAAAA/////wAAAD8A////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAAA//"
+"///wAAAH4A////+wAAAAwAVAByAGEAYwBlAHMAAAAAAP////8AAAB+AP///wAAAAMAAAAAAAAAAPw"
+"BAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQAAAAAAP////8AAABfAP///wAAB4AAAAOnAAAA"
+"BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
+"AAAAA=="
+      SavedViews    "AAAAAgAAAAA="
+      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL/gMAAAAJAAAAC"
+"AAAAGQAAAABAAAAZAAAAAMAAABkAAAAAgAAAGQAAAAFAAAAZAAAAAQAAABkAAAABwAAAGQAAAAGAA"
+"AAZAAAAAkAAABkAAAA1QAAAAsBAAABAAAAAAAAAAAAAAAAff////8AAACBAAAAAAAAAAsAAACqAAA"
+"AAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAA"
+"AAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAA"
+"AArAAAAAQAAAAAAAAPoAAAAACs="
+      PlotPalettes  "AAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      Axes          "1"
+      TimeRange     "0.0"
+      ScrollingMode "1"
+      SingleTimeAxis "1"
+      Open          "0"
+      Ts            "-1"
+      SampleLimit   "0"
+      XAxisLabel    ""
+      ShowLegend    "1"
+      Axis {
+        Name          ""
+        AutoScale     1
+        MinValue      0
+        MaxValue      1
+        Signals       {}
+        SignalTypes   [ ]
+        Untangle      0
+        KeepBaseline  off
+        BaselineValue 0
+      }
+      Fourier {
+        SingleXAxis       on
+        AxisLabel         "Frequency"
+        Scaling           0
+        PhaseDisplay      0
+        ShowFourierLegend off
+        Axis {
+          Name          ""
+          AutoScale     1
+          MinValue      0
+          MaxValue      1
+          Signals       {}
+          Untangle      0
+          KeepBaseline  off
+          BaselineValue 0
+        }
+      }
+    }
+    Component {
+      Type          PlecsProbe
+      Name          "Probe11"
+      Show          on
+      Position      [2420, 95]
+      Direction     right
+      Flipped       off
+    }
+    Component {
+      Type          Scope
+      Name          "Scope4"
+      Show          on
+      Position      [2535, 85]
+      Direction     up
+      Flipped       off
+      Location      [0, 31; 1536, 804]
+      State         "AAAA/wAAAAD9AAAAAgAAAAEAAAAAAAAAAPwCAAAAA/sAAAAQAFoAbwBvA"
+"G0AQQByAGUAYQAAAAAA/////wAAAD8A////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAAA//"
+"///wAAAH4A////+wAAAAwAVAByAGEAYwBlAHMAAAAAAP////8AAAB+AP///wAAAAMAAAeAAAAAcPw"
+"BAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQBAAAAAAAAB4AAAABfAP///wAAB4AAAAMyAAAA"
+"BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
+"AAAAA=="
+      SavedViews    "AAAAAgAAAAA="
+      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL/gMAAAAJAAAAC"
+"AAAAGQAAAABAAAAZAAAAAMAAABkAAAAAgAAAGQAAAAFAAAAZAAAAAQAAABkAAAABwAAAGQAAAAGAA"
+"AAZAAAAAkAAABkAAAHawAAAAsBAAABAAAAAAAAAAAAAAAAff////8AAACBAAAAAAAAAAsAAAChAAA"
+"AAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAA"
+"AAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAA"
+"AbKAAAAAQAAAAAAAAPoAAAAACs="
+      PlotPalettes  "AAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      Axes          "1"
+      TimeRange     "0.0"
+      ScrollingMode "1"
+      SingleTimeAxis "1"
+      Open          "0"
+      Ts            "-1"
+      SampleLimit   "0"
+      XAxisLabel    ""
+      ShowLegend    "1"
+      Axis {
+        Name          ""
+        AutoScale     1
+        MinValue      0
+        MaxValue      1
+        Signals       {}
+        SignalTypes   [ ]
+        Untangle      0
+        KeepBaseline  off
+        BaselineValue 0
+      }
+      Fourier {
+        SingleXAxis       on
+        AxisLabel         "Frequency"
+        Scaling           0
+        PhaseDisplay      0
+        ShowFourierLegend off
+        Axis {
+          Name          ""
+          AutoScale     1
+          MinValue      0
+          MaxValue      1
+          Signals       {}
+          Untangle      0
+          KeepBaseline  off
+          BaselineValue 0
+        }
+      }
+    }
+    Component {
+      Type          PlecsProbe
+      Name          "Probe12"
+      Show          on
+      Position      [480, 125]
+      Direction     right
+      Flipped       off
+    }
+    Component {
+      Type          Switch
+      Name          "S1"
+      Show          on
+      Position      [395, 235]
+      Direction     left
+      Flipped       off
+      Parameter {
+        Variable      "s_init"
+        Value         "0"
+        Show          off
+      }
+    }
+    Component {
+      Type          Step
+      Name          "Step"
+      Show          on
+      Position      [295, 140]
+      Direction     right
+      Flipped       off
+      Parameter {
+        Variable      "Time"
+        Value         "50000000000e-3"
+        Show          off
+      }
+      Parameter {
+        Variable      "Before"
+        Value         "1"
+        Show          off
+      }
+      Parameter {
+        Variable      "After"
+        Value         "0"
+        Show          off
+      }
+      Parameter {
+        Variable      "DataType"
+        Value         "10"
+        Show          off
+      }
+    }
+    Component {
+      Type          Capacitor
+      Name          "C5"
+      Show          on
+      Position      [525, 345]
+      Direction     down
+      Flipped       on
+      Parameter {
+        Variable      "C"
+        Value         "40e-6"
+        Show          on
+      }
+      Parameter {
+        Variable      "v_init"
+        Value         "V_dc"
+        Show          off
+      }
+    }
+    Component {
+      Type          Resistor
+      Name          "R3"
+      Show          on
+      Position      [525, 445]
+      Direction     up
+      Flipped       off
+      Parameter {
+        Variable      "R"
+        Value         "10e-3"
+        Show          on
+      }
+    }
+    Component {
+      Type          Resistor
+      Name          "R9"
+      Show          on
+      Position      [310, 295]
+      Direction     up
+      Flipped       off
+      Parameter {
+        Variable      "R"
+        Value         "10e-3"
+        Show          on
+      }
+    }
+    Component {
+      Type          Inductor
+      Name          "L2"
+      Show          on
+      Position      [310, 435]
+      Direction     down
+      Flipped       off
+      Parameter {
+        Variable      "L"
+        Value         "1e-6"
+        Show          off
+      }
+      Parameter {
+        Variable      "i_init"
+        Value         "0"
+        Show          off
+      }
+    }
+    Component {
+      Type          Capacitor
+      Name          "C6"
+      Show          on
+      Position      [260, 440]
+      Direction     down
+      Flipped       on
+      Parameter {
+        Variable      "C"
+        Value         "1e-9"
+        Show          off
+      }
+      Parameter {
+        Variable      "v_init"
+        Value         "0"
+        Show          off
+      }
+    }
+    Component {
+      Type          Voltmeter
+      Name          "Vm9"
+      Show          on
+      Position      [230, 365]
+      Direction     up
+      Flipped       off
+    }
+    Component {
+      Type          Scope
+      Name          "Scope8"
+      Show          on
+      Position      [265, 310]
+      Direction     left
+      Flipped       off
+      Location      [-1920, 23; -384, 796]
+      State         "AAAA/wAAAAD9AAAAAgAAAAEAAAAAAAAAAPwCAAAAA/sAAAAQAFoAbwBvA"
+"G0AQQByAGUAYQAAAAAA/////wAAADQA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAAA//"
+"///wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMAAAAAAP////8AAABmAP///wAAAAMAAAAAAAAAAPw"
+"BAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQAAAAAAP////8AAABQAP///wAABgAAAALqAAAA"
+"BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
+"AAAAA=="
+      SavedViews    "AAAAAgAAAAA="
+      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL/gMAAAAJAAAAA"
+"gAAAGQAAAADAAAAZAAAAAEAAABkAAAABgAAAGQAAAAHAAAAZAAAAAQAAABkAAAABQAAAGQAAAAIAA"
+"AAZAAAAAkAAABkAAAA2QAAAAsBAAABAAAAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAAC1AAA"
+"AAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAA"
+"AAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAA"
+"AAkAAAAAQAAAAAAAAPoAAAAACQ="
+      PlotPalettes  "AAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      Axes          "1"
+      TimeRange     "0.0"
+      ScrollingMode "1"
+      SingleTimeAxis "1"
+      Open          "0"
+      Ts            "-1"
+      SampleLimit   "0"
+      XAxisLabel    ""
+      ShowLegend    "1"
+      Axis {
+        Name          ""
+        AutoScale     1
+        MinValue      0
+        MaxValue      1
+        Signals       {}
+        SignalTypes   [ ]
+        Untangle      0
+        KeepBaseline  off
+        BaselineValue 0
+      }
+      Fourier {
+        SingleXAxis       on
+        AxisLabel         "Frequency"
+        Scaling           0
+        PhaseDisplay      0
+        ShowFourierLegend off
+        Axis {
+          Name          ""
+          AutoScale     1
+          MinValue      0
+          MaxValue      1
+          Signals       {}
+          Untangle      0
+          KeepBaseline  off
+          BaselineValue 0
+        }
+      }
+    }
+    Component {
+      Type          Diode
+      Name          "D3"
+      Show          on
+      Position      [440, 390]
+      Direction     down
+      Flipped       off
+      Parameter {
+        Variable      "Vf"
+        Value         "0"
+        Show          off
+      }
+      Parameter {
+        Variable      "Ron"
+        Value         "0"
+        Show          off
+      }
+      Parameter {
+        Variable      "thermal"
+        Value         ""
+        Show          off
+      }
+      Parameter {
+        Variable      "Rth"
+        Value         "0"
+        Show          off
+      }
+      Parameter {
+        Variable      "T_init"
+        Value         ""
+        Show          off
+      }
+    }
+    Component {
+      Type          Scope
+      Name          "Diodo roda \nlivre entrada"
+      Show          on
+      Position      [800, 185]
+      Direction     up
+      Flipped       off
+      Location      [0, 26; 1539, 850]
+      State         "AAAA/wAAAAD9AAAAAgAAAAEAAAAAAAAAAPwCAAAAA/sAAAAQAFoAbwBvA"
+"G0AQQByAGUAYQAAAAAA/////wAAAD8A////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAAA//"
+"///wAAAH4A////+wAAAAwAVAByAGEAYwBlAHMAAAAAAP////8AAAB+AP///wAAAAMAAAAAAAAAAPw"
+"BAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQAAAAAAP////8AAABfAP///wAAB4QAAAPnAAAA"
+"BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
+"AAAAA=="
+      SavedViews    "AAAAAgAAAAA="
+      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL/gMAAAAJAAAAC"
+"QAAAGQAAAAIAAAAZAAAAAMAAABkAAAAAgAAAGQAAAABAAAAZAAAAAcAAABkAAAABgAAAGQAAAAFAA"
+"AAZAAAAAQAAABkAAAAwwAAAAsBAAABAAAAAAAAAAAAAAAAff////8AAACBAAAAAAAAAAsAAACYAAA"
+"AAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAA"
+"AAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAA"
+"AArAAAAAQAAAAAAAAPoAAAAACs="
+      PlotPalettes  "AAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      Axes          "1"
+      TimeRange     "0.0"
+      ScrollingMode "1"
+      SingleTimeAxis "1"
+      Open          "0"
+      Ts            "-1"
+      SampleLimit   "0"
+      XAxisLabel    ""
+      ShowLegend    "1"
+      Axis {
+        Name          ""
+        AutoScale     1
+        MinValue      0
+        MaxValue      1
+        Signals       {}
+        SignalTypes   [ ]
+        Untangle      0
+        KeepBaseline  off
+        BaselineValue 0
+      }
+      Fourier {
+        SingleXAxis       on
+        AxisLabel         "Frequency"
+        Scaling           0
+        PhaseDisplay      0
+        ShowFourierLegend off
+        Axis {
+          Name          ""
+          AutoScale     1
+          MinValue      0
+          MaxValue      1
+          Signals       {}
+          Untangle      0
+          KeepBaseline  off
+          BaselineValue 0
+        }
+      }
+    }
+    Component {
+      Type          PlecsProbe
+      Name          "Probe16"
+      Show          on
+      Position      [740, 185]
+      Direction     right
+      Flipped       off
+    }
+    Component {
+      Type          Diode
+      Name          "D2"
+      Show          on
+      Position      [2090, 335]
+      Direction     down
+      Flipped       off
+      Parameter {
+        Variable      "Vf"
+        Value         "2"
+        Show          on
+      }
+      Parameter {
+        Variable      "Ron"
+        Value         "0"
+        Show          off
+      }
+      Parameter {
+        Variable      "thermal"
+        Value         ""
+        Show          off
+      }
+      Parameter {
+        Variable      "Rth"
+        Value         "0"
+        Show          off
+      }
+      Parameter {
+        Variable      "T_init"
+        Value         ""
+        Show          off
+      }
+    }
+    Component {
+      Type          Diode
+      Name          "D4"
+      Show          on
+      Position      [2160, 235]
+      Direction     right
+      Flipped       off
+      Parameter {
+        Variable      "Vf"
+        Value         "2"
+        Show          on
+      }
+      Parameter {
+        Variable      "Ron"
+        Value         "0"
+        Show          off
+      }
+      Parameter {
+        Variable      "thermal"
+        Value         ""
+        Show          off
+      }
+      Parameter {
+        Variable      "Rth"
+        Value         "0"
+        Show          off
+      }
+      Parameter {
+        Variable      "T_init"
+        Value         ""
+        Show          off
+      }
+    }
+    Component {
+      Type          Ammeter
+      Name          "Am3"
+      Show          on
+      Position      [2200, 235]
+      Direction     right
+      Flipped       off
+    }
+    Component {
+      Type          Display
+      Name          "Display7"
+      Show          on
+      Position      [2215, 130]
+      Direction     down
+      Flipped       off
+      Frame         [-31, -11; 31, 11]
+      LabelPosition [0, -14]
+      LabelAlign    down
+      Parameter {
+        Variable      "Notation"
+        Value         "1"
+        Show          off
+      }
+      Parameter {
+        Variable      "Precision"
+        Value         "4"
+        Show          off
+      }
+    }
+    Component {
+      Type          Scope
+      Name          "Scope12"
+      Show          on
+      Position      [2215, 170]
+      Direction     down
+      Flipped       off
+      Location      [0, 26; 1539, 850]
+      State         "AAAA/wAAAAD9AAAAAgAAAAEAAAAAAAAAAPwCAAAAA/sAAAAQAFoAbwBvA"
+"G0AQQByAGUAYQAAAAAA/////wAAAD8A////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAAA//"
+"///wAAAH4A////+wAAAAwAVAByAGEAYwBlAHMAAAAAAP////8AAAB+AP///wAAAAMAAAAAAAAAAPw"
+"BAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQAAAAAAP////8AAABfAP///wAAB4QAAAPnAAAA"
+"BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
+"AAAAA=="
+      SavedViews    "AAAAAgAAAAA="
+      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL/gMAAAAJAAAAC"
+"AAAAGQAAAABAAAAZAAAAAMAAABkAAAAAgAAAGQAAAAFAAAAZAAAAAQAAABkAAAABwAAAGQAAAAGAA"
+"AAZAAAAAkAAABkAAAA3wAAAAsBAAABAAAAAAAAAAAAAAAAff////8AAACBAAAAAAAAAAsAAAC0AAA"
+"AAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAA"
+"AAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAA"
+"AArAAAAAQAAAAAAAAPoAAAAACs="
+      PlotPalettes  "AAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      Axes          "1"
+      TimeRange     "0.0"
+      ScrollingMode "1"
+      SingleTimeAxis "1"
+      Open          "0"
+      Ts            "-1"
+      SampleLimit   "0"
+      XAxisLabel    ""
+      ShowLegend    "1"
+      Axis {
+        Name          ""
+        AutoScale     1
+        MinValue      0
+        MaxValue      1
+        Signals       {}
+        SignalTypes   [ ]
+        Untangle      0
+        KeepBaseline  off
+        BaselineValue 0
+      }
+      Fourier {
+        SingleXAxis       on
+        AxisLabel         "Frequency"
+        Scaling           0
+        PhaseDisplay      0
+        ShowFourierLegend off
+        Axis {
+          Name          ""
+          AutoScale     1
+          MinValue      0
+          MaxValue      1
+          Signals       {}
+          Untangle      0
+          KeepBaseline  off
+          BaselineValue 0
+        }
+      }
+    }
+    Component {
+      Type          Diode
+      Name          "D1"
+      Show          on
+      Position      [2000, 235]
+      Direction     left
+      Flipped       off
+      Parameter {
+        Variable      "Vf"
+        Value         "0"
+        Show          off
+      }
+      Parameter {
+        Variable      "Ron"
+        Value         "0"
+        Show          off
+      }
+      Parameter {
+        Variable      "thermal"
+        Value         ""
+        Show          off
+      }
+      Parameter {
+        Variable      "Rth"
+        Value         "0"
+        Show          off
+      }
+      Parameter {
+        Variable      "T_init"
+        Value         ""
+        Show          off
+      }
+    }
+    Component {
+      Type          Scope
+      Name          "Scope13"
+      Show          on
+      Position      [2030, 570]
+      Direction     up
+      Flipped       off
+      Location      [-59, 631; 1480, 1455]
+      State         "AAAA/wAAAAD9AAAAAgAAAAEAAAAAAAAAAPwCAAAAA/sAAAAQAFoAbwBvA"
+"G0AQQByAGUAYQAAAAAA/////wAAAG4A////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAAA//"
+"///wAAAH4A////+wAAAAwAVAByAGEAYwBlAHMAAAAAAP////8AAAB+AP///wAAAAMAAAAAAAAAAPw"
+"BAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQAAAAAAP////8AAABfAP///wAAB4QAAAPnAAAA"
+"BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
+"AAAAA=="
+      SavedViews    "AAAAAgAAAAA="
+      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL/gMAAAAJAAAAC"
+"AAAAGQAAAABAAAAZAAAAAMAAABkAAAAAgAAAGQAAAAFAAAAZAAAAAQAAABkAAAABwAAAGQAAAAGAA"
+"AAZAAAAAkAAABkAAABAgAAAAsBAAABAAAAAAAAAAAAAAAAff////8AAACBAAAAAAAAAAsAAADXAAA"
+"AAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAA"
+"AAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAA"
+"AArAAAAAQAAAAAAAAPoAAAAACs="
+      PlotPalettes  "AAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAA"
+"AEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+      Axes          "2"
+      TimeRange     "0.0"
+      ScrollingMode "1"
+      SingleTimeAxis "1"
+      Open          "0"
+      Ts            "-1"
+      SampleLimit   "0"
+      XAxisLabel    ""
+      ShowLegend    "1"
+      Axis {
+        Name          ""
+        AutoScale     1
+        MinValue      0
+        MaxValue      1
+        Signals       {}
+        SignalTypes   [ ]
+        Untangle      0
+        KeepBaseline  off
+        BaselineValue 0
+      }
+      Axis {
+        Name          ""
+        AutoScale     1
+        MinValue      0
+        MaxValue      1
+        Signals       {}
+        SignalTypes   [ ]
+        Untangle      0
+        KeepBaseline  off
+        BaselineValue 0
+      }
+      Fourier {
+        SingleXAxis       on
+        AxisLabel         "Frequency"
+        Scaling           0
+        PhaseDisplay      0
+        ShowFourierLegend off
+        Axis {
+          Name          ""
+          AutoScale     1
+          MinValue      0
+          MaxValue      1
+          Signals       {}
+          Untangle      0
+          KeepBaseline  off
+          BaselineValue 0
+        }
+        Axis {
+          Name          ""
+          AutoScale     1
+          MinValue      0
+          MaxValue      1
+          Signals       {}
+          Untangle      0
+          KeepBaseline  off
+          BaselineValue 0
+        }
+      }
+    }
+    Component {
+      Type          Voltmeter
+      Name          "Vm10"
+      Show          on
+      Position      [1905, 395]
+      Direction     up
+      Flipped       off
+    }
+    Component {
+      Type          Ammeter
+      Name          "Am7"
+      Show          on
+      Position      [1955, 435]
+      Direction     up
+      Flipped       off
+    }
+    Component {
+      Type          Switch
+      Name          "S2"
+      Show          on
+      Position      [2510, 235]
+      Direction     left
+      Flipped       off
+      Parameter {
+        Variable      "s_init"
+        Value         "0"
+        Show          off
+      }
+    }
+    Component {
+      Type          Step
+      Name          "Step1"
+      Show          on
+      Position      [2430, 190]
+      Direction     right
+      Flipped       off
+      Parameter {
+        Variable      "Time"
+        Value         "50000e-3"
+        Show          off
+      }
+      Parameter {
+        Variable      "Before"
+        Value         "1"
+        Show          off
+      }
+      Parameter {
+        Variable      "After"
+        Value         "0"
+        Show          off
+      }
+      Parameter {
+        Variable      "DataType"
+        Value         "10"
+        Show          off
+      }
+    }
+    Component {
+      Type          Display
+      Name          "Display8"
+      Show          on
+      Position      [2400, 635]
+      Direction     up
+      Flipped       off
+      Frame         [-31, -11; 31, 11]
+      LabelPosition [0, 14]
+      LabelAlign    up
+      Parameter {
+        Variable      "Notation"
+        Value         "1"
+        Show          off
+      }
+      Parameter {
+        Variable      "Precision"
+        Value         "4"
+        Show          off
+      }
+    }
+    Component {
+      Type          PlecsProbe
+      Name          "Probe17"
+      Show          on
+      Position      [2185, 635]
+      Direction     right
+      Flipped       off
+    }
+    Component {
+      Type          Reference
+      SrcComponent  "Components/Control/Filters/Periodic Average"
+      Name          "Periodic Average16"
+      Show          off
+      Position      [2310, 635]
+      Direction     up
+      Flipped       off
+      Frame         [-15, -15; 15, 15]
+      LabelPosition [0, 18]
+      LabelAlign    up
+      Parameter {
+        Variable      "T_average"
+        Value         "Ts"
+        Show          off
+      }
+      Terminal {
+        Type          Output
+        Position      [19, 0]
+        Direction     right
+      }
+      Terminal {
+        Type          Input
+        Position      [-15, 0]
+        Direction     left
+      }
+    }
+    Component {
+      Type          Resistor
+      Name          "R10"
+      Show          on
+      Position      [385, 355]
+      Direction     up
+      Flipped       off
+      Parameter {
+        Variable      "R"
+        Value         "1e3"
+        Show          on
+      }
+    }
+    Component {
+      Type          Inductor
+      Name          "L3"
+      Show          on
+      Position      [385, 415]
+      Direction     down
+      Flipped       off
+      Parameter {
+        Variable      "L"
+        Value         "1e-3"
+        Show          on
+      }
+      Parameter {
+        Variable      "i_init"
+        Value         "0"
+        Show          off
+      }
+    }
+    Component {
+      Type          Scope
+      Name          "Resistor de \namortecimento\nentrada"
+      Show          on
+      Position      [520, 540]
+      Direction     up
+      Flipped       off
+      Location      [-1920, 23; -384, 796]
+      State         "AAAA/wAAAAD9AAAAAgAAAAEAAAAAAAAAAPwCAAAAA/sAAAAQAFoAbwBvA"
+"G0AQQByAGUAYQAAAAAA/////wAAADQA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAAA//"
+"///wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMAAAAAAP////8AAABmAP///wAAAAMAAAAAAAAAAPw"
+"BAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQAAAAAAP////8AAABQAP///wAABgAAAALqAAAA"
+"BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
+"AAAAA=="
+      SavedViews    "AAAAAgAAAAA="
+      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL/gMAAAAJAAAAA"
+"gAAAGQAAAADAAAAZAAAAAEAAABkAAAABgAAAGQAAAAHAAAAZAAAAAQAAABkAAAABQAAAGQAAAAIAA"
+"AAZAAAAAkAAABkAAAAywAAAAsBAAABAAAAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAACnAAA"
+"AAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAA"
+"AAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAA"
+"AAkAAAAAQAAAAAAAAPoAAAAACQ="
+      PlotPalettes  "AAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAA"
+"AEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+      Axes          "2"
+      TimeRange     "0.0"
+      ScrollingMode "1"
+      SingleTimeAxis "1"
+      Open          "0"
+      Ts            "-1"
+      SampleLimit   "0"
+      XAxisLabel    ""
+      ShowLegend    "1"
+      Axis {
+        Name          ""
+        AutoScale     1
+        MinValue      0
+        MaxValue      1
+        Signals       {}
+        SignalTypes   [ ]
+        Untangle      0
+        KeepBaseline  off
+        BaselineValue 0
+      }
+      Axis {
+        Name          ""
+        AutoScale     1
+        MinValue      0
+        MaxValue      1
+        Signals       {}
+        SignalTypes   [ ]
+        Untangle      0
+        KeepBaseline  off
+        BaselineValue 0
+      }
+      Fourier {
+        SingleXAxis       on
+        AxisLabel         "Frequency"
+        Scaling           0
+        PhaseDisplay      0
+        ShowFourierLegend off
+        Axis {
+          Name          ""
+          AutoScale     1
+          MinValue      0
+          MaxValue      1
+          Signals       {}
+          Untangle      0
+          KeepBaseline  off
+          BaselineValue 0
+        }
+        Axis {
+          Name          ""
+          AutoScale     1
+          MinValue      0
+          MaxValue      1
+          Signals       {}
+          Untangle      0
+          KeepBaseline  off
+          BaselineValue 0
+        }
+      }
+    }
+    Component {
+      Type          PlecsProbe
+      Name          "Probe18"
+      Show          on
+      Position      [435, 540]
+      Direction     right
+      Flipped       off
+    }
+    Component {
+      Type          Sum
+      Name          "Sum"
+      Show          off
+      Position      [365, 140]
+      Direction     up
+      Flipped       off
+      Parameter {
+        Variable      "IconShape"
+        Value         "2"
+        Show          off
+      }
+      Parameter {
+        Variable      "Inputs"
+        Value         "|++"
+        Show          off
+      }
+      Parameter {
+        Variable      "DataType"
+        Value         "10"
+        Show          off
+      }
+    }
+    Component {
+      Type          Step
+      Name          "Step2"
+      Show          on
+      Position      [295, 190]
+      Direction     right
+      Flipped       off
+      Parameter {
+        Variable      "Time"
+        Value         "6000000000000e-3"
+        Show          off
+      }
+      Parameter {
+        Variable      "Before"
+        Value         "0"
+        Show          off
+      }
+      Parameter {
+        Variable      "After"
+        Value         "1"
+        Show          off
+      }
+      Parameter {
+        Variable      "DataType"
+        Value         "10"
+        Show          off
+      }
+    }
+    Component {
+      Type          Scope
+      Name          "Capacitor entrada"
+      Show          on
+      Position      [595, 125]
+      Direction     up
+      Flipped       off
+      Location      [0, 26; 1539, 850]
+      State         "AAAA/wAAAAD9AAAAAgAAAAEAAAAAAAAAAPwCAAAAA/sAAAAQAFoAbwBvA"
+"G0AQQByAGUAYQAAAAAA/////wAAAG4A////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAAA//"
+"///wAAAH4A////+wAAAAwAVAByAGEAYwBlAHMAAAAAAP////8AAAB+AP///wAAAAMAAAAAAAAAAPw"
+"BAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQAAAAAAP////8AAABfAP///wAAB4QAAAPnAAAA"
+"BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
+"AAAAA=="
+      SavedViews    "AAAAAgAAAAA="
+      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL/gMAAAAJAAAAC"
+"QAAAGQAAAAIAAAAZAAAAAMAAABkAAAAAgAAAGQAAAABAAAAZAAAAAcAAABkAAAABgAAAGQAAAAFAA"
+"AAZAAAAAQAAABkAAAA1QAAAAsBAAABAAAAAAAAAAAAAAAAff////8AAACBAAAAAAAAAAsAAACqAAA"
+"AAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAA"
+"AAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAA"
+"AArAAAAAQAAAAAAAAPoAAAAACs="
+      PlotPalettes  "AAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAA"
+"AEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+      Axes          "2"
+      TimeRange     "0.0"
+      ScrollingMode "1"
+      SingleTimeAxis "1"
+      Open          "0"
+      Ts            "-1"
+      SampleLimit   "0"
+      XAxisLabel    ""
+      ShowLegend    "1"
+      Axis {
+        Name          ""
+        AutoScale     1
+        MinValue      0
+        MaxValue      1
+        Signals       {}
+        SignalTypes   [ ]
+        Untangle      0
+        KeepBaseline  off
+        BaselineValue 0
+      }
+      Axis {
+        Name          ""
+        AutoScale     1
+        MinValue      0
+        MaxValue      1
+        Signals       {}
+        SignalTypes   [ ]
+        Untangle      0
+        KeepBaseline  off
+        BaselineValue 0
+      }
+      Fourier {
+        SingleXAxis       on
+        AxisLabel         "Frequency"
+        Scaling           0
+        PhaseDisplay      0
+        ShowFourierLegend off
+        Axis {
+          Name          ""
+          AutoScale     1
+          MinValue      0
+          MaxValue      1
+          Signals       {}
+          Untangle      0
+          KeepBaseline  off
+          BaselineValue 0
+        }
+        Axis {
+          Name          ""
+          AutoScale     1
+          MinValue      0
+          MaxValue      1
+          Signals       {}
+          Untangle      0
+          KeepBaseline  off
+          BaselineValue 0
+        }
+      }
+    }
+    Component {
+      Type          SignalDemux
+      Name          "Demux"
+      Show          off
+      Position      [555, 125]
+      Direction     right
+      Flipped       on
+      Parameter {
+        Variable      "Width"
+        Value         "2"
+        Show          off
+      }
+    }
+    Component {
+      Type          SignalDemux
+      Name          "Demux3"
+      Show          off
+      Position      [485, 540]
+      Direction     right
+      Flipped       on
+      Parameter {
+        Variable      "Width"
+        Value         "2"
+        Show          off
+      }
+    }
+    Component {
+      Type          Resistor
+      Name          "R12"
+      Show          on
+      Position      [2045, 450]
+      Direction     up
+      Flipped       off
+      Parameter {
+        Variable      "R"
+        Value         "1.7"
+        Show          on
+      }
+    }
     Connection {
       Type          Wire
-      SrcComponent  "V_dc"
+      SrcComponent  "FETD5"
       SrcTerminal   2
-      Points        [500, 505; 590, 505]
+      Points        [1045, 505; 885, 505]
       Branch {
         Points        [725, 505]
         Branch {
-          Points        [885, 505]
+          Points        [610, 505]
           Branch {
-            Points        [1045, 505]
-            DstComponent  "FETD5"
-            DstTerminal   2
+            Points        [525, 505]
+            Branch {
+              Points        [430, 505]
+              Branch {
+                Points        [310, 505]
+                Branch {
+                  Points        [310, 475]
+                  Branch {
+                    DstComponent  "L2"
+                    DstTerminal   1
+                  }
+                  Branch {
+                    Points        [260, 475]
+                    DstComponent  "C6"
+                    DstTerminal   2
+                  }
+                }
+                Branch {
+                  Points        [230, 505]
+                  DstComponent  "Vm9"
+                  DstTerminal   2
+                }
+              }
+              Branch {
+                Points        [430, 470]
+                Branch {
+                  Points        [385, 470]
+                  DstComponent  "L3"
+                  DstTerminal   1
+                }
+                Branch {
+                  Points        [440, 470]
+                  DstComponent  "D3"
+                  DstTerminal   1
+                }
+              }
+            }
+            Branch {
+              DstComponent  "R3"
+              DstTerminal   2
+            }
           }
           Branch {
-            DstComponent  "FETD4"
+            DstComponent  "Vm4"
             DstTerminal   2
           }
         }
@@ -8713,7 +9845,7 @@ Plecs {
         }
       }
       Branch {
-        DstComponent  "Vm4"
+        DstComponent  "FETD4"
         DstTerminal   2
       }
     }
@@ -8729,26 +9861,41 @@ Plecs {
           DstTerminal   2
         }
         Branch {
-          Points        [1985, 505]
+          Points        [1955, 505]
           Branch {
-            Points        [2040, 505]
+            Points        [1955, 465]
             Branch {
-              DstComponent  "R4"
+              DstComponent  "Am7"
               DstTerminal   2
             }
             Branch {
-              Points        [2095, 505]
+              Points        [1905, 465]
+              DstComponent  "Vm10"
+              DstTerminal   2
+            }
+          }
+          Branch {
+            Points        [2045, 505]
+            Branch {
+              Points        [2090, 505]
               Branch {
                 Points        [2310, 505]
                 Branch {
-                  Points        [2410, 505]
+                  Points        [2365, 505]
                   Branch {
-                    Points        [2645, 505]
-                    DstComponent  "V_dc1"
-                    DstTerminal   2
+                    Points        [2410, 505]
+                    Branch {
+                      Points        [2645, 505]
+                      DstComponent  "V_dc1"
+                      DstTerminal   2
+                    }
+                    Branch {
+                      DstComponent  "Vm3"
+                      DstTerminal   2
+                    }
                   }
                   Branch {
-                    DstComponent  "Vm3"
+                    DstComponent  "C4"
                     DstTerminal   2
                   }
                 }
@@ -8766,14 +9913,14 @@ Plecs {
                 }
               }
               Branch {
-                DstComponent  "L1"
+                DstComponent  "D2"
                 DstTerminal   1
               }
             }
-          }
-          Branch {
-            DstComponent  "D2"
-            DstTerminal   1
+            Branch {
+              DstComponent  "R12"
+              DstTerminal   2
+            }
           }
         }
       }
@@ -8791,7 +9938,7 @@ Plecs {
       Branch {
         Points        [1830, 235]
         Branch {
-          DstComponent  "D1"
+          DstComponent  "Am4"
           DstTerminal   1
         }
         Branch {
@@ -8816,7 +9963,7 @@ Plecs {
       Type          Wire
       SrcComponent  "Am5"
       SrcTerminal   2
-      Points        [590, 235]
+      Points        [610, 235]
       Branch {
         Points        [725, 235]
         Branch {
@@ -9529,14 +10676,6 @@ Plecs {
     }
     Connection {
       Type          Wire
-      SrcComponent  "Am5"
-      SrcTerminal   1
-      Points        [500, 235]
-      DstComponent  "V_dc"
-      DstTerminal   1
-    }
-    Connection {
-      Type          Wire
       SrcComponent  "Am1"
       SrcTerminal   1
       DstComponent  "Label"
@@ -9927,13 +11066,6 @@ Plecs {
       DstTerminal   2
     }
     Connection {
-      Type          Wire
-      SrcComponent  "R1"
-      SrcTerminal   1
-      DstComponent  "R2"
-      DstTerminal   2
-    }
-    Connection {
       Type          Signal
       SrcComponent  "Probe5"
       SrcTerminal   1
@@ -9945,13 +11077,6 @@ Plecs {
       SrcComponent  "Periodic Average12"
       SrcTerminal   1
       DstComponent  "Display2"
-      DstTerminal   1
-    }
-    Connection {
-      Type          Wire
-      SrcComponent  "R1"
-      SrcTerminal   2
-      DstComponent  "R3"
       DstTerminal   1
     }
     Connection {
@@ -9969,13 +11094,6 @@ Plecs {
       DstTerminal   1
     }
     Connection {
-      Type          Wire
-      SrcComponent  "D1"
-      SrcTerminal   2
-      DstComponent  "Am4"
-      DstTerminal   1
-    }
-    Connection {
       Type          Signal
       SrcComponent  "Periodic Average11"
       SrcTerminal   1
@@ -9989,6 +11107,11 @@ Plecs {
         DstComponent  "Product2"
         DstTerminal   2
       }
+      Branch {
+        Points        [2745, 185]
+        DstComponent  "Scope"
+        DstTerminal   1
+      }
     }
     Connection {
       Type          Signal
@@ -9999,13 +11122,6 @@ Plecs {
     }
     Connection {
       Type          Wire
-      SrcComponent  "R3"
-      SrcTerminal   2
-      DstComponent  "L1"
-      DstTerminal   2
-    }
-    Connection {
-      Type          Wire
       SrcComponent  "C1"
       SrcTerminal   2
       DstComponent  "R4"
@@ -10013,13 +11129,17 @@ Plecs {
     }
     Connection {
       Type          Wire
-      SrcComponent  "C1"
+      SrcComponent  "R5"
       SrcTerminal   1
-      Points        [2040, 235]
+      Points        [2310, 255]
       Branch {
-        Points        [2095, 235]
+        Points        [2310, 235]
         Branch {
-          Points        [2310, 235]
+          DstComponent  "Am3"
+          DstTerminal   1
+        }
+        Branch {
+          Points        [2365, 235]
           Branch {
             Points        [2410, 235]
             Branch {
@@ -10027,46 +11147,21 @@ Plecs {
               DstTerminal   1
             }
             Branch {
-              DstComponent  "Am6"
-              DstTerminal   2
+              DstComponent  "S2"
+              DstTerminal   1
             }
           }
           Branch {
-            Points        [2310, 255]
-            Branch {
-              DstComponent  "R5"
-              DstTerminal   1
-            }
-            Branch {
-              Points        [2220, 255]
-              DstComponent  "R6"
-              DstTerminal   1
-            }
+            DstComponent  "R1"
+            DstTerminal   1
           }
-        }
-        Branch {
-          DstComponent  "R2"
-          DstTerminal   1
         }
       }
       Branch {
-        Points        [1985, 235]
-        Branch {
-          DstComponent  "D2"
-          DstTerminal   2
-        }
-        Branch {
-          DstComponent  "Am4"
-          DstTerminal   2
-        }
+        Points        [2220, 255]
+        DstComponent  "R6"
+        DstTerminal   1
       }
-    }
-    Connection {
-      Type          Wire
-      SrcComponent  "R6"
-      SrcTerminal   2
-      DstComponent  "C2"
-      DstTerminal   1
     }
     Connection {
       Type          Wire
@@ -10090,13 +11185,6 @@ Plecs {
         DstComponent  "C2"
         DstTerminal   2
       }
-    }
-    Connection {
-      Type          Wire
-      SrcComponent  "R7"
-      SrcTerminal   2
-      DstComponent  "C3"
-      DstTerminal   1
     }
     Connection {
       Type          Signal
@@ -10133,6 +11221,328 @@ Plecs {
         DstComponent  "Product2"
         DstTerminal   3
       }
+    }
+    Connection {
+      Type          Wire
+      SrcComponent  "R2"
+      SrcTerminal   1
+      Points        [2045, 235]
+      Branch {
+        DstComponent  "D1"
+        DstTerminal   2
+      }
+      Branch {
+        Points        [2090, 235]
+        Branch {
+          DstComponent  "D4"
+          DstTerminal   2
+        }
+        Branch {
+          DstComponent  "D2"
+          DstTerminal   2
+        }
+      }
+    }
+    Connection {
+      Type          Wire
+      SrcComponent  "R1"
+      SrcTerminal   2
+      DstComponent  "C4"
+      DstTerminal   1
+    }
+    Connection {
+      Type          Wire
+      SrcComponent  "R6"
+      SrcTerminal   2
+      DstComponent  "C2"
+      DstTerminal   1
+    }
+    Connection {
+      Type          Wire
+      SrcComponent  "R7"
+      SrcTerminal   2
+      DstComponent  "C3"
+      DstTerminal   1
+    }
+    Connection {
+      Type          Signal
+      SrcComponent  "Probe10"
+      SrcTerminal   1
+      Points        [2475, 30; 2475, 20]
+      DstComponent  "Scope3"
+      DstTerminal   1
+    }
+    Connection {
+      Type          Signal
+      SrcComponent  "Probe11"
+      SrcTerminal   1
+      Points        [2475, 95; 2475, 85]
+      DstComponent  "Scope4"
+      DstTerminal   1
+    }
+    Connection {
+      Type          Wire
+      SrcComponent  "C5"
+      SrcTerminal   2
+      DstComponent  "R3"
+      DstTerminal   1
+    }
+    Connection {
+      Type          Wire
+      SrcComponent  "R9"
+      SrcTerminal   2
+      DstComponent  "V_dc"
+      DstTerminal   1
+    }
+    Connection {
+      Type          Wire
+      SrcComponent  "V_dc"
+      SrcTerminal   2
+      Points        [310, 400]
+      Branch {
+        DstComponent  "L2"
+        DstTerminal   2
+      }
+      Branch {
+        Points        [260, 400]
+        DstComponent  "C6"
+        DstTerminal   1
+      }
+    }
+    Connection {
+      Type          Wire
+      SrcComponent  "R9"
+      SrcTerminal   1
+      Points        [310, 235]
+      Branch {
+        DstComponent  "S1"
+        DstTerminal   1
+      }
+      Branch {
+        Points        [230, 235]
+        DstComponent  "Vm9"
+        DstTerminal   1
+      }
+    }
+    Connection {
+      Type          Signal
+      SrcComponent  "Vm9"
+      SrcTerminal   3
+      Points        [265, 365]
+      DstComponent  "Scope8"
+      DstTerminal   1
+    }
+    Connection {
+      Type          Signal
+      SrcComponent  "Probe16"
+      SrcTerminal   1
+      DstComponent  "Diodo roda \nlivre entrada"
+      DstTerminal   1
+    }
+    Connection {
+      Type          Wire
+      SrcComponent  "Am4"
+      SrcTerminal   2
+      Points        [1955, 235]
+      Branch {
+        Points        [1955, 275]
+        Branch {
+          DstComponent  "C1"
+          DstTerminal   1
+        }
+        Branch {
+          Points        [1905, 275]
+          DstComponent  "Vm10"
+          DstTerminal   1
+        }
+      }
+      Branch {
+        DstComponent  "D1"
+        DstTerminal   1
+      }
+    }
+    Connection {
+      Type          Wire
+      SrcComponent  "D4"
+      SrcTerminal   1
+      DstComponent  "Am3"
+      DstTerminal   2
+    }
+    Connection {
+      Type          Signal
+      SrcComponent  "Am3"
+      SrcTerminal   3
+      Points        [2265, 250; 2265, 170]
+      Branch {
+        Points        [2265, 130]
+        DstComponent  "Display7"
+        DstTerminal   1
+      }
+      Branch {
+        DstComponent  "Scope12"
+        DstTerminal   1
+      }
+    }
+    Connection {
+      Type          Signal
+      SrcComponent  "Vm10"
+      SrcTerminal   3
+      Points        [1925, 395; 1925, 530; 1870, 530; 1870, 575]
+      DstComponent  "Scope13"
+      DstTerminal   2
+    }
+    Connection {
+      Type          Wire
+      SrcComponent  "Am7"
+      SrcTerminal   1
+      DstComponent  "R4"
+      DstTerminal   2
+    }
+    Connection {
+      Type          Signal
+      SrcComponent  "Am7"
+      SrcTerminal   3
+      Points        [1980, 435; 1980, 565]
+      DstComponent  "Scope13"
+      DstTerminal   1
+    }
+    Connection {
+      Type          Signal
+      SrcComponent  "Step1"
+      SrcTerminal   1
+      Points        [2510, 190]
+      DstComponent  "S2"
+      DstTerminal   3
+    }
+    Connection {
+      Type          Wire
+      SrcComponent  "S2"
+      SrcTerminal   2
+      DstComponent  "Am6"
+      DstTerminal   2
+    }
+    Connection {
+      Type          Signal
+      SrcComponent  "Periodic Average16"
+      SrcTerminal   1
+      DstComponent  "Display8"
+      DstTerminal   1
+    }
+    Connection {
+      Type          Signal
+      SrcComponent  "Probe17"
+      SrcTerminal   1
+      DstComponent  "Periodic Average16"
+      DstTerminal   2
+    }
+    Connection {
+      Type          Wire
+      SrcComponent  "R10"
+      SrcTerminal   2
+      DstComponent  "L3"
+      DstTerminal   2
+    }
+    Connection {
+      Type          Wire
+      SrcComponent  "Am5"
+      SrcTerminal   1
+      Points        [525, 235]
+      Branch {
+        DstComponent  "C5"
+        DstTerminal   1
+      }
+      Branch {
+        Points        [430, 235]
+        Branch {
+          Points        [430, 285]
+          Branch {
+            Points        [385, 285]
+            DstComponent  "R10"
+            DstTerminal   1
+          }
+          Branch {
+            Points        [440, 285]
+            DstComponent  "D3"
+            DstTerminal   2
+          }
+        }
+        Branch {
+          DstComponent  "S1"
+          DstTerminal   2
+        }
+      }
+    }
+    Connection {
+      Type          Signal
+      SrcComponent  "Step"
+      SrcTerminal   1
+      DstComponent  "Sum"
+      DstTerminal   2
+    }
+    Connection {
+      Type          Signal
+      SrcComponent  "Sum"
+      SrcTerminal   1
+      Points        [395, 140]
+      DstComponent  "S1"
+      DstTerminal   3
+    }
+    Connection {
+      Type          Signal
+      SrcComponent  "Step2"
+      SrcTerminal   1
+      Points        [365, 190]
+      DstComponent  "Sum"
+      DstTerminal   3
+    }
+    Connection {
+      Type          Signal
+      SrcComponent  "Demux"
+      SrcTerminal   2
+      DstComponent  "Capacitor entrada"
+      DstTerminal   1
+    }
+    Connection {
+      Type          Signal
+      SrcComponent  "Demux"
+      SrcTerminal   3
+      DstComponent  "Capacitor entrada"
+      DstTerminal   2
+    }
+    Connection {
+      Type          Signal
+      SrcComponent  "Probe12"
+      SrcTerminal   1
+      DstComponent  "Demux"
+      DstTerminal   1
+    }
+    Connection {
+      Type          Signal
+      SrcComponent  "Demux3"
+      SrcTerminal   2
+      DstComponent  "Resistor de \namortecimento\nentrada"
+      DstTerminal   1
+    }
+    Connection {
+      Type          Signal
+      SrcComponent  "Demux3"
+      SrcTerminal   3
+      DstComponent  "Resistor de \namortecimento\nentrada"
+      DstTerminal   2
+    }
+    Connection {
+      Type          Signal
+      SrcComponent  "Probe18"
+      SrcTerminal   1
+      DstComponent  "Demux3"
+      DstTerminal   1
+    }
+    Connection {
+      Type          Wire
+      SrcComponent  "R12"
+      SrcTerminal   1
+      DstComponent  "R2"
+      DstTerminal   2
     }
     Annotation {
       Name          "<html><body>\n<p><span style=\" font-size:15px;\">Analise"
@@ -10293,6 +11703,40 @@ Plecs {
     }
   }
   ProbeBlock {
+    Tag           "dab3p_ideal_matlab/Probe10"
+    Probe {
+      Component     "C2"
+      Path          ""
+      Signals       {"Capacitor voltage"}
+    }
+    Probe {
+      Component     "C3"
+      Path          ""
+      Signals       {"Capacitor voltage"}
+    }
+  }
+  ProbeBlock {
+    Tag           "dab3p_ideal_matlab/Probe11"
+    Probe {
+      Component     "R5"
+      Path          ""
+      Signals       {"Resistor current"}
+    }
+    Probe {
+      Component     "R8"
+      Path          ""
+      Signals       {"Resistor current"}
+    }
+  }
+  ProbeBlock {
+    Tag           "dab3p_ideal_matlab/Probe12"
+    Probe {
+      Component     "C5"
+      Path          ""
+      Signals       {"Capacitor current", "Capacitor voltage"}
+    }
+  }
+  ProbeBlock {
     Tag           "dab3p_ideal_matlab/Probe13"
     Probe {
       Component     "La"
@@ -10322,6 +11766,30 @@ Plecs {
     }
   }
   ProbeBlock {
+    Tag           "dab3p_ideal_matlab/Probe16"
+    Probe {
+      Component     "D3"
+      Path          ""
+      Signals       {"Diode current"}
+    }
+  }
+  ProbeBlock {
+    Tag           "dab3p_ideal_matlab/Probe17"
+    Probe {
+      Component     "R5"
+      Path          ""
+      Signals       {"Resistor current"}
+    }
+  }
+  ProbeBlock {
+    Tag           "dab3p_ideal_matlab/Probe18"
+    Probe {
+      Component     "R10"
+      Path          ""
+      Signals       {"Resistor current", "Resistor power"}
+    }
+  }
+  ProbeBlock {
     Tag           "dab3p_ideal_matlab/Probe2"
     Probe {
       Component     "Llka_p"
@@ -10345,15 +11813,7 @@ Plecs {
   ProbeBlock {
     Tag           "dab3p_ideal_matlab/Probe5"
     Probe {
-      Component     "R1"
-      Path          ""
-      Signals       {"Resistor power"}
-    }
-  }
-  ProbeBlock {
-    Tag           "dab3p_ideal_matlab/Probe6"
-    Probe {
-      Component     "R3"
+      Component     "R12"
       Path          ""
       Signals       {"Resistor power"}
     }

@@ -10,9 +10,13 @@ end
 
 addpath('utils')
 addpath('utils_transf')
+addpath('dados_pratica')
+% 
+% color1 = [0.045 0.245 0.745]; % blue
+% color2 = [0.635 0.635 0.635]; % gray
 
-color1 = [0.045 0.245 0.745]; % blue
-color2 = [0.635 0.635 0.635]; % gray
+color1 = [249,152,32]/255; % orange
+color2 = [32,129,249]/255; % blue
 
 syms Ld1 Ld2 n Lm Po t L1 L2 Ldab M fs Vi d dt real positive
 syms phi real
@@ -29,11 +33,11 @@ trafo = 'DiY';
 Vi_num = 400;
 d_num = 1;
 fs_num = 100e3;
-Ldab_num = 61e-6;
-Ld1_num = 2e-6;
-n_num = 1;
+Ldab_num = 61.5e-6;
+Ld1_num = 1.5e-6;
+n_num = 5/9;
 Ld2_num = Ld1_num*n_num*n_num;
-Lm_num = [700e-6, 1.4e-3 10e-3];
+Lm_num = [800e-6, 1.4e-3 10e-3];
 M_num = Lm_num*n_num;
 L1_num = Ld1_num + Lm_num;
 L2_num = Ld2_num + n_num*n_num*Lm_num;
@@ -99,10 +103,11 @@ fIp.f2(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,phi_num(2
 fIs.f2(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,phi_num(2))
 fpot_eq.f2(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,phi_num(2))
 
+
 %%
 for mag=1:3
-    equat.f2 = fx0s.f2(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,max(intervalo.f1));
-    equat_ts.f2 = fts.f2(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,max(intervalo.f1));
+    equat.f2 = fx0s.f2(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,0*pi/180);
+    equat_ts.f2 = fts.f2(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,0*pi/180);
     
     figure
     cmap = f_create_cmap(2, color2, color1);
@@ -272,7 +277,7 @@ plot(rad2deg(vec_ph.f1),lim_pot.f1,'Color',jetcustom(3,:),'LineWidth',1.5)
 plot(rad2deg(vec_ph.f2),lim_pot.f2,'Color',jetcustom(3,:),'LineWidth',1.5)
 
 hold off
-ylim([0 4500])
+% ylim([0 4500])
 xlim([min(intervalo.f1) max(intervalo.f2)]*180/pi)
 grid on
 grid minor
@@ -303,13 +308,13 @@ lim_p.f1 = ones(1,length(vec_ph.f1)).*fIp_eq.f1(L1_num(1),L2_num(1),Ldab_num,M_n
 lim_s.f1 = ones(1,length(vec_ph.f1)).*fIs_eq.f1(L1_num(1),L2_num(1),Ldab_num,M_num(1),Vi_num,d_num,fs_num,vec_ph.f1);
 lim_pot.f1 = ones(1,length(vec_ph.f1)).*fpot_eq.f1(L1_num(1),L2_num(1),Ldab_num,M_num(1),Vi_num,d_num,fs_num,vec_ph.f1);
 
-fill([lim_pot.f1 fliplr(lim_pot.f1)], [lim_p.f1 fliplr(lim_s.f1)],jetcustom(1,:), 'FaceAlpha', 0.1, 'EdgeColor', 'none');
+fill([lim_pot.f1 fliplr(lim_pot.f1)], [lim_p.f1 fliplr(lim_s.f1)],jetcustom(1,:), 'FaceAlpha', .3, 'EdgeColor', 'none');
 
 lim_p.f2 = ones(1,length(vec_ph.f2)).*fIp_eq.f2(L1_num(1),L2_num(1),Ldab_num,M_num(1),Vi_num,d_num,fs_num,vec_ph.f2);
 lim_s.f2 = ones(1,length(vec_ph.f2)).*fIs_eq.f2(L1_num(1),L2_num(1),Ldab_num,M_num(1),Vi_num,d_num,fs_num,vec_ph.f2);
 lim_pot.f2 = ones(1,length(vec_ph.f2)).*fpot_eq.f2(L1_num(1),L2_num(1),Ldab_num,M_num(1),Vi_num,d_num,fs_num,vec_ph.f2);
 
-fill([lim_pot.f2 fliplr(lim_pot.f2)], [lim_p.f2 fliplr(lim_s.f2)],jetcustom(1,:), 'FaceAlpha', 0.1, 'EdgeColor', 'none');
+fill([lim_pot.f2 fliplr(lim_pot.f2)], [lim_p.f2 fliplr(lim_s.f2)],jetcustom(1,:), 'FaceAlpha', .3, 'EdgeColor', 'none');
 
 plot(lim_pot.f1,lim_p.f1,'Color',jetcustom(1,:),'LineWidth',1.5)
 plot(lim_pot.f2,lim_p.f2,'Color',jetcustom(1,:),'LineWidth',1.5)
@@ -321,13 +326,13 @@ lim_p.f1 = ones(1,length(vec_ph.f1)).*fIp_eq.f1(L1_num(2),L2_num(2),Ldab_num,M_n
 lim_s.f1 = ones(1,length(vec_ph.f1)).*fIs_eq.f1(L1_num(2),L2_num(2),Ldab_num,M_num(2),Vi_num,d_num,fs_num,vec_ph.f1);
 lim_pot.f1 = ones(1,length(vec_ph.f1)).*fpot_eq.f1(L1_num(2),L2_num(2),Ldab_num,M_num(2),Vi_num,d_num,fs_num,vec_ph.f1);
 
-fill([lim_pot.f1 fliplr(lim_pot.f1)], [lim_p.f1 fliplr(lim_s.f1)],jetcustom(2,:), 'FaceAlpha', 0.1, 'EdgeColor', 'none');
+fill([lim_pot.f1 fliplr(lim_pot.f1)], [lim_p.f1 fliplr(lim_s.f1)],jetcustom(2,:), 'FaceAlpha', .3, 'EdgeColor', 'none');
 
 lim_p.f2 = ones(1,length(vec_ph.f2)).*fIp_eq.f2(L1_num(2),L2_num(2),Ldab_num,M_num(2),Vi_num,d_num,fs_num,vec_ph.f2);
 lim_s.f2 = ones(1,length(vec_ph.f2)).*fIs_eq.f2(L1_num(2),L2_num(2),Ldab_num,M_num(2),Vi_num,d_num,fs_num,vec_ph.f2);
 lim_pot.f2 = ones(1,length(vec_ph.f2)).*fpot_eq.f2(L1_num(2),L2_num(2),Ldab_num,M_num(2),Vi_num,d_num,fs_num,vec_ph.f2);
 
-fill([lim_pot.f2 fliplr(lim_pot.f2)], [lim_p.f2 fliplr(lim_s.f2)],jetcustom(2,:), 'FaceAlpha', 0.1, 'EdgeColor', 'none');
+fill([lim_pot.f2 fliplr(lim_pot.f2)], [lim_p.f2 fliplr(lim_s.f2)],jetcustom(2,:), 'FaceAlpha', .3, 'EdgeColor', 'none');
 
 plot(lim_pot.f1,lim_p.f1,'Color',jetcustom(2,:),'LineWidth',1.5)
 plot(lim_pot.f2,lim_p.f2,'Color',jetcustom(2,:),'LineWidth',1.5)
@@ -338,13 +343,13 @@ lim_p.f1 = ones(1,length(vec_ph.f1)).*fIp_eq.f1(L1_num(3),L2_num(3),Ldab_num,M_n
 lim_s.f1 = ones(1,length(vec_ph.f1)).*fIs_eq.f1(L1_num(3),L2_num(3),Ldab_num,M_num(3),Vi_num,d_num,fs_num,vec_ph.f1);
 lim_pot.f1 = ones(1,length(vec_ph.f1)).*fpot_eq.f1(L1_num(3),L2_num(3),Ldab_num,M_num(3),Vi_num,d_num,fs_num,vec_ph.f1);
 
-fill([lim_pot.f1 fliplr(lim_pot.f1)], [lim_p.f1 fliplr(lim_s.f1)],jetcustom(3,:), 'FaceAlpha', 0.1, 'EdgeColor', 'none');
+fill([lim_pot.f1 fliplr(lim_pot.f1)], [lim_p.f1 fliplr(lim_s.f1)],jetcustom(3,:), 'FaceAlpha', .3, 'EdgeColor', 'none');
 
 lim_p.f2 = ones(1,length(vec_ph.f2)).*fIp_eq.f2(L1_num(3),L2_num(3),Ldab_num,M_num(3),Vi_num,d_num,fs_num,vec_ph.f2);
 lim_s.f2 = ones(1,length(vec_ph.f2)).*fIs_eq.f2(L1_num(3),L2_num(3),Ldab_num,M_num(3),Vi_num,d_num,fs_num,vec_ph.f2);
 lim_pot.f2 = ones(1,length(vec_ph.f2)).*fpot_eq.f2(L1_num(3),L2_num(3),Ldab_num,M_num(3),Vi_num,d_num,fs_num,vec_ph.f2);
 
-fill([lim_pot.f2 fliplr(lim_pot.f2)], [lim_p.f2 fliplr(lim_s.f2)],jetcustom(3,:), 'FaceAlpha', 0.1, 'EdgeColor', 'none');
+fill([lim_pot.f2 fliplr(lim_pot.f2)], [lim_p.f2 fliplr(lim_s.f2)],jetcustom(3,:), 'FaceAlpha', .3, 'EdgeColor', 'none');
 
 plot(lim_pot.f1,lim_p.f1,'Color',jetcustom(3,:),'LineWidth',1.5)
 plot(lim_pot.f2,lim_p.f2,'Color',jetcustom(3,:),'LineWidth',1.5)
@@ -361,3 +366,128 @@ xlabel('$P_o$[W]')
 ylabel('$d$')
 set(gca, 'FontSize', 20)
 f_save_figure(append('figure\',string(trafo),'_d_Po.pdf'))
+
+
+
+%% experimental
+
+%% corrente indutor
+
+fid = fopen('C1Trace00000.dat');
+format long
+cell_data= textscan(fid,'%f%f','Delimiter',' ','headerLines',1);
+my_data1 = cat(2,cell_data{:});
+fclose(fid);
+
+fid = fopen('C3Trace00000.dat');
+format long
+cell_data= textscan(fid,'%f%f','Delimiter',' ','headerLines',1);
+my_data2 = cat(2,cell_data{:});
+fclose(fid);
+
+fid = fopen('C4Trace00000.dat');
+format long
+cell_data= textscan(fid,'%f%f','Delimiter',' ','headerLines',1);
+my_data3 = cat(2,cell_data{:});
+fclose(fid);
+
+
+
+equat.f2 = fx0s.f2(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,4*pi/180);
+equat_ts.f2 = fts.f2(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,4*pi/180);
+
+figure
+cmap = f_create_cmap(3, color2, color1);
+colormap(cmap)
+jetcustom = cmap;
+hold on
+
+L1 = loglog(nan, nan,'-','LineWidth',2.5,'Color',[0 0 0]);
+L2 = loglog(nan, nan,'--.','LineWidth',1.5,'Color',[0 0 0]);
+
+% L11 = loglog(nan, nan,'Color',jetcustom(1,:));
+% L22 = loglog(nan, nan,'Color',jetcustom(2,:));
+% L33 = loglog(nan, nan,'Color',jetcustom(3,:));
+
+plot((-my_data1(1,1)+my_data1(:,1))*1e6,my_data1(:,2),'Color',jetcustom(1,:),'LineWidth',1.5)
+plot((-my_data2(1,1)+my_data2(:,1))*1e6,my_data2(:,2),'Color',jetcustom(3,:),'LineWidth',1.5)
+plot((-my_data3(1,1)+my_data3(:,1))*1e6,my_data3(:,2),'Color',jetcustom(2,:),'LineWidth',1.5)
+
+plot(equat_ts.f2*1e6,equat.f2(1,:),'--.','Color',jetcustom(1,:),'LineWidth',1.5)
+plot(equat_ts.f2*1e6,equat.f2(2,:),'--.','Color',jetcustom(2,:),'LineWidth',1.5)
+plot(equat_ts.f2*1e6,equat.f2(3,:),'--.','Color',jetcustom(3,:),'LineWidth',1.5)
+
+
+
+hold off
+xlim([0 max(equat_ts.f2)*1e6])
+% ylim([-8 8])
+grid on
+grid minor
+legend({'Experimental','Theoric'},'Location','best','FontSize', 14)
+set(gca, 'FontSize', 20)
+xlabel('$t[\mu$s]')
+ylabel('$i\,$[A]')
+f_save_figure(append('figure\',string(trafo),'_DiY_phi4_400_ILabc.pdf'))
+
+
+
+%% corrente indutor
+
+fid = fopen('C1Trace00001.dat');
+format long
+cell_data= textscan(fid,'%f%f','Delimiter',' ','headerLines',1);
+my_data1 = cat(2,cell_data{:});
+fclose(fid);
+
+fid = fopen('C3Trace00001.dat');
+format long
+cell_data= textscan(fid,'%f%f','Delimiter',' ','headerLines',1);
+my_data2 = cat(2,cell_data{:});
+fclose(fid);
+
+fid = fopen('C4Trace00001.dat');
+format long
+cell_data= textscan(fid,'%f%f','Delimiter',' ','headerLines',1);
+my_data3 = cat(2,cell_data{:});
+fclose(fid);
+
+mag=1;
+
+equat.f2 = fx0s.f2(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,3/4,fs_num,(-1+4.5)*pi/180);
+equat_ts.f2 = fts.f2(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,3/4,fs_num,(-1+4.5)*pi/180);
+
+figure
+cmap = f_create_cmap(3, color2, color1);
+colormap(cmap)
+jetcustom = cmap;
+hold on
+
+L1 = loglog(nan, nan,'-','LineWidth',2.5,'Color',[0 0 0]);
+L2 = loglog(nan, nan,'--.','LineWidth',1.5,'Color',[0 0 0]);
+
+plot((-my_data1(1,1)+my_data1(:,1))*1e6,my_data1(:,2),'Color',jetcustom(1,:),'LineWidth',2.5)
+plot((-my_data2(1,1)+my_data2(:,1))*1e6,my_data2(:,2),'Color',jetcustom(3,:),'LineWidth',2.5)
+plot((-my_data3(1,1)+my_data3(:,1))*1e6,my_data3(:,2),'Color',jetcustom(2,:),'LineWidth',2.5)
+
+plot(equat_ts.f2*1e6,equat.f2(1,:),'--.','Color',jetcustom(1,:),'LineWidth',1.5)
+plot(equat_ts.f2*1e6,equat.f2(2,:),'--.','Color',jetcustom(2,:),'LineWidth',1.5)
+plot(equat_ts.f2*1e6,equat.f2(3,:),'--.','Color',jetcustom(3,:),'LineWidth',1.5)
+
+
+
+hold off
+xlim([0 max(equat_ts.f2)*1e6])
+% ylim([-8 8])
+grid on
+grid minor
+legend({'Experimental','Theoric'},'Location','best','FontSize', 14)
+set(gca, 'FontSize', 20)
+xlabel('$t[\mu$s]')
+ylabel('$i\,$[A]')
+f_save_figure(append('figure\',string(trafo),'_DiY_phi_m1_300_ILabc.pdf'))
+
+
+
+
+

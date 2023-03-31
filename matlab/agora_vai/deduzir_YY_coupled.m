@@ -30,11 +30,11 @@ phi_num = [deg2rad(10),deg2rad(80)];  %[MUDAR]
 trafo = 'YY';
 
 Vi_num = 400;
-d_num = 1;
+d_num = 0.5;
 fs_num = 100e3;
-Ldab_num = 61e-6;
-Ld1_num = 2e-6;
-n_num = 1;
+Ldab_num = 61.5e-6;
+Ld1_num = 1.4e-6;
+n_num = 5/9;
 Ld2_num = Ld1_num*n_num*n_num;
 Lm_num = [700e-6, 1.4e-3 10e-3];
 M_num = Lm_num*n_num;
