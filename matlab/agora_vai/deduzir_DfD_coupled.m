@@ -11,8 +11,8 @@ end
 addpath('utils')
 addpath('utils_transf')
 
-color1 = [0.045 0.245 0.745]; % blue
-color2 = [0.635 0.635 0.635]; % gray
+color1 = [249,152,32]/255; % orange
+color2 = [32,129,249]/255; % blue
 
 syms Ld1 Ld2 n Lm Po t L1 L2 Ldab M fs Vi d dt real positive
 syms phi real
@@ -119,7 +119,8 @@ for mag=1:3
     set(gca, 'FontSize', 20)
     xlabel('$t[\mu$s]')
     ylabel('$i\,$[A]')
-    f_save_figure(append('figure\',string(trafo),'_',string(mag),'_ilIL.pdf'))
+    file_name = append('figure\finalCap2\corrente',string(mag),'_',trafo,'.pdf');
+    exportgraphics(gca,file_name,'ContentType','vector');
 end
 %%
 LLm_num = min(Lm_num):(max(Lm_num)-min(Lm_num))/100:max(Lm_num);

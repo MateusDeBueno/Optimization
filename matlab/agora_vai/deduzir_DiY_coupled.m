@@ -403,7 +403,7 @@ jetcustom = cmap;
 hold on
 
 L1 = loglog(nan, nan,'-','LineWidth',2.5,'Color',[0 0 0]);
-L2 = loglog(nan, nan,'--.','LineWidth',1.5,'Color',[0 0 0]);
+L2 = loglog(nan, nan,':','LineWidth',1.5,'Color',[0 0 0 0.7]);
 
 % L11 = loglog(nan, nan,'Color',jetcustom(1,:));
 % L22 = loglog(nan, nan,'Color',jetcustom(2,:));
@@ -413,9 +413,9 @@ plot((-my_data1(1,1)+my_data1(:,1))*1e6,my_data1(:,2),'Color',jetcustom(1,:),'Li
 plot((-my_data2(1,1)+my_data2(:,1))*1e6,my_data2(:,2),'Color',jetcustom(3,:),'LineWidth',1.5)
 plot((-my_data3(1,1)+my_data3(:,1))*1e6,my_data3(:,2),'Color',jetcustom(2,:),'LineWidth',1.5)
 
-plot(equat_ts.f2*1e6,equat.f2(1,:),'--.','Color',jetcustom(1,:),'LineWidth',1.5)
-plot(equat_ts.f2*1e6,equat.f2(2,:),'--.','Color',jetcustom(2,:),'LineWidth',1.5)
-plot(equat_ts.f2*1e6,equat.f2(3,:),'--.','Color',jetcustom(3,:),'LineWidth',1.5)
+plot(equat_ts.f2*1e6,equat.f2(1,:),':','Color',[jetcustom(1,:), 0.7],'LineWidth',1.5)
+plot(equat_ts.f2*1e6,equat.f2(2,:),':','Color',[jetcustom(2,:), 0.7],'LineWidth',1.5)
+plot(equat_ts.f2*1e6,equat.f2(3,:),':','Color',[jetcustom(3,:), 0.7],'LineWidth',1.5)
 
 
 

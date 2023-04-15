@@ -133,5 +133,5 @@ function [x0s, ts, idab, hb, HB, Ip, Is, iME, idrm, ilrm, iLrm, iSwPrm, iSwSrm] 
     
     %% corrente de comutacao
     Ip = hb(1,1);
-    Is = HB(1,sec_switch);
+    Is = -HB(1,sec_switch);
 end

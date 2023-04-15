@@ -23,20 +23,20 @@ Plecs {
   MaxConsecutiveZCs "1000"
   AlgebraicLoopWithStateMachineMsg "3"
   AssertionAction "1"
-  InitializationCommands "d = 3/4;\ntdb = 0e-9;\nphi_deg = 3.5\nn = 5/9;\n\nV_"
-"dc = 400;\nV_out = V_dc*d;\nfs = 100e3;\n\nTs = 1/fs;\n\non_percent = 0.5-tdb"
-"/Ts;\n\nC_out = 40e-6;\nR_out = 167;\n\nVf = 3.8;\nRon = 110e-3;\n\n\nCdc_blo"
-"ck = 6.7e-6;\nR_Cdc_block = 30e-3;\nL_Cdc_block = 71e-9;\n\nphi_time = phi_de"
-"g/(fs*360)\n\nLlka_from_p = 1.496e-6;\nLlkb_from_p = 1.7597e-6;\nLlkc_from_p "
-"= 1.3889e-6;\n\nLlka_p = Llka_from_p;\nLlka_s = Llka_from_p*n*n;\nLlkb_p = Ll"
-"kb_from_p;\nLlkb_s = Llka_from_p*n*n;\nLlkc_p = Llkc_from_p;\nLlkc_s = Llka_f"
-"rom_p*n*n;\n\nRLlka_from_p = 50e-3;\nRLlkb_from_p = 40e-3;\nRLlkc_from_p = 47"
-"e-3;\n\nRLlka_p = RLlka_from_p;\nRLlka_s = RLlka_from_p*0.001;\nRLlkb_p = RLl"
-"kb_from_p;\nRLlkb_s = RLlkb_from_p*0.001;\nRLlkc_p = RLlkc_from_p;\nRLlkc_s ="
-" RLlkc_from_p*0.001;\n\nLma = 0.4*0.773e-3;\nLmb = 0.4*0.963e-3;\nLmc = 0.4*0"
-".963e-3;\nRm = inf;\n\nLa = 61.6491e-6;\nLb = 61.5226e-6;\nLc = 61.7754e-6;\n"
-"\nRLa = 50e-3;\nRLb = 50e-3;\nRLc = 50e-3;\n\n\nN_p = 9;\nN_s = 5;\nAc_p = 6."
-"83e-4;\nN_L = 14;\nAc_L = 4.20e-4;\nlmp = 0.149;"
+  InitializationCommands "d = 1;\ntdb = 0e-9;\nphi_deg = 50;\nn = 5/9;\n\nV_dc"
+" = 400;\nV_out = V_dc*d;\nfs = 100e3;\n\nTs = 1/fs;\n\non_percent = 0.5-tdb/T"
+"s;\n\nC_out = 40e-6;\nR_out = 167;\n\nVf = 3.8;\nRon = 110e-3;\n\n\nCdc_block"
+" = 6.7e-6;\nR_Cdc_block = 30e-3;\nL_Cdc_block = 71e-9;\n\nphi_time = phi_deg/"
+"(fs*360)\n\nLlka_from_p = 1.5e-6;\nLlkb_from_p = 1.5e-6;\nLlkc_from_p = 1.5e-"
+"6;\n\nLlka_p = Llka_from_p;\nLlka_s = Llka_from_p*n*n;\nLlkb_p = Llkb_from_p;"
+"\nLlkb_s = Llka_from_p*n*n;\nLlkc_p = Llkc_from_p;\nLlkc_s = Llka_from_p*n*n;"
+"\n\nRLlka_from_p = 50e-3;\nRLlkb_from_p = 40e-3;\nRLlkc_from_p = 47e-3;\n\nRL"
+"lka_p = RLlka_from_p;\nRLlka_s = RLlka_from_p*0.001;\nRLlkb_p = RLlkb_from_p;"
+"\nRLlkb_s = RLlkb_from_p*0.001;\nRLlkc_p = RLlkc_from_p;\nRLlkc_s = RLlkc_fro"
+"m_p*0.001;\n\nLma = 0.8e-3;\nLmb = 0.8e-3;\nLmc = 0.8e-3;\nRm = inf;\n\nLa = "
+"61.5e-6;\nLb = 61.5e-6;\nLc = 61.5e-6;\n\nRLa = 50e-3;\nRLb = 50e-3;\nRLc = 5"
+"0e-3;\n\n\nN_p = 9;\nN_s = 5;\nAc_p = 6.83e-4;\nN_L = 14;\nAc_L = 4.20e-4;\nl"
+"mp = 0.149;"
   InitialState  "1"
   SystemState   ""
   TaskingMode   "1"
@@ -60,9 +60,9 @@ Plecs {
   ScriptsDialogGeometry ""
   ScriptsDialogSplitterPos "0"
   Schematic {
-    Location      [0, 26; 1920, 990]
-    ZoomFactor    0.583094
-    SliderPosition [0, 0]
+    Location      [1920, 21; 3840, 985]
+    ZoomFactor    0.873844
+    SliderPosition [435, 0]
     ShowBrowser   off
     BrowserWidth  100
     Component {
@@ -2839,9 +2839,9 @@ Plecs {
         Direction     left
       }
       Schematic {
-        Location      [-2310, -214; -390, 750]
-        ZoomFactor    0.667277
-        SliderPosition [0, 0]
+        Location      [0, 27; 1920, 991]
+        ZoomFactor    1.49864
+        SliderPosition [156, 251]
         ShowBrowser   off
         BrowserWidth  100
         Component {
@@ -5301,7 +5301,7 @@ Plecs {
       LabelAlign    up
       Parameter {
         Variable      "Value"
-        Value         "1"
+        Value         "0"
         Show          off
       }
       Parameter {
@@ -5322,7 +5322,7 @@ Plecs {
       LabelAlign    up
       Parameter {
         Variable      "Value"
-        Value         "1"
+        Value         "0"
         Show          off
       }
       Parameter {
@@ -5359,20 +5359,19 @@ Plecs {
       Position      [1105, 965]
       Direction     up
       Flipped       off
-      Location      [8, 31; 1528, 788]
-      State         "AAAA/wAAAAD9AAAAAgAAAAAAAAIRAAADk/wCAAAAAfsAAAAUAEQAYQB0A"
-"GEAVwBpAGQAZwBlAHQBAAAAOAAAA5MAAABvAP///wAAAAEAAACWAAADk/wCAAAAA/sAAAAQAFoAbw"
-"BvAG0AQQByAGUAYQEAAAA4AAAC+wAAAD8A////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAA"
-"A/////wAAAH4A////+wAAAAwAVAByAGEAYwBlAHMBAAADOAAAAJMAAAB+AP///wAABLsAAAOTAAAA"
+      Location      [1920, 21; 3840, 1010]
+      State         "AAAA/wAAAAD9AAAAAgAAAAAAAAIRAAADwvwCAAAAAfsAAAAUAEQAYQB0A"
+"GEAVwBpAGQAZwBlAHQBAAAALwAAA8IAAABbAP///wAAAAEAAACWAAADwvwCAAAAA/sAAAAQAFoAbw"
+"BvAG0AQQByAGUAYQEAAAAvAAAC8wAAADQA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAA"
+"A/////wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMBAAADJgAAAMsAAABmAP///wAABNEAAAPCAAAA"
 "BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
 "AAAAA=="
       SavedViews    "AAAAAgAAAAA="
-      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL+AMAAAAHAAAAA"
-"wAAAGQAAAAEAAAAZAAAAAUAAABkAAAABgAAAGQAAAAHAAAAZAAAAAgAAABkAAAACQAAAGQAAAIRAA"
-"AACwEAAAEAAAAAAAAAAAAAAAB9/////wAAAIEAAAAAAAAACwAAALgAAAABAAAAAAAAAGQAAAABAAA"
-"AAAAAAGQAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAB"
-"AAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAJEAAAABAAAAAAAAA+gAA"
-"AAAKw=="
+      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL+AIAAAAGAAAAB"
+"gAAAGQAAAADAAAAZAAAAAkAAABkAAAABQAAAGQAAAAEAAAAZAAAAAcAAABkAAACEQAAAAsBAAABAA"
+"AAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAACjAAAAAQAAAAAAAABkAAAAAQAAAAAAAABkAAA"
+"AAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAA"
+"AAAAAQAAAAAAAABkAAAAAQAAAAAAAAAAAAAAAQAAAAAAAABCAAAAAQAAAAAAAAPoAAAAACQ="
       PlotPalettes  "AAAAAQAAAAMAAAABAAAAAwAAAAEC//8u4P//zMwAAAAAAAEC//8AAP///"
 "/8AAAAAAAEC//9PsP////8AAAAAAAMAAAABAAAAAAEAAAAAAQAAAAADAAAAAQAAAAEAAAABAAAAAQ"
 "AAAAEAAAABAAAAAwAAAAEAAAAAAQAAAAABAAAAAAMAAAABP/AAAAAAAAAAAAABQAgAAAAAAAAAAAA"
@@ -5381,7 +5380,7 @@ Plecs {
       TimeRange     "0.0"
       ScrollingMode "1"
       SingleTimeAxis "1"
-      Open          "0"
+      Open          "1"
       Ts            "-1"
       SampleLimit   "0"
       XAxisLabel    ""
@@ -7283,8 +7282,8 @@ Plecs {
 "AAAAA=="
       SavedViews    "AAAAAgAAAAA="
       HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL/gMAAAAJAAAAB"
-"AAAAGQAAAAFAAAAZAAAAAYAAABkAAAABwAAAGQAAAABAAAAZAAAAAIAAABkAAAAAwAAAGQAAAAIAA"
-"AAZAAAAAkAAABkAAAGBAAAAAsBAAABAAAAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAAC0AAA"
+"gAAAGQAAAABAAAAZAAAAAMAAABkAAAAAgAAAGQAAAAJAAAAZAAAAAgAAABkAAAABQAAAGQAAAAEAA"
+"AAZAAAAAcAAABkAAAGBAAAAAsBAAABAAAAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAAC0AAA"
 "AAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAA"
 "AAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAA"
 "AVQAAAAAQAAAAAAAAPoAAAAACQ="

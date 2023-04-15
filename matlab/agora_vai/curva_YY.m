@@ -1,5 +1,6 @@
 clear; close all; clc;
 
+%%
 % https://www.mathworks.com/matlabcentral/answers/183311-setting-default-interpreter-to-latex
 list_factory = fieldnames(get(groot,'factory'));
 index_interpreter = find(contains(list_factory,'Interpreter'));
@@ -13,8 +14,6 @@ addpath('utils')
 addpath('utils_transf')
 addpath('utils_loss')
 addpath('data');
-addpath('histcompress')
-addpath('consolidator')
 
 awg_data = readtable('awg_table.txt');
 awg_wires = awg_data.Var3; %all wires in mm %wires between awg1 and awg32
@@ -92,20 +91,17 @@ trafoo = 'YY';
 
 %%
 
-% color1 = [0.045 0.245 0.745]; % blue
-% color2 = [0.635 0.635 0.635]; % gray
-color2 = [249,152,32]/255; % orange
-color1 = [32,129,249]/255; % blue
-
+color1 = [249,152,32]/255; % orange
+color2 = [32,129,249]/255; % blue
 
 pr_ang = 200; %precision
 ang_min = 1*pi/180;
 ang_max = 90*pi/180;
 vec_ph = ang_min:(ang_max-ang_min)/pr_ang:ang_max;
-pr_d = 20; %precision
+pr_d = 30; %precision
 d_max = 1.2;
-d_min = 0.2;
-vec_d = d_min:(d_max-d_min)/pr_d:d_max;
+d_min = 0.25;
+vec_d = d_min:0.125/2:d_max;
 
 n_points = length(vec_d)*length(vec_ph)
 
@@ -224,7 +220,7 @@ exportgraphics(gca,file_name,'ContentType','vector');
 %% perdas no trafo
 
 % d_values = [.5 .75];
-d_values = [.5 .75 1];
+d_values = [.25 .5 .75 1];
 
 % Initialize arrays to store values
 phi_v = cell(1, numel(d_values));
@@ -280,11 +276,16 @@ phi_exp_300 = [10 20 30 40 50 60 70 75];
 io_exp_300 = [1 2.88 4.56 6.13 7.647 8.88 9.77 10]; %phi 10 20 30 40 50
 ef_exp_300 = [80.9 92.2 94.5 95.82 96.38 96.134 95.78 95.45]/100;
 
+phi_exp_400 = [10 20 30 40 50 60 70 79];
+io_exp_400 = [.813 2.68 4.366 5.887 7.23 8.404 9.539 10]; %phi 10 20 30 40 50
+ef_exp_400 = [70.04 88.36 92.077 93.65 94.27 94.595 94.6 93.99]/100;
 
-%%
 
-% d_values = [0.2, 0.5, 0.75, 1];
-d_values = [.5 .75];
+
+%% eficiencia por corrente de saida
+
+
+d_values = [150/400 200/400 250/400];
 
 % Initialize arrays to store values
 phi_v = cell(1, numel(d_values));
@@ -295,8 +296,8 @@ clear legen_name;
 % Loop over d values
 for i = 1:numel(d_values)
     % Get logical index for current d value
-    idx = round(dd, 2) == d_values(i);
-    
+    idx = round(dd, 3) == d_values(i);
+    sum(idx)
     % Extract values for current d value
     phi_v{i} = phii(idx);
     Pm_v{i} = Pm(idx);
@@ -306,7 +307,7 @@ for i = 1:numel(d_values)
 end
 
 
-colors = f_create_cmap(numel(d_values), color1, color2);
+colors = f_create_cmap(length(d_values), color1, color2);
 
 figure
 hold on
@@ -314,12 +315,11 @@ for i = 1:1:numel(d_values)
     plot(Pm_v{i}./(l.pr.Vi*d_values(i)), efc_v{i}, 'LineWidth', 1.5, 'Color', colors(i,:))
 end
 
+% scatter(io_exp_150,ef_exp_150,'filled','square','MarkerEdgeColor',colors(1,:),'MarkerFaceColor',colors(1,:))
+scatter(io_exp_200,ef_exp_200,'filled','square','MarkerEdgeColor',colors(2,:),'MarkerFaceColor',colors(2,:))
+% scatter(io_exp_250,ef_exp_250,'filled','square','MarkerEdgeColor',colors(3,:),'MarkerFaceColor',colors(3,:))
 
-scatter(io_exp_200,ef_exp_200,'filled','square','MarkerEdgeColor',colors(1,:),'MarkerFaceColor',colors(1,:))
-scatter(io_exp_300,ef_exp_300,'filled','square','MarkerEdgeColor',colors(2,:),'MarkerFaceColor',colors(2,:))
-
-
-hold off
+grid on
 ylim([0.85 1])
 xlim([0 10])
 legend(legen_name, 'Location','best')
@@ -328,8 +328,151 @@ grid on
 grid minor
 ylabel('$\eta$')
 xlabel('$i_o\,$[A]')
-file_name = append('figure\losses\efc_Io_',string(trafoo),'.pdf');
+file_name = append('figure\losses\efc_Io1_',string(trafoo),'.pdf');
 exportgraphics(gca,file_name,'ContentType','vector');
+
+colors = f_create_cmap(numel(d_values), color1, color2);
+
+% figure
+% hold on
+% for i = 1:1:numel(d_values)
+%     plot(180/pi*phi_v{i}, efc_v{i}, 'LineWidth', 1.5, 'Color', colors(i,:))
+% end
+% 
+% grid on
+% ylim([0.85 1])
+% xlim([0 90])
+% legend(legen_name, 'Location','best')
+% set(gca, 'FontSize', 20)
+% grid on
+% grid minor
+% ylabel('$\eta$')
+% xlabel('$\phi\,[^\circ]$')
+% file_name = append('figure\losses\efc_phi1_',string(trafoo),'.pdf');
+% exportgraphics(gca,file_name,'ContentType','vector');
+
+figure
+hold on
+for i = 1:1:numel(d_values)
+    plot(Pm_v{i}/1000, efc_v{i}, 'LineWidth', 1.5, 'Color', colors(i,:))
+end
+
+% scatter(io_exp_150*150/1000,ef_exp_150,'filled','square','MarkerEdgeColor',colors(1,:),'MarkerFaceColor',colors(1,:))
+scatter(io_exp_200*200/1000,ef_exp_200,'filled','square','MarkerEdgeColor',colors(2,:),'MarkerFaceColor',colors(2,:))
+% scatter(io_exp_250*250/1000,ef_exp_250,'filled','square','MarkerEdgeColor',colors(3,:),'MarkerFaceColor',colors(3,:))
+
+hold off
+ylim([0.85 1])
+xlim([0 4])
+legend(legen_name, 'Location','best')
+set(gca, 'FontSize', 20)
+grid on
+grid minor
+ylabel('$\eta$')
+xlabel('$P_o\,$[kW]')
+file_name = append('figure\losses\efc_Po1_',string(trafoo),'.pdf');
+exportgraphics(gca,file_name,'ContentType','vector');
+
+
+
+%% analise com tensao fixa segunda parte
+
+% d_values = [100/400 150/400 200/400 250/400 300/400 350/400 400/400 450/400];
+d_values = [300/400 350/400 400/400];
+
+% Initialize arrays to store values
+phi_v = cell(1, numel(d_values));
+Pm_v = cell(1, numel(d_values));
+efc_v = cell(1, numel(d_values));
+
+clear legen_name;
+% Loop over d values
+for i = 1:numel(d_values)
+    % Get logical index for current d value
+    idx = round(dd, 3) == d_values(i);
+    sum(idx)
+    % Extract values for current d value
+    phi_v{i} = phii(idx);
+    Pm_v{i} = Pm(idx);
+    efc_v{i} = efc(idx);
+
+    legen_name(i) = append('$V_o = $',string(d_values(i)*l.pr.Vi),'$\,$[V]');
+end
+
+
+colors = f_create_cmap(length(d_values), color1, color2);
+
+figure
+hold on
+for i = 1:1:numel(d_values)
+    plot(Pm_v{i}./(l.pr.Vi*d_values(i)), efc_v{i}, 'LineWidth', 1.5, 'Color', colors(i,:))
+end
+
+scatter(io_exp_300,ef_exp_300,'filled','square','MarkerEdgeColor',colors(1,:),'MarkerFaceColor',colors(1,:))
+% scatter(io_exp_350,ef_exp_350,'filled','square','MarkerEdgeColor',colors(2,:),'MarkerFaceColor',colors(2,:))
+scatter(io_exp_400,ef_exp_400,'filled','square','MarkerEdgeColor',colors(3,:),'MarkerFaceColor',colors(3,:))
+
+
+grid on
+ylim([0.85 1])
+xlim([0 10])
+legend(legen_name, 'Location','best')
+set(gca, 'FontSize', 20)
+grid on
+grid minor
+ylabel('$\eta$')
+xlabel('$i_o\,$[A]')
+file_name = append('figure\losses\efc_Io2_',string(trafoo),'.pdf');
+exportgraphics(gca,file_name,'ContentType','vector');
+
+colors = f_create_cmap(numel(d_values), color1, color2);
+
+% figure
+% hold on
+% for i = 1:1:numel(d_values)
+%     plot(180/pi*phi_v{i}, efc_v{i}, 'LineWidth', 1.5, 'Color', colors(i,:))
+% end
+% 
+% grid on
+% ylim([0.85 1])
+% xlim([-30 60])
+% legend(legen_name, 'Location','best')
+% set(gca, 'FontSize', 20)
+% grid on
+% grid minor
+% ylabel('$\eta$')
+% xlabel('$\phi\,[^\circ]$')
+% file_name = append('figure\losses\efc_phi2_',string(trafoo),'.pdf');
+% exportgraphics(gca,file_name,'ContentType','vector');
+
+
+figure
+hold on
+for i = 1:1:numel(d_values)
+    plot(Pm_v{i}/1000, efc_v{i}, 'LineWidth', 1.5, 'Color', colors(i,:))
+end
+
+
+scatter(io_exp_300*300/1000,ef_exp_300,'filled','square','MarkerEdgeColor',colors(1,:),'MarkerFaceColor',colors(1,:))
+% scatter(io_exp_350*350/1000,ef_exp_350,'filled','square','MarkerEdgeColor',colors(2,:),'MarkerFaceColor',colors(2,:))
+scatter(io_exp_400*400/1000,ef_exp_400,'filled','square','MarkerEdgeColor',colors(3,:),'MarkerFaceColor',colors(3,:))
+
+
+hold off
+ylim([0.85 1])
+xlim([0 4])
+legend(legen_name, 'Location','best')
+set(gca, 'FontSize', 20)
+grid on
+grid minor
+ylabel('$\eta$')
+xlabel('$P_o\,$[kW]')
+file_name = append('figure\losses\efc_Po2_',string(trafoo),'.pdf');
+exportgraphics(gca,file_name,'ContentType','vector');
+
+
+
+
 %% analise das perdas
 
 % pswitch = cSw_p + cSw_s + sSw_p + sSw_s;

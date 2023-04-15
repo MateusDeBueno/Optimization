@@ -1,8 +1,9 @@
 clear; close all; clc;
+%%
+color1 = [249,152,32]/255; % orange
+color2 = [32,129,249]/255; % blue
 
-color1 = [0.045 0.245 0.745]; % blue
-color2 = [0.635 0.635 0.635]; % gray
-
+addpath('dados_pratica')
 
 % https://www.mathworks.com/matlabcentral/answers/183311-setting-default-interpreter-to-latex
 list_factory = fieldnames(get(groot,'factory'));
@@ -63,22 +64,20 @@ l.tr.MLT = 230*1e-3; % [m]
 l.sC.Rac100 = 4.3e-3;
 
 
-l.pr.dt = 440e-9;
-l.pr.phi = deg2rad(67);
+l.pr.dt = 0e-9;
+l.pr.phi = deg2rad(0);
 l.pr.Vi = 400;
 l.pr.d = 1;
 l.pr.fs = 100e3;
-l.pr.Ldab = 61e-6;
-l.pr.Ld1 = 1e-12;
+l.pr.Ldab = 61.5e-6;
+l.pr.Ld1 = 1.5e-6;
 l.pr.n = l.tr.Ns/l.tr.Np;
 l.pr.Ld2 = l.pr.Ld1*l.pr.n*l.pr.n;
-l.pr.Lm = 700000000e-6;
+l.pr.Lm = 700e-6;
 l.pr.M = l.pr.Lm*l.pr.n;
 l.pr.L1 = l.pr.Ld1 + l.pr.Lm;
 l.pr.L2 = l.pr.Ld2 + l.pr.n*l.pr.n*l.pr.Lm;
 l.pr.k = l.pr.M/sqrt(l.pr.L1.*l.pr.L2);
-
-
 
 Vi_num = l.pr.Vi;
 d_num = l.pr.d;
@@ -86,7 +85,7 @@ fs_num = l.pr.fs;
 Ldab_num = l.pr.Ldab;
 Ld1_num = l.pr.Ld1;
 n_num = l.pr.n;
-Ld2_num = l.pr.Ld1;
+Ld2_num = l.pr.Ld2;
 Lm_num = l.pr.Lm;
 phi_num = l.pr.phi;  %[MUDAR]
 M_num = Lm_num*n_num;
@@ -151,12 +150,12 @@ intervalo = [0 deg2rad(60)];
     ild = il;
     dild = dil;
     %corrente no HB
-    ihb = il;
-    dihb = dil;
+    ihb = il - [il(3); il(1:2)];
+    dihb = dil - [dil(3); dil(1:2)];
     %tensoes no Ldab
     vLdab = Ldab*dild;
     %malha primario
-    m_p = Td*u(1:3) == Td*vLdab + Td*vP; 
+    m_p = Td*u(1:3) == vLdab + vP; 
     
     %% definicoes secundario %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %corrente no HB
@@ -209,13 +208,13 @@ intervalo = [0 deg2rad(60)];
     x0x = struct2array(solve(xcl(:,1) == -xcl(:,7), x0)).';
     x0s = simplify(pinv(Tclx)*subs(xcl, x0, x0x));
     dx0s = pinv(Tclx)*B*scl; %derivadas dos estados, indutor e trafo secundario
-    
+        
     %% Corrente nos estados
     [ilrm,~] = rms_and_mean(dx0s(1,:),x0s(1,:),ts,1:12,1:12);
     [iLrm,~] = rms_and_mean(dx0s(4,:),x0s(4,:),ts,1:12,1:12);
     
-%     %fourier dos estados
-%     syms nn
+    %fourier dos estados
+    syms nn
 %     ilrm_cn = ck_fourier(ts,dx0s(1,:),x0s(1,:)); %DESCOMENTAR
 %     iLrm_cn = ck_fourier(ts,dx0s(4,:),x0s(4,:)); %DESCOMENTAR  
     
@@ -241,8 +240,8 @@ intervalo = [0 deg2rad(60)];
     %% Corrente de saida
     target = [1;0;0];
     [etapas] = pega_etapa(sf_s,target);
-    [ioRMS,iME] = rms_and_mean(dHB(1,:),HB(1,:),ts,etapas,etapas);
-    Pm = Vo*iME;
+    [ioRMS,ioME] = rms_and_mean(dHB(1,:),HB(1,:),ts,etapas,etapas);
+    Pm = Vo*ioME;
     
     %% Corrente Ldab
     for ii=1:length(x0s)-1
@@ -309,7 +308,8 @@ intervalo = [0 deg2rad(60)];
     
     Pv_tr = simplify(ki_tr*fs*sum_int_tr)*Bppk_tr^(b_tr-a_tr);
     P_core_tr = Pv_tr*Ve_tr;
-
+    
+    
 %%
 
 fts = matlabFunction(ts, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
@@ -317,6 +317,7 @@ fHB = matlabFunction(HB, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
 fhb = matlabFunction(hb, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
 fhbrm = matlabFunction(hbrm, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
 fHBrm = matlabFunction(HBrm, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+fidab = matlabFunction(idab, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
 fIp = matlabFunction(Ip, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
 fIs = matlabFunction(Is, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
 fPm = matlabFunction(Pm, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
@@ -362,20 +363,269 @@ fBpk_tr(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num,l.tr.N,l.tr.Ac)
 fP_core_L(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num,l.L.N,l.L.Ac,l.L.Ve,l.L.a,l.L.b,l.L.ki)
 fBpk_L(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num,l.L.N,l.L.Ac)
 
-Pse = l.tr.Ve*l.tr.kc*(l.pr.fs)^(l.tr.a)*fBpk_tr(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num,l.tr.N,l.tr.Ac)^(l.tr.b)
+Pse = l.tr.Ve*l.tr.kc*(l.pr.fs)^(l.tr.a)*fBpk_tr(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num,l.tr.N,l.tr.Ac)^(l.tr.b);
+
+%% criar uma porrada de funcoes
+syms Po real
+
+fidab = matlabFunction(idab, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+fx0s = matlabFunction(x0s, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+fts = matlabFunction(ts, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+
+%equacao_limite
+Ip_eq = Ip == 0;
+Is_eq = Is == 0;
+pot_eq = ioME*Vo == Po;
+
+fpot_eq = matlabFunction(solve(pot_eq,Po), 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+fIp_eq = matlabFunction(solve(Ip_eq,d), 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+fIs_eq = matlabFunction(solve(Is_eq,d), 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
 
 
+%correntes eficazes
+fidrm = matlabFunction(idrm, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+filrm = matlabFunction(ilrm, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+fiLrm = matlabFunction(iLrm, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+fiSwPrm = matlabFunction(iSwPrm, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+fiSwSrm = matlabFunction(iSwSrm, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+
+fIp = matlabFunction(Ip, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+fIs = matlabFunction(Is, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
 
 
-%%
-xx = fts(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num);
-yy = fhb(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num);
-yy = [yy, yy(1)];
+%% coisas para parte teorica
+% corrente nos estados
+
+trafo = 'DfY';
+
+
+yy = fx0s(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num(1));
+xx = fts(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num(1));
+
+%corrente no primario do trafo
+figure
+cmap = f_create_cmap(3, color2, color1);
+colormap(cmap)
+jetcustom = cmap;
+hold on
+
+plot(xx*1e6,yy(1,:),'Color',jetcustom(1,:),'LineWidth',1.5)
+plot(xx*1e6,yy(2,:),'Color',jetcustom(2,:),'LineWidth',1.5)
+plot(xx*1e6,yy(3,:),'Color',jetcustom(3,:),'LineWidth',1.5)
+
+hold off
+grid on
+grid minor
+set(gca, 'FontSize', 20)
+xlabel('$t[\mu$s]')
+ylabel('$i\,$[A]')
+legend({'$i_{a}$','$i_{b}$','$i_{c}$'},'Location','southeast','FontSize', 16)
+file_name = append('figure\finalCap2\primary_current_',trafo,'.pdf');
+exportgraphics(gca,file_name,'ContentType','vector');
+
+
+%corrente no secundario do trafo
+figure
+cmap = f_create_cmap(3, color2, color1);
+colormap(cmap)
+jetcustom = cmap;
+hold on
+
+plot(xx*1e6,yy(4,:),'Color',jetcustom(1,:),'LineWidth',1.5)
+plot(xx*1e6,yy(5,:),'Color',jetcustom(2,:),'LineWidth',1.5)
+plot(xx*1e6,yy(6,:),'Color',jetcustom(3,:),'LineWidth',1.5)
+
+hold off
+grid on
+grid minor
+set(gca, 'FontSize', 20)
+xlabel('$t[\mu$s]')
+ylabel('$i\,$[A]')
+legend({'$i_{A}$','$i_{B}$','$i_{C}$'},'Location','southeast','FontSize', 16)
+file_name = append('figure\finalCap2\secondary_current_',trafo,'.pdf');
+exportgraphics(gca,file_name,'ContentType','vector');
+
+% corrente no Ldab
+yy_s = fx0s(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num(1));
+xx = fts(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num(1));
+il = yy_s(1:3,:);
+yy = il - [il(3,:); il(1:2,:)]; %equacao especifica para esse trafo
 
 figure
-plot(xx,yy, 'LineWidth',1.5)
+cmap = f_create_cmap(3, color2, color1);
+colormap(cmap)
+jetcustom = cmap;
+hold on
+plot(xx*1e6,yy(1,:),'Color',jetcustom(1,:),'LineWidth',1.5)
+plot(xx*1e6,yy(2,:),'Color',jetcustom(2,:),'LineWidth',1.5)
+plot(xx*1e6,yy(3,:),'Color',jetcustom(3,:),'LineWidth',1.5)
+hold off
 grid on
-grid off
-xlim([0 1/fs_num])
+grid minor
+set(gca, 'FontSize', 20)
+xlabel('$t[\mu$s]')
+ylabel('$i\,$[A]')
+legend({'$i_{Ldab_a}$','$i_{Ldab_b}$','$i_{Ldab_c}$'},'Location','southeast','FontSize', 16)
 
 
+
+
+
+
+%% tensao e corrente sobre o indutor
+
+
+fVLdab = matlabFunction(dwb_L, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+
+yy = fVLdab(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num);
+yy = [yy,yy(1)];
+xx = fts(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num);
+
+yy2 = fidab(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num);
+yy2 = [yy2,yy2(1)];
+
+
+fid = fopen('C1Trace00002.dat');
+format long
+cell_data= textscan(fid,'%f%f','Delimiter',' ','headerLines',1);
+my_data1 = cat(2,cell_data{:});
+fclose(fid);
+
+fid = fopen('C2Trace00000.dat');
+format long
+cell_data= textscan(fid,'%f%f','Delimiter',' ','headerLines',1);
+my_data2 = cat(2,cell_data{:});
+fclose(fid);
+
+figure
+
+cmap = f_create_cmap(2, color2, color1);
+colormap(cmap)
+jetcustom = cmap;
+
+hold on
+L11 = plot(nan, nan,'-','LineWidth',1.5,'Color',[0 0 0]);
+L22 = plot(nan, nan,':','LineWidth',1.5,'Color',[0 0 0]);
+
+stairs(xx*1e6,yy,':','Color',jetcustom(1,:), 'LineWidth',1.5)
+plot((-my_data2(1,1)+my_data2(:,1))*1e6,my_data2(:,2),'-','Color',jetcustom(1,:), 'LineWidth',1.5)
+ylabel('$V_{La}\,$[V]')
+yyaxis right
+plot(xx*1e6,yy2,':','Color',jetcustom(2,:), 'LineWidth',1.5)
+plot((-my_data1(1,1)+my_data1(:,1))*1e6,my_data1(:,2),'-','Color',jetcustom(2,:), 'LineWidth',1.5)
+hold off
+grid on
+grid minor
+set(gca, 'FontSize', 20)
+% xlim([0 1/fs_num])
+xlabel('$t[\mu$s]')
+ylabel('$i_{La}\,$[A]')
+legend({'Experimental','Theoric'},'Location','best','FontSize', 14)
+ax = gca;
+ax.YAxis(1).Color = jetcustom(1,:);
+ax.YAxis(2).Color = jetcustom(2,:);
+f_save_figure(append('figure\comp\fig1.pdf'))
+
+
+%% corrente primario e secundario
+
+fid = fopen('C1Trace00005.dat');
+format long
+cell_data= textscan(fid,'%f%f','Delimiter',' ','headerLines',1);
+my_data1 = cat(2,cell_data{:});
+fclose(fid);
+
+fid = fopen('C3Trace00004.dat');
+format long
+cell_data= textscan(fid,'%f%f','Delimiter',' ','headerLines',1);
+my_data2 = cat(2,cell_data{:});
+fclose(fid);
+
+fil= matlabFunction(x0s(1,:), 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+fiL = matlabFunction(x0s(4,:), 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+
+yy = fil(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num);
+xx = fts(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num);
+yy2 = fiL(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num);
+
+
+figure
+
+
+cmap = f_create_cmap(2, color2, color1);
+colormap(cmap)
+jetcustom = cmap;
+
+hold on
+L11 = plot(nan, nan,'-','LineWidth',1.5,'Color',[0 0 0]);
+L22 = plot(nan, nan,':','LineWidth',1.5,'Color',[0 0 0]);
+
+plot(xx*1e6,yy,':','Color',jetcustom(1,:),'LineWidth',1.5)
+plot(xx*1e6,-yy2,':','Color',jetcustom(2,:),'LineWidth',1.5)
+
+kk = 10;
+text(xx(kk)*1e6,yy(kk)+2,'$i_p$','Interpreter', 'Latex','FontSize', 16) 
+kk = 5;
+text(xx(kk)*1e6,-yy2(kk)+2,'$-i_s$','Interpreter', 'Latex','FontSize', 16) 
+
+plot((-my_data1(1,1)+my_data1(:,1))*1e6,my_data1(:,2),'-','Color',jetcustom(1,:), 'LineWidth',1.5)
+plot((-my_data2(1,1)+my_data2(:,1))*1e6,my_data2(:,2),'-','Color',jetcustom(2,:), 'LineWidth',1.5)
+hold off
+grid on
+grid minor
+set(gca, 'FontSize', 20)
+legend({'Experimental','Theoric'},'Location','best','FontSize', 14)
+ylim([-15 15])
+xlabel('$t[\mu$s]')
+ylabel('$i\,$[A]')
+f_save_figure(append('figure\comp\fig2.pdf'))
+
+%% correntes nos indutores
+
+fid = fopen('C1Trace00006.dat');
+format long
+cell_data= textscan(fid,'%f%f','Delimiter',' ','headerLines',1);
+my_data1 = cat(2,cell_data{:});
+fclose(fid);
+
+fid = fopen('C3Trace00005.dat');
+format long
+cell_data= textscan(fid,'%f%f','Delimiter',' ','headerLines',1);
+my_data2 = cat(2,cell_data{:});
+fclose(fid);
+
+fid = fopen('C4Trace00002.dat');
+format long
+cell_data= textscan(fid,'%f%f','Delimiter',' ','headerLines',1);
+my_data3 = cat(2,cell_data{:});
+fclose(fid);
+
+fl= matlabFunction(x0s(1:3,:), 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+yy = fl(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num);
+xx = fts(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num);
+
+
+figure
+cmap = f_create_cmap(3, color2, color1);
+colormap(cmap)
+jetcustom = cmap;
+hold on
+
+L11 = plot(nan, nan,'-','LineWidth',2.5,'Color',[0 0 0]);
+L22 = plot(nan, nan,'--.','LineWidth',1.5,'Color',[0 0 0]);
+
+plot(xx*1e6,yy(1,:),':','Color',jetcustom(1,:),'LineWidth',1.5)
+plot(xx*1e6,yy(2,:),':','Color',jetcustom(2,:),'LineWidth',1.5)
+plot(xx*1e6,yy(3,:),':','Color',jetcustom(3,:),'LineWidth',1.5)
+
+
+plot((-my_data1(1,1)+my_data1(:,1))*1e6,my_data1(:,2),'-','Color',jetcustom(1,:), 'LineWidth',1.5)
+plot((-my_data2(1,1)+my_data2(:,1))*1e6,my_data2(:,2),'-','Color',jetcustom(3,:), 'LineWidth',1.5)
+plot((-my_data3(1,1)+my_data3(:,1))*1e6,my_data3(:,2),'-','Color',jetcustom(2,:), 'LineWidth',1.5)
+
+hold off
+grid on
+grid minor
+set(gca, 'FontSize', 20)
+legend({'Experimental','Theoric'},'Location','best','FontSize', 14)
+f_save_figure(append('figure\comp\fig3.pdf'))

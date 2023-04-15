@@ -30,12 +30,12 @@ phi_num = [deg2rad(10),deg2rad(80)];  %[MUDAR]
 trafo = 'YY';
 
 Vi_num = 400;
-d_num = 0.5;
+d_num = 1;
 fs_num = 100e3;
 Ldab_num = 61.5e-6;
-Ld1_num = 1.4e-6;
+Ld1_num = 15e-6;
 n_num = 5/9;
-Ld2_num = Ld1_num*n_num*n_num;
+Ld2_num = 15e-6;
 Lm_num = [700e-6, 1.4e-3 10e-3];
 M_num = Lm_num*n_num;
 L1_num = Ld1_num + Lm_num;
@@ -191,9 +191,9 @@ colormap(cmap)
 jetcustom = cmap;
 hold on
 %legend that is unrelated to the plotted data
-L1 = plot(nan, nan,'Color',jetcustom(1,:),'LineWidth',1.5);
-L2 = plot(nan, nan,'Color',jetcustom(2,:),'LineWidth',1.5);
-L3 = plot(nan, nan,'Color',jetcustom(3,:),'LineWidth',1.5);
+L11 = plot(nan, nan,'Color',jetcustom(1,:),'LineWidth',1.5);
+L22 = plot(nan, nan,'Color',jetcustom(2,:),'LineWidth',1.5);
+L33 = plot(nan, nan,'Color',jetcustom(3,:),'LineWidth',1.5);
 
 text(13,1.7,'HS in primary','Interpreter', 'Latex','FontSize', 14) 
 text(13,0.35,'HS in secondary','Interpreter', 'Latex','FontSize', 14) 
@@ -236,7 +236,7 @@ fill([rad2deg(vec_ph.f1) fliplr(rad2deg(vec_ph.f1))], [lim_p.f1 fliplr(lim_s.f1)
 fill([rad2deg(vec_ph.f2) fliplr(rad2deg(vec_ph.f2))], [lim_p.f2 fliplr(lim_s.f2)],jetcustom(3,:), 'FaceAlpha', 0.1, 'EdgeColor', 'none');
 
 hold off
-ylim([0 3])
+ylim([0 1.5])
 grid on
 grid minor
 legend({'$L_m = 0.7\,$mH','$L_m = 1.4\,$mH','$L_m = 10.0\,$mH'},'Location','best','FontSize', 14)
@@ -254,9 +254,9 @@ jetcustom = cmap;
 figure
 hold on
 %legend that is unrelated to the plotted data
-L1 = plot(nan, nan,'Color',jetcustom(1,:),'LineWidth',1.5);
-L2 = plot(nan, nan,'Color',jetcustom(2,:),'LineWidth',1.5);
-L3 = plot(nan, nan,'Color',jetcustom(3,:),'LineWidth',1.5);
+L11 = plot(nan, nan,'Color',jetcustom(1,:),'LineWidth',1.5);
+L22 = plot(nan, nan,'Color',jetcustom(2,:),'LineWidth',1.5);
+L33 = plot(nan, nan,'Color',jetcustom(3,:),'LineWidth',1.5);
 
 lim_pot.f1 = ones(1,length(vec_ph.f1)).*fpot_eq.f1(L1_num(1),L2_num(1),Ldab_num,M_num(1),Vi_num,d_num,fs_num,vec_ph.f1);
 lim_pot.f2 = ones(1,length(vec_ph.f2)).*fpot_eq.f2(L1_num(1),L2_num(1),Ldab_num,M_num(1),Vi_num,d_num,fs_num,vec_ph.f2);
@@ -275,7 +275,7 @@ plot(rad2deg(vec_ph.f1),lim_pot.f1,'Color',jetcustom(3,:),'LineWidth',1.5)
 plot(rad2deg(vec_ph.f2),lim_pot.f2,'Color',jetcustom(3,:),'LineWidth',1.5)
 
 hold off
-ylim([0 2500])
+% ylim([0 2500])
 xlim([min(intervalo.f1) max(intervalo.f2)]*180/pi)
 grid on
 grid minor
@@ -294,9 +294,9 @@ jetcustom = cmap;
 figure
 hold on
 %legend that is unrelated to the plotted data
-L1 = plot(nan, nan,'Color',jetcustom(1,:),'LineWidth',1.5);
-L2 = plot(nan, nan,'Color',jetcustom(2,:),'LineWidth',1.5);
-L3 = plot(nan, nan,'Color',jetcustom(3,:),'LineWidth',1.5);
+L11 = plot(nan, nan,'Color',jetcustom(1,:),'LineWidth',1.5);
+L22 = plot(nan, nan,'Color',jetcustom(2,:),'LineWidth',1.5);
+L33 = plot(nan, nan,'Color',jetcustom(3,:),'LineWidth',1.5);
 
 text(500,1.7,'HS in primary','Interpreter', 'Latex','FontSize', 14) 
 text(500,0.35,'HS in secondary','Interpreter', 'Latex','FontSize', 14) 
@@ -355,7 +355,7 @@ plot(lim_pot.f1,lim_s.f1,'Color',jetcustom(3,:),'LineWidth',1.5)
 plot(lim_pot.f2,lim_s.f2,'Color',jetcustom(3,:),'LineWidth',1.5)
 
 hold off
-ylim([0 3])
+ylim([0 1.5])
 xlim([0 max(lim_pot.f2)])
 grid on
 grid minor
