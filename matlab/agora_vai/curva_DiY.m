@@ -91,7 +91,7 @@ trafoo = 'DiY';
 color1 = [249,152,32]/255; % orange
 color2 = [32,129,249]/255; % blue
 
-pr_ang = 200; %precision
+pr_ang = 30; %precision
 ang_min = -29*pi/180;
 ang_max = 60*pi/180;
 vec_ph = ang_min:(ang_max-ang_min)/pr_ang:ang_max;
@@ -140,13 +140,14 @@ z = efc;
 n = 200;
 %Create regular grid across data space
 [X,Y] = meshgrid(linspace(min(x),max(x),n), linspace(min(y),max(y),n));
+Z = griddata(x,y,z,X,Y);
 
 
 
 figure
-contourLevels = [-10 0.9 0.92 0.94 0.96];
+contourLevels = [0.92 0.94 0.96];
 colors = f_create_cmap(length(contourLevels), color1, color2);
-[cCont, hCont] = contourf(X,Y*l.pr.Vi,griddata(x,y,z,X,Y),contourLevels, 'LineStyle', 'none');
+[cCont, hCont] = contourf(X,Y*l.pr.Vi,Z,contourLevels, 'LineStyle', 'none');
 cmap = interp1(contourLevels, colors, linspace(min(contourLevels), max(contourLevels), 256));
 colormap(cmap);
 leg = contourLegend(hCont);
@@ -158,6 +159,27 @@ ylabel('$V_o\,$[V]')
 xlabel('$\phi\,[^{\circ}]$')
 file_name = append('figure\losses\Vo_phi_efc_',string(trafoo),'.pdf');
 exportgraphics(gca,file_name,'ContentType','vector');
+%%
+
+fig = figure;
+
+colors = f_create_cmap(length(contourLevels)+1, color1, color2);
+[legen_name] = create_legend_contourf(contourLevels, colors);
+
+
+set(fig,'defaultLegendAutoUpdate','off');
+hc = contourfcmap(X,Y*l.pr.Vi,Z,contourLevels, colors(2:end-1,:), ...
+    'lo', colors(1,:), ...
+    'hi', colors(end,:), ...
+    'method', 'calccontour');
+hc.h.LineStyle = 'none';
+grid on
+grid minor
+set(gca, 'FontSize', 20)
+ylabel('$V_o\,$[V]')
+xlabel('$\phi\,[^{\circ}]$')
+legend(legen_name,'Location','best','FontSize', 16,'Interpreter','latex');
+ylim([min(vec_d(:))*l.pr.Vi max(vec_d(:))*l.pr.Vi])
 
 %%
 

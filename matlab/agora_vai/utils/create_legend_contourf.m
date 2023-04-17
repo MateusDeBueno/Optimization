@@ -1,4 +1,6 @@
 function [legen_name] = create_legend_contourf(contourLevels, colors)
+% function [legen_name] = create_legend_contourf(contourLevels)
+
     clear legen_name;
     
     n_contour = numel(contourLevels);

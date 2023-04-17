@@ -36,13 +36,13 @@ M_num = Lm_num*n_num;
 L1_num = Ld1_num + Lm_num;
 L2_num = Ld2_num + n_num*n_num*Lm_num;
 k_num = M_num/sqrt(L1_num.*L2_num);
-phi_num = deg2rad(15);
+phi_num = deg2rad(-15);
 
 %%
 
 %cria intervalo de angulo
-intervalo = [0 deg2rad(60)];
-
+% intervalo = [0 deg2rad(60)];
+intervalo = [deg2rad(-60) 0];
 
 %% aqui comeca
 
@@ -123,8 +123,8 @@ intervalo = [0 deg2rad(60)];
     
     Tclxx = kron(eye(2), Tcl);
 
-    A = Tclxx*As*pinv(Tclxx);
-    B = Tclxx*Bs*pinv(Tclxx);
+    A = Tclxx*As/Tclxx;
+    B = Tclxx*Bs/Tclxx;
     
     %% obter funcao de comutacao, depende de phi
     [sf_p, sf_s, sf, ang, sec_switch] = times_and_commutation(phi_num,pi);
@@ -668,3 +668,52 @@ ylabel('$i\,$[A]')
 file_name = append('figure\finalCap2\isw_s_',trafo,'.pdf');
 exportgraphics(gca,file_name,'ContentType','vector');
 
+%%
+latex(ioME)
+latex(Ip)
+latex(Is)
+
+
+
+%%
+figure
+sf_p
+
+
+[iSwPrm,~] = rms_and_mean(dhb(1,:),hb(1,:),ts,1:6,1:12);
+[iSwSrm,~] = rms_and_mean(dHB(1,:),HB(1,:),ts,1:6,1:12);  
+
+
+yy = fhbb(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num);
+yy = [yy, yy(:,1)];
+xx = fts(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num);
+
+teste = yy.*[sf_p, sf_p(:,1)];
+
+
+figure
+plot(xx, teste)
+
+% 
+% xxp1 = [xx(1:7), xx(7)];
+% yyp1 = [yy(1,1:7), 0];
+% xxp2 = [xx(7) xx(end)];
+% yyp2 = [0 0];
+% 
+% xxp = [xxp1 xxp2];
+% yyp = [yyp1 yyp2];
+% 
+% figure
+% hold on
+% plot(xxp*1e6,yyp,'Color',color2,'LineWidth',2)
+% plot(xx*1e6,yy(1,:),'-.','Color',color1,'LineWidth',1.5)
+% hold off
+% ylim([-5 5])
+% grid on
+% grid minor
+% legend({'$i_{sw-p}$','$i_{a}$'},'Location','best','FontSize', 16)
+% set(gca, 'FontSize', 20)
+% xlabel('$t[\mu$s]')
+% ylabel('$i\,$[A]')
+% file_name = append('figure\finalCap2\isw_p_',trafo,'.pdf');
+% exportgraphics(gca,file_name,'ContentType','vector');

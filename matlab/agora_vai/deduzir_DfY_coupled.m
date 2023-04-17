@@ -471,36 +471,11 @@ z = Poo.f2';
 n = 200;
 [X2,Y2] = meshgrid(linspace(min(x),max(x),n), linspace(min(y),max(y),n));
 Z2 = griddata(x,y,z,X2,Y2);
-
-fig = figure;
-set(fig,'defaultLegendAutoUpdate','off');
-hold on
-
-[legen_name] = create_legend_contourf(contourLevels, colors);
-
-leg = legend(legen_name,'Location','northeast','FontSize', 16,'Interpreter','latex');
-title(leg,'$P_{o}\,$[kW]')
-
-hold on
 hc = contourfcmap(X1,Y1,Z1/1000,contourLevels, colors(2:end-1,:), ...
      'lo', colors(1,:), ...
      'hi', colors(end,:), ...
      'method', 'calccontour');
 hc.h.LineStyle = 'none';
-
-hc = contourfcmap(X2,Y2,Z2/1000,contourLevels, colors(2:end-1,:), ...
-     'lo', colors(1,:), ...
-     'hi', colors(end,:), ...
-     'method', 'calccontour');
-hc.h.LineStyle = 'none';
-hold off
-
-grid on
-grid minor
-set(gca, 'FontSize', 20)
-ylabel('d')
-xlabel('$\phi\,[^{\circ}]$')
-
 file_name = append('figure\finalCap2\Po_map_',trafo,'.pdf');
 exportgraphics(gca,file_name,'ContentType','vector');
 
