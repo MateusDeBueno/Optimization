@@ -1,6 +1,6 @@
 clear; close all; clc;
 
-%% iDY
+%% iDY %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 phi_exp{1,1} = [-15 -19];
 io_exp{1,1} = [6.41 5.169]; %phi 10 20 30 40 50
@@ -26,7 +26,7 @@ phi_exp{1,6} = [-22 -20 -18 -15 -12 -8 -5 -2 1 4];
 io_exp{1,6} = [1.9 2.5 3.15 4.123 5.295 6.15 7.168 7.999 9.086 10]; %phi 10 20 30 40 50
 ef_exp{1,6} = [93.166 94.624 95.55 96.33 96.8 96.96 97.23 97.33 97.356 97.28]/100;
 
-%% YY
+%% YY %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 phi_exp{2,1} = [nan];
 io_exp{2,1} = [nan]; %phi 10 20 30 40 50
@@ -55,7 +55,7 @@ ef_exp{2,6} = [70.04 88.36 92.077 93.65 94.27 94.595 94.6 93.99]/100;
 
 %%
 
-ocultar_titulo = 0;
+ocultar_titulo = 1;
 
 % https://www.mathworks.com/matlabcentral/answers/183311-setting-default-interpreter-to-latex
 list_factory = fieldnames(get(groot,'factory'));
@@ -69,11 +69,13 @@ color1 = [249,152,32]/255; % orange
 color2 = [32,129,249]/255; % blue
 
 efc_min_graph = 0.9;
+Io_max_graph = 10;
 
 addpath('utils')
 addpath('utils_transf')
 addpath('utils_loss')
 addpath('data');
+addpath('dados_pratica');
 addpath('contourfcmap-pkg-master/FEX-function_handle')
 addpath('contourfcmap-pkg-master/arclength')
 addpath('contourfcmap-pkg-master/contourcs')
@@ -116,6 +118,7 @@ l.L.ki = l.L.kc/(2^(l.L.b-l.L.a)*(2*pi)^(l.L.a-1)*l.L.int_ki);
 l.L.Ac = 421.3e-6;
 l.L.Ve = 52.1e-6;
 l.L.N = 14;
+% l.L.N = 10;
 l.L.strand = 180;
 l.L.awg = 38;
 l.L.dl = awg_wires(l.L.awg)*1e-3; % [m]
@@ -142,7 +145,7 @@ l.tr.awg = 38;
 l.tr.dl = awg_wires(l.tr.awg)*1e-3; % [m]
 l.tr.MLT = 230*1e-3; % [m]
 
-l.sC.Rac100 = 4.3e-3 + 2e-3;
+l.sC.Rac100 = (4.3e-3)/2;
 l.C.Rb_ac10k = 4.2e-3 + 2e-3;
 
 l.pr.dt = 0e-9;
@@ -161,12 +164,12 @@ l.pr.k = l.pr.M/sqrt(l.pr.L1.*l.pr.L2);
 
 %% calcula iDY
 
-pr_ang = 30; %precision
-ang_min(1) = -29.5*pi/180;
+pr_ang = 200; %precision
+ang_min(1) = -29.9*pi/180;
 ang_max(1) = 60*pi/180;
 vec_ph(1,:) = ang_min(1):(ang_max(1)-ang_min(1))/pr_ang:ang_max(1);
 
-ang_min(2) = .5*pi/180;
+ang_min(2) = .1*pi/180;
 ang_max(2) = 90*pi/180;
 vec_ph(2,:) = ang_min(2):(ang_max(2)-ang_min(2))/pr_ang:ang_max(2);
 
@@ -178,6 +181,7 @@ vec_d = [vec_d;vec_d];
 n_points = length(vec_d)*length(vec_ph(1,:));
 
 trafo_usados = {'DiY', 'YY'};%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+trafo_usados_correto = {'iDY', 'YY'};%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%
 
@@ -208,8 +212,37 @@ for nf = 1:2
                 out = f_equationsDfY_dt(l);
             end
             
+            %estresses
+            C = num2cell(out);
+            [hbrm(nf,k),HBrm(nf,k),Ip(nf,k),Is(nf,k),iiRMS(nf,k),iiME(nf,k),ioRMS(nf,k),ioME(nf,k),Pm(nf,k),idrm(nf,k),ilrm(nf,k),iLrm(nf,k),iSwPrm(nf,k),iSwSrm(nf,k),P_core_tr(nf,k),Bpk_tr(nf,k),P_core_L(nf,k),Bpk_L(nf,k)] = C{:};
+            
+            %perdas
             [efc(nf,k),ptot(nf,k),Pm(nf,k),cSw_p(nf,k),cSw_s(nf,k),sSw_p(nf,k),sSw_s(nf,k),Pil_cu(nf,k),PiL_cu(nf,k),PiLd_cu(nf,k),Psc(nf,k),P_core_L(nf,k),P_core_tr(nf,k)] = f_loss(trafoo, out, l);
-%             output{nf,k} = out;
+            
+            %para plot
+            [out] = f_equations_plot(l,trafoo);
+            C = num2cell(out);
+            vPP(1:3,:) = cell2mat(C(1:3,:));
+            vSS(1:3,:) = cell2mat(C(4:6,:));
+            vLLdab(1:3,:) = cell2mat(C(7:9,:));
+            hbb(1:3,:) = cell2mat(C(10:12,:));
+            HBB(1:3,:) = cell2mat(C(13:15,:));
+            idab_plot(1:3,:) = cell2mat(C(16:18,:));
+            x0s(1:6,:) = cell2mat(C(19:24,:));
+            ts(1,:) = cell2mat(C(25,:));
+            sec_switch_plot(1,:) = cell2mat(C(26,:));
+            sf_plot(1:6,:) = cell2mat(C(27:32,:));
+
+            % Store values in cell arrays
+            vPP_cell{nf,k} = vPP;
+            vSS_cell{nf,k} = vSS;
+            vLLdab_cell{nf,k} = vLLdab;
+            hbb_cell{nf,k} = hbb;
+            HBB_cell{nf,k} = HBB;
+            idab_plot_cell{nf,k} = idab_plot;
+            x0s_cell{nf,k} = x0s;
+            ts_cell{nf,k} = ts;
+            sf_plot_cell{nf,k} = sf_plot;
         end
     end
 end
@@ -311,141 +344,57 @@ for nf = 1:2
     exportgraphics(gca,file_name,'ContentType','vector');
 end
 
-% % % % %% analise com tensoes fixas part1
-% % % % 
-% % % % d_values = [150/400 200/400 250/400];
-% % % % 
-% % % % % Initialize arrays to store values
-% % % % phi_v = cell(2, numel(d_values));
-% % % % Pm_v = cell(2, numel(d_values));
-% % % % efc_v = cell(2, numel(d_values));
-% % % % 
-% % % % colors = f_create_cmap(length(d_values), color1, color2);
-% % % % for nf = 1:2
-% % % % 
-% % % %     clear legen_name;
-% % % %     % Loop over d values
-% % % %     for i = 1:numel(d_values)
-% % % %         % Get logical index for current d value
-% % % %         idx = round(dd(nf,:), 3) == d_values(i);
-% % % %         sum(idx)
-% % % %         % Extract values for current d value
-% % % %         phi_v{nf,i} = phii(nf,idx);
-% % % %         Pm_v{nf,i} = Pm(nf,idx);
-% % % %         efc_v{nf,i} = efc(nf,idx);
-% % % %     
-% % % %         legen_name(i) = append('$V_o = $',string(d_values(i)*l.pr.Vi),'$\,$[V]');
-% % % %     end
-% % % % end
-% % % % 
-% % % % for nf=1:2
-% % % %     figure
-% % % %     hold on
-% % % %     for i = 1:numel(d_values)
-% % % %         plot(Pm_v{nf,i}./(l.pr.Vi*d_values(i)), efc_v{nf,i}, 'LineWidth', 1.5, 'Color', colors(i,:))
-% % % %     end
-% % % %     hold off
-% % % %     ylim([efc_min_graph 1])
-% % % %     xlim([0 10])
-% % % %     legend(legen_name, 'Location','best')
-% % % %     set(gca, 'FontSize', 20)
-% % % %     grid on
-% % % %     grid minor
-% % % %     ylabel('$\eta$')
-% % % %     xlabel('$i_o\,$[A]')
-% % % %     if (ocultar_titulo == 0)
-% % % %         title(trafo_usados(nf))
-% % % %     end    
-% % % % 
-% % % %     figure
-% % % %     hold on
-% % % %     for i = 1:numel(d_values)
-% % % %         plot(Pm_v{nf,i}*1e-3, efc_v{nf,i}, 'LineWidth', 1.5, 'Color', colors(i,:))
-% % % %     end
-% % % %     hold off
-% % % %     ylim([efc_min_graph 1])
-% % % %     xlim([0 4])
-% % % %     legend(legen_name, 'Location','best')
-% % % %     set(gca, 'FontSize', 20)
-% % % %     grid on
-% % % %     grid minor
-% % % %     ylabel('$\eta$')
-% % % %     xlabel('$P_o\,$[kW]') 
-% % % % 
-% % % %     if (ocultar_titulo == 0)
-% % % %         title(trafo_usados(nf))
-% % % %     end
-% % % % end
-% % % % 
-% % % % 
-% % % % %% analise com tensoes fixas part2
-% % % % 
-% % % % d_values = [300/400 350/400 400/400];
-% % % % 
-% % % % % Initialize arrays to store values
-% % % % phi_v = cell(2, numel(d_values));
-% % % % Pm_v = cell(2, numel(d_values));
-% % % % efc_v = cell(2, numel(d_values));
-% % % % 
-% % % % colors = f_create_cmap(length(d_values), color1, color2);
-% % % % for nf = 1:2
-% % % % 
-% % % %     clear legen_name;
-% % % %     % Loop over d values
-% % % %     for i = 1:numel(d_values)
-% % % %         % Get logical index for current d value
-% % % %         idx = round(dd(nf,:), 3) == d_values(i);
-% % % %         sum(idx)
-% % % %         % Extract values for current d value
-% % % %         phi_v{nf,i} = phii(nf,idx);
-% % % %         Pm_v{nf,i} = Pm(nf,idx);
-% % % %         efc_v{nf,i} = efc(nf,idx);
-% % % %     
-% % % %         legen_name(i) = append('$V_o = $',string(d_values(i)*l.pr.Vi),'$\,$[V]');
-% % % %     end
-% % % % end
-% % % % 
-% % % % for nf=1:2
-% % % %     figure
-% % % %     hold on
-% % % %     for i = 1:numel(d_values)
-% % % %         plot(Pm_v{nf,i}./(l.pr.Vi*d_values(i)), efc_v{nf,i}, 'LineWidth', 1.5, 'Color', colors(i,:))
-% % % %     end
-% % % %     hold off
-% % % %     ylim([efc_min_graph 1])
-% % % %     xlim([0 10])
-% % % %     legend(legen_name, 'Location','best')
-% % % %     set(gca, 'FontSize', 20)
-% % % %     grid on
-% % % %     grid minor
-% % % %     ylabel('$\eta$')
-% % % %     xlabel('$i_o\,$[A]')
-% % % %     if (ocultar_titulo == 0)
-% % % %         title(trafo_usados(nf))
-% % % %     end
-% % % %     
-% % % %     figure
-% % % %     hold on
-% % % %     for i = 1:numel(d_values)
-% % % %         plot(Pm_v{nf,i}*1e-3, efc_v{nf,i}, 'LineWidth', 1.5, 'Color', colors(i,:))
-% % % %     end
-% % % %     hold off
-% % % %     ylim([efc_min_graph 1])
-% % % %     xlim([0 4])
-% % % %     legend(legen_name, 'Location','best')
-% % % %     set(gca, 'FontSize', 20)
-% % % %     grid on
-% % % %     grid minor
-% % % %     ylabel('$\eta$')
-% % % %     xlabel('$P_o\,$[kW]') 
-% % % %     if (ocultar_titulo == 0)
-% % % %         title(trafo_usados(nf))
-% % % %     end    
-% % % % end
+%% eficia em funcao da tensao de saida e corrente de saida
+
+contourLevels = [0.93 0.95 0.97];
+colors = f_create_cmap(length(contourLevels)+1, color1, color2);
+
+for nf = 1:2
+    y = dd(nf,:);
+    x = ioME(nf,:);
+    z = efc(nf,:);
+    
+    n = 200;
+    %Create regular grid across data space
+    [X,Y] = meshgrid(linspace(min(x),max(x),n), linspace(min(y),max(y),n));
+    Z = griddata(x,y,z,X,Y);
+    
+    fig = figure;
+    hold on
+    set(fig,'defaultLegendAutoUpdate','off');
+    
+    [legen_name] = create_legend_contourf(contourLevels, colors);
+    hc = contourfcmap(X,Y*l.pr.Vi,Z,contourLevels, colors(2:end-1,:), ...
+         'lo', colors(1,:), ...
+         'hi', colors(end,:), ...
+         'method', 'calccontour');
+    hc.h.LineStyle = 'none';
+    
+    hold off
+    legend(legen_name,'Location','best','FontSize', 16,'Interpreter','latex');
+    
+    ylim([min(vec_d(:))*l.pr.Vi max(vec_d(:))*l.pr.Vi])
+    xlim([0 Io_max_graph])
+
+    grid on
+    grid minor
+    set(gca, 'FontSize', 20)
+    ylabel('$V_o\,$[V]')
+    xlabel('$I_o\,$[A]')
+
+    if (ocultar_titulo == 0)
+        title(append('eficiencia, ',trafo_usados(nf)))
+    end
+
+    file_name = append('figure\comparacoes_perdas\mapa_eficiencia_Vo_Io_',trafo_usados_correto{nf},'.pdf');
+    exportgraphics(gca,file_name,'ContentType','vector');
+end
+
 
 %% analisando com tensoes fixas, par a par
 
 d_values = [150/400 200/400 250/400 300/400 350/400 400/400];
+% d_values = [ 200/400 250/400 300/400 350/400 400/400];
 
 % Initialize arrays to store values
 phi_v = cell(2, numel(d_values));
@@ -481,7 +430,7 @@ for d_target = d_values
     end
 
     hold off
-    legend(trafo_usados, 'Location','best')
+    legend(trafo_usados_correto, 'Location','best')
     ylim([efc_min_graph 1])
     xlim([0 10])
     set(gca, 'FontSize', 20)
@@ -496,122 +445,1018 @@ for d_target = d_values
     exportgraphics(gca,file_name,'ContentType','vector');
 end
 
+%% densidade de fluxo no indutor
 
-%% todas as perdas
+contourLevels = [0.025 0.05 0.1];
+colors = f_create_cmap(length(contourLevels)+1, color1, color2);
 
-d_values = [150/400 200/400 250/400 300/400 350/400 400/400];
-
-% Initialize arrays to store values
-phi_v = cell(2, numel(d_values));
-Pm_v = cell(2, numel(d_values));
-efc_v = cell(2, numel(d_values));
-
-cSw_p_v = cell(2, numel(d_values));
-cSw_s_v = cell(2, numel(d_values));
-sSw_p_v = cell(2, numel(d_values));
-sSw_s_v = cell(2, numel(d_values));
-
-Pil_cu_v = cell(2, numel(d_values));
-PiL_cu_v = cell(2, numel(d_values));
-PiLd_cu_v = cell(2, numel(d_values));
-
-P_core_L_v = cell(2, numel(d_values));
-P_core_tr_v = cell(2, numel(d_values));
-
-
-
-
-colors = f_create_cmap(length(d_values), color1, color2);
 for nf = 1:2
-    clear legen_name;
-    % Loop over d values
-    for i = 1:numel(d_values)
-        % Get logical index for current d value
-        idx = round(dd(nf,:), 3) == d_values(i);
-        sum(idx)
-        % Extract values for current d value
-        phi_v{nf,i} = phii(nf,idx);
-        Pm_v{nf,i} = Pm(nf,idx);
-        efc_v{nf,i} = efc(nf,idx);
-        
-        cSw_p_v{nf,i} = cSw_p(nf,idx); %perdas conducao primario
-        cSw_s_v{nf,i} = cSw_s(nf,idx); %perdas conducao secundario
-        sSw_p_v{nf,i} = sSw_p(nf,idx); %perdas comutacao primario
-        sSw_s_v{nf,i} = sSw_s(nf,idx); %perdas comutacao secundario
-        
-        Pil_cu_v{nf,i} = Pil_cu(nf,idx); %perdas bobina primario
-        PiL_cu_v{nf,i} = PiL_cu(nf,idx); %perdas bobina secundario
-        PiLd_cu_v{nf,i} = PiLd_cu(nf,idx); %perdas bobina indutor
-        
-        P_core_L_v{nf,i} = P_core_L(nf,idx); %perdas nucleo indutor
-        P_core_tr_v{nf,i} = P_core_tr(nf,idx); %perdas nucleo trafo
-        
-        ptot_v{nf,i} = ptot(nf,idx); %perdas totais
-        % legen_name(i) = append('$V_o = $',string(d_values(i)*l.pr.Vi),'$\,$[V]');
-    end
-end
+    y = dd(nf,:);
+    x = ioME(nf,:);
+    z = Bpk_L(nf,:);
+    
+    n = 200;
+    %Create regular grid across data space
+    [X,Y] = meshgrid(linspace(min(x),max(x),n), linspace(min(y),max(y),n));
+    Z = griddata(x,y,z,X,Y);
 
-legen_name = {'iDY: $Sw_p$', 'iDY: $Sw_s$','YY: $Sw_p$', 'YY: $Sw_s$'};
-for d_target = d_values
-    colors = f_create_cmap(2, color1, color2);
-    idxx = d_target == d_values;
-    position = find(idxx == 1);
+    
     fig = figure;
     hold on
     set(fig,'defaultLegendAutoUpdate','off');
     
-    for nf = 1:2
-        plot(Pm_v{nf,position}./(l.pr.Vi*d_target), (cSw_p_v{nf,position}+sSw_p_v{nf,position}),':o', 'LineWidth', 1.5, 'Color', colors(nf,:))
-        plot(Pm_v{nf,position}./(l.pr.Vi*d_target), (cSw_s_v{nf,position}+sSw_s_v{nf,position}),'--.', 'LineWidth', 1.5, 'Color', colors(nf,:))
-%         plot(Pm_v{nf,position}./(l.pr.Vi*d_target), (PiLd_cu_v{nf,position}+P_core_L_v{nf,position}),'--o', 'LineWidth', 1.5, 'Color', colors(nf,:))
-%         plot(Pm_v{nf,position}./(l.pr.Vi*d_target), (Pil_cu_v{nf,position}+PiL_cu_v{nf,position}+P_core_tr_v{nf,position}),'--*', 'LineWidth', 1.5, 'Color', colors(nf,:))
-%         plot(Pm_v{nf,position}./(l.pr.Vi*d_target), (ptot_v{nf,position}),'-', 'LineWidth', 1.5, 'Color', colors(nf,:))
-    end
+    [legen_name] = create_legend_contourf(contourLevels, colors);
+    hc = contourfcmap(X,Y*l.pr.Vi,Z,contourLevels, colors(2:end-1,:), ...
+         'lo', colors(1,:), ...
+         'hi', colors(end,:), ...
+         'method', 'calccontour');
+    hc.h.LineStyle = 'none';
+    
     hold off
-    legend(legen_name, 'Location','best','NumColumns',2)
-%     legend(legen_name, 'Location','northwest','NumColumns',2)
-    xlim([0 10])
-    set(gca, 'FontSize', 20)
+    legend(legen_name,'Location','best','FontSize', 16,'Interpreter','latex');
+    
+    ylim([min(vec_d(:))*l.pr.Vi max(vec_d(:))*l.pr.Vi])
+    xlim([0 Io_max_graph])
+
     grid on
     grid minor
-    ylabel('$P\,$[W]')
-    xlabel('$i_o\,$[A]')
+    set(gca, 'FontSize', 20)
+    ylabel('$V_o\,$[V]')
+    xlabel('$I_o\,$[A]')
+
     if (ocultar_titulo == 0)
-        title(append('$V_o = $',string(d_target*l.pr.Vi),'$\,$[V]'))
+        title(append('fluxo no indutor, ', trafo_usados(nf)))
     end
-    file_name = append('figure\comparacoes_perdas\perdas_chaves_Vo_',string(d_target*l.pr.Vi),'.pdf');
+
+    file_name = append('figure\comparacoes_perdas\mapa_fluxo_indu_Vo_Io_',trafo_usados{nf},'.pdf');
     exportgraphics(gca,file_name,'ContentType','vector');
 end
 
 
-legen_name = {'iDY:$L_{dab}$', 'iDY:Trans','YY:$L_{dab}$', 'YY:Trans'};
-for d_target = d_values
-    colors = f_create_cmap(2, color1, color2);
-    idxx = d_target == d_values;
-    position = find(idxx == 1);
+%% densidade de fluxo transformador
+contourLevels = [0.05 0.1 0.15];
+colors = f_create_cmap(length(contourLevels)+1, color1, color2);
+
+for nf = 1:2
+    y = dd(nf,:);
+    x = ioME(nf,:);
+    z = Bpk_tr(nf,:);
+    
+    n = 200;
+    %Create regular grid across data space
+    [X,Y] = meshgrid(linspace(min(x),max(x),n), linspace(min(y),max(y),n));
+    Z = griddata(x,y,z,X,Y);
+
+    
     fig = figure;
     hold on
     set(fig,'defaultLegendAutoUpdate','off');
-
-    for nf = 1:2
-%         plot(Pm_v{nf,position}./(l.pr.Vi*d_target), (cSw_p_v{nf,position}+sSw_p_v{nf,position}),':o', 'LineWidth', 1.5, 'Color', colors(nf,:))
-%         plot(Pm_v{nf,position}./(l.pr.Vi*d_target), (cSw_s_v{nf,position}+sSw_s_v{nf,position}),'--.', 'LineWidth', 1.5, 'Color', colors(nf,:))
-        plot(Pm_v{nf,position}./(l.pr.Vi*d_target), (PiLd_cu_v{nf,position}+P_core_L_v{nf,position}),'--o', 'LineWidth', 1.5, 'Color', colors(nf,:))
-        plot(Pm_v{nf,position}./(l.pr.Vi*d_target), (Pil_cu_v{nf,position}+PiL_cu_v{nf,position}+P_core_tr_v{nf,position}),'--*', 'LineWidth', 1.5, 'Color', colors(nf,:))
-%         plot(Pm_v{nf,position}./(l.pr.Vi*d_target), (ptot_v{nf,position}),'-', 'LineWidth', 1.5, 'Color', colors(nf,:))
-    end
+    
+    [legen_name] = create_legend_contourf(contourLevels, colors);
+    hc = contourfcmap(X,Y*l.pr.Vi,Z,contourLevels, colors(2:end-1,:), ...
+         'lo', colors(1,:), ...
+         'hi', colors(end,:), ...
+         'method', 'calccontour');
+    hc.h.LineStyle = 'none';
+    
     hold off
-    legend(legen_name, 'Location','best','NumColumns',2)
-%     legend(legen_name, 'Location','northwest','NumColumns',2)
-    xlim([0 10])
-    set(gca, 'FontSize', 20)
+    legend(legen_name,'Location','best','FontSize', 16,'Interpreter','latex');
+    
+    ylim([min(vec_d(:))*l.pr.Vi max(vec_d(:))*l.pr.Vi])
+    xlim([0 Io_max_graph])
+
     grid on
     grid minor
-    ylabel('$P\,$[W]')
-    xlabel('$i_o\,$[A]')
+    set(gca, 'FontSize', 20)
+    ylabel('$V_o\,$[V]')
+    xlabel('$I_o\,$[A]')
+
     if (ocultar_titulo == 0)
-        title(append('$V_o = $',string(d_target*l.pr.Vi),'$\,$[V]'))
+        title(append('fluxo no transformador, ', trafo_usados(nf)))
     end
-    file_name = append('figure\comparacoes_perdas\perdas_magneticos_Vo_',string(d_target*l.pr.Vi),'.pdf');
+
+    file_name = append('figure\comparacoes_perdas\mapa_fluxo_trans_Vo_Io_',trafo_usados{nf},'.pdf');
     exportgraphics(gca,file_name,'ContentType','vector');
 end
+
+
+%% perdas primario chaves
+contourLevels = [10 15 20];
+colors = f_create_cmap(length(contourLevels)+1, color1, color2);
+
+for nf = 1:2
+    y = dd(nf,:);
+    x = ioME(nf,:);
+    z = cSw_p(nf,:)+sSw_p(nf,:);
+    
+    n = 200;
+    %Create regular grid across data space
+    [X,Y] = meshgrid(linspace(min(x),max(x),n), linspace(min(y),max(y),n));
+    Z = griddata(x,y,z,X,Y);
+
+    
+    fig = figure;
+    hold on
+    set(fig,'defaultLegendAutoUpdate','off');
+    
+    [legen_name] = create_legend_contourf(contourLevels, colors);
+    hc = contourfcmap(X,Y*l.pr.Vi,Z,contourLevels, colors(2:end-1,:), ...
+         'lo', colors(1,:), ...
+         'hi', colors(end,:), ...
+         'method', 'calccontour');
+    hc.h.LineStyle = 'none';
+    
+    hold off
+    legend(legen_name,'Location','best','FontSize', 16,'Interpreter','latex');
+    
+    ylim([min(vec_d(:))*l.pr.Vi max(vec_d(:))*l.pr.Vi])
+    xlim([0 Io_max_graph])
+
+    grid on
+    grid minor
+    set(gca, 'FontSize', 20)
+    ylabel('$V_o\,$[V]')
+    xlabel('$I_o\,$[A]')
+
+    if (ocultar_titulo == 0)
+        title(append('perdas nas chaves do primario, ', trafo_usados(nf)))
+    end
+
+    file_name = append('figure\comparacoes_perdas\mapa_perdas_chaves_primario_Vo_Io_',trafo_usados{nf},'.pdf');
+    exportgraphics(gca,file_name,'ContentType','vector');
+end
+
+%% perdas secundario chaves
+contourLevels = [10 15 20];
+colors = f_create_cmap(length(contourLevels)+1, color1, color2);
+
+for nf = 1:2
+    y = dd(nf,:);
+    x = ioME(nf,:);
+    z = cSw_s(nf,:)+sSw_s(nf,:);
+    
+    n = 200;
+    %Create regular grid across data space
+    [X,Y] = meshgrid(linspace(min(x),max(x),n), linspace(min(y),max(y),n));
+    Z = griddata(x,y,z,X,Y);
+
+    
+    fig = figure;
+    hold on
+    set(fig,'defaultLegendAutoUpdate','off');
+    
+    [legen_name] = create_legend_contourf(contourLevels, colors);
+    hc = contourfcmap(X,Y*l.pr.Vi,Z,contourLevels, colors(2:end-1,:), ...
+         'lo', colors(1,:), ...
+         'hi', colors(end,:), ...
+         'method', 'calccontour');
+    hc.h.LineStyle = 'none';
+    
+    hold off
+    legend(legen_name,'Location','best','FontSize', 16,'Interpreter','latex');
+    
+    ylim([min(vec_d(:))*l.pr.Vi max(vec_d(:))*l.pr.Vi])
+    xlim([0 Io_max_graph])
+
+    grid on
+    grid minor
+    set(gca, 'FontSize', 20)
+    ylabel('$V_o\,$[V]')
+    xlabel('$I_o\,$[A]')
+
+    if (ocultar_titulo == 0)
+        title(append('perdas nas chaves do secundario, ', trafo_usados(nf)))
+    end
+
+    file_name = append('figure\comparacoes_perdas\mapa_perdas_chaves_primario_Vo_Io_',trafo_usados{nf},'.pdf');
+    exportgraphics(gca,file_name,'ContentType','vector');
+end
+
+%% perdas no indutor
+contourLevels = [5 7.5 10];
+colors = f_create_cmap(length(contourLevels)+1, color1, color2);
+
+for nf = 1:2
+    y = dd(nf,:);
+    x = ioME(nf,:);
+    z = PiLd_cu(nf,:)+P_core_L(nf,:);
+    
+    n = 200;
+    %Create regular grid across data space
+    [X,Y] = meshgrid(linspace(min(x),max(x),n), linspace(min(y),max(y),n));
+    Z = griddata(x,y,z,X,Y);
+
+    
+    fig = figure;
+    hold on
+    set(fig,'defaultLegendAutoUpdate','off');
+    
+    [legen_name] = create_legend_contourf(contourLevels, colors);
+    hc = contourfcmap(X,Y*l.pr.Vi,Z,contourLevels, colors(2:end-1,:), ...
+         'lo', colors(1,:), ...
+         'hi', colors(end,:), ...
+         'method', 'calccontour');
+    hc.h.LineStyle = 'none';
+    
+    hold off
+    legend(legen_name,'Location','best','FontSize', 16,'Interpreter','latex');
+    
+    ylim([min(vec_d(:))*l.pr.Vi max(vec_d(:))*l.pr.Vi])
+    xlim([0 Io_max_graph])
+
+    grid on
+    grid minor
+    set(gca, 'FontSize', 20)
+    ylabel('$V_o\,$[V]')
+    xlabel('$I_o\,$[A]')
+
+    if (ocultar_titulo == 0)
+        title(append('perdas nos indutores, ', trafo_usados(nf)))
+    end
+
+    file_name = append('figure\comparacoes_perdas\mapa_perdas_indutor_Vo_Io_',trafo_usados{nf},'.pdf');
+    exportgraphics(gca,file_name,'ContentType','vector');
+end
+%% temperatura nucleo
+contourLevels = [5 10 15];
+colors = f_create_cmap(length(contourLevels)+1, color1, color2);
+
+for nf = 1:2
+    y = dd(nf,:);
+    x = ioME(nf,:);
+    deltaT = P_core_L(nf,:)/3*8;
+    z = deltaT;
+    
+    n = 200;
+    %Create regular grid across data space
+    [X,Y] = meshgrid(linspace(min(x),max(x),n), linspace(min(y),max(y),n));
+    Z = griddata(x,y,z,X,Y);
+
+    
+    fig = figure;
+    hold on
+    set(fig,'defaultLegendAutoUpdate','off');
+    
+    [legen_name] = create_legend_contourf(contourLevels, colors);
+    hc = contourfcmap(X,Y*l.pr.Vi,Z,contourLevels, colors(2:end-1,:), ...
+         'lo', colors(1,:), ...
+         'hi', colors(end,:), ...
+         'method', 'calccontour');
+    hc.h.LineStyle = 'none';
+    
+    hold off
+    legend(legen_name,'Location','best','FontSize', 16,'Interpreter','latex');
+    
+    ylim([min(vec_d(:))*l.pr.Vi max(vec_d(:))*l.pr.Vi])
+    xlim([0 Io_max_graph])
+
+    grid on
+    grid minor
+    set(gca, 'FontSize', 20)
+    ylabel('$V_o\,$[V]')
+    xlabel('$I_o\,$[A]')
+
+    if (ocultar_titulo == 0)
+        title(append('temperatura no indutor, ', trafo_usados(nf)))
+    end
+
+    file_name = append('figure\comparacoes_perdas\mapa_temperatura_indutor_Vo_Io_',trafo_usados{nf},'.pdf');
+    exportgraphics(gca,file_name,'ContentType','vector');
+end
+
+
+%% perdas no transformador
+contourLevels = [10 20 30];
+colors = f_create_cmap(length(contourLevels)+1, color1, color2);
+
+for nf = 1:2
+    y = dd(nf,:);
+    x = ioME(nf,:);
+    z = P_core_tr(nf,:)+PiL_cu(nf,:)+Pil_cu(nf,:);
+    
+    n = 200;
+    %Create regular grid across data space
+    [X,Y] = meshgrid(linspace(min(x),max(x),n), linspace(min(y),max(y),n));
+    Z = griddata(x,y,z,X,Y);
+
+    
+    fig = figure;
+    hold on
+    set(fig,'defaultLegendAutoUpdate','off');
+    
+    [legen_name] = create_legend_contourf(contourLevels, colors);
+    hc = contourfcmap(X,Y*l.pr.Vi,Z,contourLevels, colors(2:end-1,:), ...
+         'lo', colors(1,:), ...
+         'hi', colors(end,:), ...
+         'method', 'calccontour');
+    hc.h.LineStyle = 'none';
+    
+    hold off
+    legend(legen_name,'Location','best','FontSize', 16,'Interpreter','latex');
+    
+    ylim([min(vec_d(:))*l.pr.Vi max(vec_d(:))*l.pr.Vi])
+    xlim([0 Io_max_graph])
+
+    grid on
+    grid minor
+    set(gca, 'FontSize', 20)
+    ylabel('$V_o\,$[V]')
+    xlabel('$I_o\,$[A]')
+
+    if (ocultar_titulo == 0)
+        title(append('perdas no transformador, ', trafo_usados(nf)))
+    end
+
+    file_name = append('figure\comparacoes_perdas\mapa_perdas_transformador_Vo_Io_',trafo_usados{nf},'.pdf');
+    exportgraphics(gca,file_name,'ContentType','vector');
+end
+
+%% perdas totais
+contourLevels = [20 40 60 80];
+colors = f_create_cmap(length(contourLevels)+1, color1, color2);
+
+for nf = 1:2
+    y = dd(nf,:);
+    x = ioME(nf,:);
+    z = ptot(nf,:);
+    
+    n = 200;
+    %Create regular grid across data space
+    [X,Y] = meshgrid(linspace(min(x),max(x),n), linspace(min(y),max(y),n));
+    Z = griddata(x,y,z,X,Y);
+
+    
+    fig = figure;
+    hold on
+    set(fig,'defaultLegendAutoUpdate','off');
+    
+    [legen_name] = create_legend_contourf(contourLevels, colors);
+    hc = contourfcmap(X,Y*l.pr.Vi,Z,contourLevels, colors(2:end-1,:), ...
+         'lo', colors(1,:), ...
+         'hi', colors(end,:), ...
+         'method', 'calccontour');
+    hc.h.LineStyle = 'none';
+    
+    hold off
+    legend(legen_name,'Location','best','FontSize', 16,'Interpreter','latex');
+    
+    ylim([min(vec_d(:))*l.pr.Vi max(vec_d(:))*l.pr.Vi])
+    xlim([0 Io_max_graph])
+
+    grid on
+    grid minor
+    set(gca, 'FontSize', 20)
+    ylabel('$V_o\,$[V]')
+    xlabel('$I_o\,$[A]')
+
+    if (ocultar_titulo == 0)
+        title(append('perdas totais, ', trafo_usados(nf)))
+    end
+
+    file_name = append('figure\comparacoes_perdas\mapa_perdas_totais_Vo_Io_',trafo_usados{nf},'.pdf');
+    exportgraphics(gca,file_name,'ContentType','vector');
+end
+
+
+%% digitalizar 
+
+%% para plot, primeira situacao
+
+% Define the desired Y-axis range
+desiredYRange = 40;
+% Define the desired X-axis range
+desiredXRange = 20;
+
+% Load the image
+image = imread('LeCroy16.png');
+
+
+trafoo = "YY";
+l.pr.phi = deg2rad(70);
+l.pr.d = .75;
+
+out = f_equationsYY_dt(l);
+C = num2cell(out);
+[hbrm,HBrm,Ip,Is,iiRMS,iiME,ioRMS,ioME,Pm,idrm,ilrm,iLrm,iSwPrm,iSwSrm,P_core_tr,Bpk_tr,P_core_L,Bpk_L] = C{:};
+Pm
+
+[out] = f_equations_plot(l,trafoo);
+C = num2cell(out);
+vPP(1:3,:) = cell2mat(C(1:3,:));
+vSS(1:3,:) = cell2mat(C(4:6,:));
+vLLdab(1:3,:) = cell2mat(C(7:9,:));
+hbb(1:3,:) = cell2mat(C(10:12,:));
+HBB(1:3,:) = cell2mat(C(13:15,:));
+idab_plot(1:3,:) = cell2mat(C(16:18,:));
+x0s(1:6,:) = cell2mat(C(19:24,:));
+ts(1,:) = cell2mat(C(25,:));
+sec_switch_plot(1,:) = cell2mat(C(26,:));
+sf_plot(1:6,:) = cell2mat(C(27:32,:));
+
+% Extract the red, green, and blue channels
+redChannel = image(:,:,1);
+greenChannel = image(:,:,2);
+blueChannel = image(:,:,3);
+
+% Define the colors to search for
+colorsToFind = [0, 255, 255; 247, 255, 0; 0, 255, 0; 99, 105, 99]; % RGB values for each color
+
+% Initialize arrays to store extracted data points for each color
+pointsWithColor1 = [];
+pointsWithColor2 = [];
+pointsWithColor3 = [];
+pointsWithColor4 = [];
+
+% Loop through each color and find the indices of points with that color
+for i = 1:size(colorsToFind, 1)
+    colorToFind = colorsToFind(i,:);
+    [row, col] = find(redChannel == colorToFind(1) & ...
+                      greenChannel == colorToFind(2) & ...
+                      blueChannel == colorToFind(3));
+    
+    % Extract the data points with the current color and store them in the appropriate array
+    switch i
+        case 1
+            pointsWithColor1 = [col, row];
+        case 2
+            pointsWithColor2 = [col, row];
+        case 3
+            pointsWithColor3 = [col, row];
+        case 4
+            pointsWithColor4 = [col, row];
+    end
+end
+
+% Find the min and max values in pointsWithColor4
+minX = min(pointsWithColor4(:, 1));
+maxX = max(pointsWithColor4(:, 1));
+minY = min(pointsWithColor4(:, 2));
+maxY = max(pointsWithColor4(:, 2));
+
+% Store the arrays of points with color in a cell array for easy looping
+pointsWithColors = {pointsWithColor1, pointsWithColor2, pointsWithColor3};
+
+% Loop through each pointsWithColor array and remove data points outside the range of values in pointsWithColor4
+for i = 1:numel(pointsWithColors)
+    pointsWithColor = pointsWithColors{i};
+    pointsWithColor(pointsWithColor(:, 1) < minX | pointsWithColor(:, 1) > maxX | ...
+                    pointsWithColor(:, 2) < minY | pointsWithColor(:, 2) > maxY, :) = [];
+    pointsWithColors{i} = pointsWithColor;
+end
+
+% Extract the Y-axis coordinates from pointsWithColor4
+yValues = pointsWithColor4(:, 2);
+
+% Compute the histogram of Y-axis values
+[counts, edges] = histcounts(yValues);
+
+% Find the unique Y-axis values with less than 100 occurrences
+uniqueYValues = edges(counts > 200);
+
+% Define marker size for scatter plot
+markerSize = 0.5; % Adjust this value to change the size of the markers
+
+% Define the desired offset level
+desiredOffset = -uniqueYValues(ceil(length(uniqueYValues)/2));
+
+% Calculate the range between the first and last values of uniqueYValues
+yRange = uniqueYValues(end) - uniqueYValues(1);
+
+% Calculate the scale factor based on the desired Y-axis range
+scaleFactor = desiredYRange / yRange;
+
+% Find the range of uniqueYValues
+minYValue = min(uniqueYValues);
+maxYValue = max(uniqueYValues);
+
+% Update the offset and scale for pointsWithColors{1} to pointsWithColors{3}
+pointsWithColors{1}(:,2) = pointsWithColors{1}(:,2) - (minYValue - desiredOffset);
+pointsWithColors{1}(:,2) = pointsWithColors{1}(:,2) * scaleFactor;
+pointsWithColors{2}(:,2) = pointsWithColors{2}(:,2) - (minYValue - desiredOffset);
+pointsWithColors{2}(:,2) = pointsWithColors{2}(:,2) * scaleFactor;
+pointsWithColors{3}(:,2) = pointsWithColors{3}(:,2) - (minYValue - desiredOffset);
+pointsWithColors{3}(:,2) = pointsWithColors{3}(:,2) * scaleFactor;
+
+% Calculate the scale factor based on the desired X-axis range
+xRange = maxX - minX;
+scaleFactorX = desiredXRange / xRange;
+
+% Update the X-axis values for pointsWithColors{1} to pointsWithColors{3}
+pointsWithColors{1}(:,1) = pointsWithColors{1}(:,1) * scaleFactorX;
+pointsWithColors{2}(:,1) = pointsWithColors{2}(:,1) * scaleFactorX;
+pointsWithColors{3}(:,1) = pointsWithColors{3}(:,1) * scaleFactorX;
+
+tx = 1.9;
+% Plot the extracted data points for each color with the specified marker size
+
+figure
+cmap = f_create_cmap(3, color2, color1);
+colormap(cmap)
+jetcustom = cmap;
+
+c1 = f_create_cmap(3, cmap(1,:), [1 1 1]);
+c2 = f_create_cmap(3, cmap(2,:), [1 1 1]);
+c3 = f_create_cmap(3, cmap(3,:), [1 1 1]);
+color_white = [c1(2,:);c2(2,:);c3(2,:)];
+
+color_black = jetcustom*0.7;
+
+hold on
+
+L11 = plot(nan, nan,'-','LineWidth',2.5,'Color',[0.7 0.7 0.7]);
+L22 = plot(nan, nan,'-','LineWidth',1,'Color',[0 0 0]);
+
+marker_size = 5;
+% plot(pointsWithColors{1}(:,1)-tx, pointsWithColors{1}(:,2),'Color',color_white(1,:),'LineWidth',2);
+% plot(pointsWithColors{2}(:,1)-tx, pointsWithColors{2}(:,2),'Color',color_white(2,:),'LineWidth',2);
+% plot(pointsWithColors{3}(:,1)-tx, pointsWithColors{3}(:,2),'Color',color_white(3,:),'LineWidth',2);
+scatter(pointsWithColors{1}(:,1)-tx, pointsWithColors{1}(:,2), marker_size,'filled', 'MarkerFaceColor',color_white(1,:));
+scatter(pointsWithColors{2}(:,1)-tx, pointsWithColors{2}(:,2), marker_size,'filled', 'MarkerFaceColor',color_white(2,:));
+scatter(pointsWithColors{3}(:,1)-tx, pointsWithColors{3}(:,2), marker_size,'filled', 'MarkerFaceColor',color_white(3,:));
+
+plot(ts*1e6,idab_plot(1,:),'-','Color',color_black(3,:),'LineWidth',1)
+plot(ts*1e6,idab_plot(3,:),'-','Color',color_black(2,:),'LineWidth',1)
+plot(ts*1e6,idab_plot(2,:),'-','Color',color_black(1,:),'LineWidth',1)
+hold off
+grid on
+grid minor
+yticks(-14:7:14)
+xlim([0 10])
+ylim([-14 14])
+legend({'Experimental','Theoric'},'Location','southeast','FontSize', 14)
+set(gca, 'FontSize', 20)
+xlabel('$t[\mu$s]')
+ylabel('$i\,$[A]')
+file_name = append('figure\finalCap2\d_',string(l.pr.d),'_phi_',string(l.pr.phi*180/pi),'_',trafoo,'.pdf');
+exportgraphics(gca,file_name,'ContentType','vector');
+
+%% para plot, segunda situacao
+
+% Define the desired Y-axis range
+desiredYRange = 24;
+% Define the desired X-axis range
+desiredXRange = 20;
+
+% Load the image
+image = imread('LeCroy20.png');
+
+
+trafoo = "YY";
+l.pr.phi = deg2rad(79);
+l.pr.d = 1;
+
+out = f_equationsYY_dt(l);
+C = num2cell(out);
+[hbrm,HBrm,Ip,Is,iiRMS,iiME,ioRMS,ioME,Pm,idrm,ilrm,iLrm,iSwPrm,iSwSrm,P_core_tr,Bpk_tr,P_core_L,Bpk_L] = C{:};
+Pm
+
+
+[out] = f_equations_plot(l,trafoo);
+C = num2cell(out);
+vPP(1:3,:) = cell2mat(C(1:3,:));
+vSS(1:3,:) = cell2mat(C(4:6,:));
+vLLdab(1:3,:) = cell2mat(C(7:9,:));
+hbb(1:3,:) = cell2mat(C(10:12,:));
+HBB(1:3,:) = cell2mat(C(13:15,:));
+idab_plot(1:3,:) = cell2mat(C(16:18,:));
+x0s(1:6,:) = cell2mat(C(19:24,:));
+ts(1,:) = cell2mat(C(25,:));
+sec_switch_plot(1,:) = cell2mat(C(26,:));
+sf_plot(1:6,:) = cell2mat(C(27:32,:));
+
+% Extract the red, green, and blue channels
+redChannel = image(:,:,1);
+greenChannel = image(:,:,2);
+blueChannel = image(:,:,3);
+
+% Define the colors to search for
+colorsToFind = [0, 255, 255; 247, 255, 0; 0, 255, 0; 99, 105, 99]; % RGB values for each color
+
+% Initialize arrays to store extracted data points for each color
+pointsWithColor1 = [];
+pointsWithColor2 = [];
+pointsWithColor3 = [];
+pointsWithColor4 = [];
+
+% Loop through each color and find the indices of points with that color
+for i = 1:size(colorsToFind, 1)
+    colorToFind = colorsToFind(i,:);
+    [row, col] = find(redChannel == colorToFind(1) & ...
+                      greenChannel == colorToFind(2) & ...
+                      blueChannel == colorToFind(3));
+    
+    % Extract the data points with the current color and store them in the appropriate array
+    switch i
+        case 1
+            pointsWithColor1 = [col, row];
+        case 2
+            pointsWithColor2 = [col, row];
+        case 3
+            pointsWithColor3 = [col, row];
+        case 4
+            pointsWithColor4 = [col, row];
+    end
+end
+
+% Find the min and max values in pointsWithColor4
+minX = min(pointsWithColor4(:, 1));
+maxX = max(pointsWithColor4(:, 1));
+minY = min(pointsWithColor4(:, 2));
+maxY = max(pointsWithColor4(:, 2));
+
+% Store the arrays of points with color in a cell array for easy looping
+pointsWithColors = {pointsWithColor1, pointsWithColor2, pointsWithColor3};
+
+% Loop through each pointsWithColor array and remove data points outside the range of values in pointsWithColor4
+for i = 1:numel(pointsWithColors)
+    pointsWithColor = pointsWithColors{i};
+    pointsWithColor(pointsWithColor(:, 1) < minX | pointsWithColor(:, 1) > maxX | ...
+                    pointsWithColor(:, 2) < minY | pointsWithColor(:, 2) > maxY, :) = [];
+    pointsWithColors{i} = pointsWithColor;
+end
+
+% Extract the Y-axis coordinates from pointsWithColor4
+yValues = pointsWithColor4(:, 2);
+
+% Compute the histogram of Y-axis values
+[counts, edges] = histcounts(yValues);
+
+% Find the unique Y-axis values with less than 100 occurrences
+uniqueYValues = edges(counts > 200);
+
+% Define marker size for scatter plot
+markerSize = 0.5; % Adjust this value to change the size of the markers
+
+% Define the desired offset level
+desiredOffset = -uniqueYValues(ceil(length(uniqueYValues)/2));
+
+% Calculate the range between the first and last values of uniqueYValues
+yRange = uniqueYValues(end) - uniqueYValues(1);
+
+% Calculate the scale factor based on the desired Y-axis range
+scaleFactor = desiredYRange / yRange;
+
+% Find the range of uniqueYValues
+minYValue = min(uniqueYValues);
+maxYValue = max(uniqueYValues);
+
+% Update the offset and scale for pointsWithColors{1} to pointsWithColors{3}
+pointsWithColors{1}(:,2) = pointsWithColors{1}(:,2) - (minYValue - desiredOffset);
+pointsWithColors{1}(:,2) = pointsWithColors{1}(:,2) * scaleFactor;
+pointsWithColors{2}(:,2) = pointsWithColors{2}(:,2) - (minYValue - desiredOffset);
+pointsWithColors{2}(:,2) = pointsWithColors{2}(:,2) * scaleFactor;
+pointsWithColors{3}(:,2) = pointsWithColors{3}(:,2) - (minYValue - desiredOffset);
+pointsWithColors{3}(:,2) = pointsWithColors{3}(:,2) * scaleFactor;
+
+% Calculate the scale factor based on the desired X-axis range
+xRange = maxX - minX;
+scaleFactorX = desiredXRange / xRange;
+
+% Update the X-axis values for pointsWithColors{1} to pointsWithColors{3}
+pointsWithColors{1}(:,1) = pointsWithColors{1}(:,1) * scaleFactorX;
+pointsWithColors{2}(:,1) = pointsWithColors{2}(:,1) * scaleFactorX;
+pointsWithColors{3}(:,1) = pointsWithColors{3}(:,1) * scaleFactorX;
+
+tx = 2.0;
+% Plot the extracted data points for each color with the specified marker size
+
+figure
+cmap = f_create_cmap(3, color2, color1);
+colormap(cmap)
+jetcustom = cmap;
+
+c1 = f_create_cmap(3, cmap(1,:), [1 1 1]);
+c2 = f_create_cmap(3, cmap(2,:), [1 1 1]);
+c3 = f_create_cmap(3, cmap(3,:), [1 1 1]);
+color_white = [c1(2,:);c2(2,:);c3(2,:)];
+
+color_black = jetcustom*0.7;
+
+hold on
+
+L11 = plot(nan, nan,'-','LineWidth',2.5,'Color',[0.7 0.7 0.7]);
+L22 = plot(nan, nan,'-','LineWidth',1,'Color',[0 0 0]);
+
+marker_size = 4;
+% plot(pointsWithColors{1}(:,1)-tx, pointsWithColors{1}(:,2),'Color',color_white(1,:),'LineWidth',2.5);
+% plot(pointsWithColors{2}(:,1)-tx, pointsWithColors{2}(:,2),'Color',color_white(2,:),'LineWidth',2.5);
+% plot(pointsWithColors{3}(:,1)-tx, pointsWithColors{3}(:,2),'Color',color_white(3,:),'LineWidth',2.5);
+scatter(pointsWithColors{1}(:,1)-tx, pointsWithColors{1}(:,2), marker_size,'filled', 'MarkerFaceColor',color_white(1,:));
+scatter(pointsWithColors{2}(:,1)-tx, pointsWithColors{2}(:,2), marker_size,'filled', 'MarkerFaceColor',color_white(2,:));
+scatter(pointsWithColors{3}(:,1)-tx, pointsWithColors{3}(:,2), marker_size,'filled', 'MarkerFaceColor',color_white(3,:));
+plot(ts*1e6,idab_plot(1,:),'-','Color',color_black(3,:),'LineWidth',1)
+plot(ts*1e6,idab_plot(3,:),'-','Color',color_black(2,:),'LineWidth',1)
+plot(ts*1e6,idab_plot(2,:),'-','Color',color_black(1,:),'LineWidth',1)
+hold off
+grid on
+grid minor
+yticks(-14:7:14)
+xlim([0 10])
+ylim([-14 14])
+legend({'Experimental','Theoric'},'Location','southeast','FontSize', 14)
+set(gca, 'FontSize', 20)
+xlabel('$t[\mu$s]')
+ylabel('$i\,$[A]')
+file_name = append('figure\finalCap2\d_',string(l.pr.d),'_phi_',string(l.pr.phi*180/pi),'_',trafoo,'.pdf');
+exportgraphics(gca,file_name,'ContentType','vector');
+
+
+
+%% so pra mostrar
+
+% Define the desired Y-axis range
+desiredYRange = 24;
+% Define the desired X-axis range
+desiredXRange = 20;
+
+% Load the image
+image = imread('LeCroy20.png');
+
+% Extract the red, green, and blue channels
+redChannel = image(:,:,1);
+greenChannel = image(:,:,2);
+blueChannel = image(:,:,3);
+
+% Define the colors to search for
+colorsToFind = [0, 255, 255; 247, 255, 0; 0, 255, 0; 99, 105, 99]; % RGB values for each color
+
+% Initialize arrays to store extracted data points for each color
+pointsWithColor1 = [];
+pointsWithColor2 = [];
+pointsWithColor3 = [];
+pointsWithColor4 = [];
+
+% Loop through each color and find the indices of points with that color
+for i = 1:size(colorsToFind, 1)
+    colorToFind = colorsToFind(i,:);
+    [row, col] = find(redChannel == colorToFind(1) & ...
+                      greenChannel == colorToFind(2) & ...
+                      blueChannel == colorToFind(3));
+    
+    % Extract the data points with the current color and store them in the appropriate array
+    switch i
+        case 1
+            pointsWithColor1 = [col, row];
+        case 2
+            pointsWithColor2 = [col, row];
+        case 3
+            pointsWithColor3 = [col, row];
+        case 4
+            pointsWithColor4 = [col, row];
+    end
+end
+
+% Find the min and max values in pointsWithColor4
+minX = min(pointsWithColor4(:, 1));
+maxX = max(pointsWithColor4(:, 1));
+minY = min(pointsWithColor4(:, 2));
+maxY = max(pointsWithColor4(:, 2));
+
+% Store the arrays of points with color in a cell array for easy looping
+pointsWithColors = {pointsWithColor1, pointsWithColor2, pointsWithColor3};
+
+% Loop through each pointsWithColor array and remove data points outside the range of values in pointsWithColor4
+for i = 1:numel(pointsWithColors)
+    pointsWithColor = pointsWithColors{i};
+    pointsWithColor(pointsWithColor(:, 1) < minX | pointsWithColor(:, 1) > maxX | ...
+                    pointsWithColor(:, 2) < minY | pointsWithColor(:, 2) > maxY, :) = [];
+    pointsWithColors{i} = pointsWithColor;
+end
+
+% Extract the Y-axis coordinates from pointsWithColor4
+yValues = pointsWithColor4(:, 2);
+
+% Compute the histogram of Y-axis values
+[counts, edges] = histcounts(yValues);
+
+% Find the unique Y-axis values with less than 100 occurrences
+uniqueYValues = edges(counts > 200);
+
+% Define marker size for scatter plot
+markerSize = 0.5; % Adjust this value to change the size of the markers
+
+% Define the desired offset level
+desiredOffset = -uniqueYValues(ceil(length(uniqueYValues)/2));
+
+% Calculate the range between the first and last values of uniqueYValues
+yRange = uniqueYValues(end) - uniqueYValues(1);
+
+% Calculate the scale factor based on the desired Y-axis range
+scaleFactor = desiredYRange / yRange;
+
+% Find the range of uniqueYValues
+minYValue = min(uniqueYValues);
+maxYValue = max(uniqueYValues);
+
+% Update the offset and scale for pointsWithColors{1} to pointsWithColors{3}
+pointsWithColors{1}(:,2) = pointsWithColors{1}(:,2) - (minYValue - desiredOffset);
+pointsWithColors{1}(:,2) = pointsWithColors{1}(:,2) * scaleFactor;
+pointsWithColors{2}(:,2) = pointsWithColors{2}(:,2) - (minYValue - desiredOffset);
+pointsWithColors{2}(:,2) = pointsWithColors{2}(:,2) * scaleFactor;
+pointsWithColors{3}(:,2) = pointsWithColors{3}(:,2) - (minYValue - desiredOffset);
+pointsWithColors{3}(:,2) = pointsWithColors{3}(:,2) * scaleFactor;
+
+% Calculate the scale factor based on the desired X-axis range
+xRange = maxX - minX;
+scaleFactorX = desiredXRange / xRange;
+
+% Update the X-axis values for pointsWithColors{1} to pointsWithColors{3}
+pointsWithColors{1}(:,1) = pointsWithColors{1}(:,1) * scaleFactorX;
+pointsWithColors{2}(:,1) = pointsWithColors{2}(:,1) * scaleFactorX;
+pointsWithColors{3}(:,1) = pointsWithColors{3}(:,1) * scaleFactorX;
+
+figure
+cmap = f_create_cmap(3, color2, color1);
+colormap(cmap)
+jetcustom = cmap;
+
+hold on
+
+marker_size = 2;
+
+scatter(pointsWithColors{1}(:,1)-pointsWithColors{1}(1,1), -pointsWithColors{1}(:,2), marker_size,'filled', 'MarkerFaceColor',jetcustom(1,:));
+scatter(pointsWithColors{2}(:,1)-pointsWithColors{1}(1,1), -pointsWithColors{2}(:,2), marker_size,'filled', 'MarkerFaceColor',jetcustom(2,:));
+scatter(pointsWithColors{3}(:,1)-pointsWithColors{1}(1,1), -pointsWithColors{3}(:,2), marker_size,'filled', 'MarkerFaceColor',jetcustom(3,:));
+
+hold off
+grid on
+% grid minor
+yticks(-12:3:12)
+% xlim([0 10])
+ylim([-12 12])
+set(gca, 'FontSize', 20)
+xlabel('$t[\mu$s]')
+ylabel('$i\,$[A]')
+title('Lecroy20.png')
+
+
+
+
+
+%% corrente indutor iDY
+
+fid = fopen('C1Trace00000.dat');
+format long
+cell_data= textscan(fid,'%f%f','Delimiter',' ','headerLines',1);
+my_data1 = cat(2,cell_data{:});
+fclose(fid);
+
+fid = fopen('C3Trace00000.dat');
+format long
+cell_data= textscan(fid,'%f%f','Delimiter',' ','headerLines',1);
+my_data2 = cat(2,cell_data{:});
+fclose(fid);
+
+fid = fopen('C4Trace00000.dat');
+format long
+cell_data= textscan(fid,'%f%f','Delimiter',' ','headerLines',1);
+my_data3 = cat(2,cell_data{:});
+fclose(fid);
+
+
+
+trafoo = "DiY";
+l.pr.phi = deg2rad(4);
+l.pr.d = 1;
+
+out = f_equationsDiY_dt(l);
+C = num2cell(out);
+[hbrm,HBrm,Ip,Is,iiRMS,iiME,ioRMS,ioME,Pm,idrm,ilrm,iLrm,iSwPrm,iSwSrm,P_core_tr,Bpk_tr,P_core_L,Bpk_L] = C{:};
+Pm
+
+[out] = f_equations_plot(l,trafoo);
+C = num2cell(out);
+vPP(1:3,:) = cell2mat(C(1:3,:));
+vSS(1:3,:) = cell2mat(C(4:6,:));
+vLLdab(1:3,:) = cell2mat(C(7:9,:));
+hbb(1:3,:) = cell2mat(C(10:12,:));
+HBB(1:3,:) = cell2mat(C(13:15,:));
+idab_plot(1:3,:) = cell2mat(C(16:18,:));
+x0s(1:6,:) = cell2mat(C(19:24,:));
+ts(1,:) = cell2mat(C(25,:));
+sec_switch_plot(1,:) = cell2mat(C(26,:));
+sf_plot(1:6,:) = cell2mat(C(27:32,:));
+
+figure
+cmap = f_create_cmap(3, color2, color1);
+colormap(cmap)
+jetcustom = cmap;
+hold on
+
+L11 = plot(nan, nan,'-','LineWidth',2.5,'Color',[0.7 0.7 0.7]);
+L22 = plot(nan, nan,'-','LineWidth',1,'Color',[0 0 0]);
+
+shiftt = 1;
+xx = (-my_data1(1,1)+my_data1(:,1))*1e6;
+yy = my_data1(:,2);
+yy_plot1 = [yy(shiftt:end); yy(1:shiftt-1)]';
+yy = my_data2(:,2);
+yy_plot2 = [yy(shiftt:end); yy(1:shiftt-1)]';
+yy = my_data3(:,2);
+yy_plot3 = [yy(shiftt:end); yy(1:shiftt-1)]';
+
+marker_size = 8;
+scatter(xx, yy_plot3, marker_size,'filled', 'MarkerFaceColor',color_white(1,:));
+scatter(xx, yy_plot2, marker_size,'filled', 'MarkerFaceColor',color_white(2,:));
+scatter(xx, yy_plot1, marker_size,'filled', 'MarkerFaceColor',color_white(3,:));
+plot(ts*1e6,idab_plot(1,:),'-','Color',color_black(3,:),'LineWidth',1)
+plot(ts*1e6,idab_plot(2,:),'-','Color',color_black(1,:),'LineWidth',1)
+plot(ts*1e6,idab_plot(3,:),'-','Color',color_black(2,:),'LineWidth',1)
+hold off
+yticks(-8:4:8)
+ylim([-8 8])
+grid on
+grid minor
+legend({'Experimental','Theoric'},'Location','southeast','FontSize', 14)
+set(gca, 'FontSize', 20)
+xlabel('$t[\mu$s]')
+ylabel('$i\,$[A]')
+file_name = append('figure\finalCap2\d_',string(l.pr.d),'_phi_',string(l.pr.phi*180/pi),'_',trafoo,'.pdf');
+exportgraphics(gca,file_name,'ContentType','vector');
+
+
+
+
+
+%% corrente indutor
+
+fid = fopen('C1Trace00001.dat');
+format long
+cell_data= textscan(fid,'%f%f','Delimiter',' ','headerLines',1);
+my_data1 = cat(2,cell_data{:});
+fclose(fid);
+
+fid = fopen('C3Trace00001.dat');
+format long
+cell_data= textscan(fid,'%f%f','Delimiter',' ','headerLines',1);
+my_data2 = cat(2,cell_data{:});
+fclose(fid);
+
+fid = fopen('C4Trace00001.dat');
+format long
+cell_data= textscan(fid,'%f%f','Delimiter',' ','headerLines',1);
+my_data3 = cat(2,cell_data{:});
+fclose(fid);
+
+
+trafoo = "DiY";
+l.pr.phi = deg2rad(-1+4.5);
+l.pr.d = 3/4;
+
+out = f_equationsDiY_dt(l);
+C = num2cell(out);
+[hbrm,HBrm,Ip,Is,iiRMS,iiME,ioRMS,ioME,Pm,idrm,ilrm,iLrm,iSwPrm,iSwSrm,P_core_tr,Bpk_tr,P_core_L,Bpk_L] = C{:};
+Pm
+
+
+[out] = f_equations_plot(l,trafoo);
+C = num2cell(out);
+vPP(1:3,:) = cell2mat(C(1:3,:));
+vSS(1:3,:) = cell2mat(C(4:6,:));
+vLLdab(1:3,:) = cell2mat(C(7:9,:));
+hbb(1:3,:) = cell2mat(C(10:12,:));
+HBB(1:3,:) = cell2mat(C(13:15,:));
+idab_plot(1:3,:) = cell2mat(C(16:18,:));
+x0s(1:6,:) = cell2mat(C(19:24,:));
+ts(1,:) = cell2mat(C(25,:));
+sec_switch_plot(1,:) = cell2mat(C(26,:));
+sf_plot(1:6,:) = cell2mat(C(27:32,:));
+
+figure
+cmap = f_create_cmap(3, color2, color1);
+colormap(cmap)
+jetcustom = cmap;
+hold on
+
+L11 = plot(nan, nan,'-','LineWidth',2.5,'Color',[0.7 0.7 0.7]);
+L22 = plot(nan, nan,'-','LineWidth',1,'Color',[0 0 0]);
+
+shiftt = 19700;
+xx = (-my_data1(1,1)+my_data1(:,1))*1e6;
+yy = my_data1(:,2);
+yy_plot1 = [yy(shiftt:end); yy(1:shiftt-1)]';
+yy = my_data2(:,2);
+yy_plot2 = [yy(shiftt:end); yy(1:shiftt-1)]';
+yy = my_data3(:,2);
+yy_plot3 = [yy(shiftt:end); yy(1:shiftt-1)]';
+
+marker_size = 8;
+scatter(xx, yy_plot3, marker_size,'filled', 'MarkerFaceColor',color_white(1,:));
+scatter(xx, yy_plot2, marker_size,'filled', 'MarkerFaceColor',color_white(2,:));
+scatter(xx, yy_plot1, marker_size,'filled', 'MarkerFaceColor',color_white(3,:));
+plot(ts*1e6,idab_plot(1,:),'-','Color',color_black(3,:),'LineWidth',1)
+plot(ts*1e6,idab_plot(2,:),'-','Color',color_black(1,:),'LineWidth',1)
+plot(ts*1e6,idab_plot(3,:),'-','Color',color_black(2,:),'LineWidth',1)
+
+hold off
+xlim([0 10])
+yticks(-8:4:8)
+ylim([-8 8])
+grid on
+grid minor
+legend({'Experimental','Theoric'},'Location','southeast','FontSize', 14)
+set(gca, 'FontSize', 20)
+xlabel('$t[\mu$s]')
+ylabel('$i\,$[A]')
+file_name = append('figure\finalCap2\d_',string(l.pr.d),'_phi_',string(l.pr.phi*180/pi),'_',trafoo,'.pdf');
+exportgraphics(gca,file_name,'ContentType','vector');

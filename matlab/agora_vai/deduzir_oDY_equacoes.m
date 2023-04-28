@@ -25,9 +25,9 @@ addpath('utils_loss')
 addpath('data');
 
 Vi_num = 400;
-d_num = 1;
+d_num = 3/4;
 fs_num = 100e3;
-Ldab_num = 61.5e-6;
+Ldab_num = 60e-6;
 Ld1_num = 2e-6;
 n_num = 1;
 Ld2_num = 2e-6;
@@ -36,13 +36,13 @@ M_num = Lm_num*n_num;
 L1_num = Ld1_num + Lm_num;
 L2_num = Ld2_num + n_num*n_num*Lm_num;
 k_num = M_num/sqrt(L1_num.*L2_num);
-phi_num = deg2rad(-15);
+phi_num = deg2rad(15);
 
 %%
 
 %cria intervalo de angulo
 % intervalo = [0 deg2rad(60)];
-intervalo = [deg2rad(-60) 0];
+intervalo = [deg2rad(0) deg2rad(60)];
 
 %% aqui comeca
 
@@ -372,9 +372,11 @@ grid minor
 set(gca, 'FontSize', 20)
 xlabel('$t[\mu$s]')
 ylabel('$i_{la}\,$[A]')
-ylim([-5 5])
+ylim([-6 6])
+yticks(-6:3:6)
 yyaxis left
 ylim([-300 300])
+yticks(-300:150:300)
 ax = gca;
 ax.YAxis(1).Color = jetcustom(1,:);
 ax.YAxis(2).Color = jetcustom(2,:);
@@ -406,9 +408,11 @@ grid minor
 set(gca, 'FontSize', 20)
 xlabel('$t[\mu$s]')
 ylabel('$i_{tra}\,$[A]')
-ylim([-3 3])
+ylim([-4 4])
+yticks(-4:2:4)
 yyaxis left
 ylim([-300 300])
+yticks(-300:150:300)
 ax = gca;
 ax.YAxis(1).Color = jetcustom(1,:);
 ax.YAxis(2).Color = jetcustom(2,:);
@@ -438,9 +442,11 @@ grid minor
 set(gca, 'FontSize', 20)
 xlabel('$t[\mu$s]')
 ylabel('$i_{trA}\,$[A]')
-ylim([-3 3])
+ylim([-4 4])
+yticks(-4:2:4)
 yyaxis left
 ylim([-300 300])
+yticks(-300:150:300)
 ax = gca;
 ax.YAxis(1).Color = jetcustom(1,:);
 ax.YAxis(2).Color = jetcustom(2,:);
@@ -460,7 +466,8 @@ hold on
 plot(xx*1e6,yy(1,:),'Color',jetcustom(1,:),'LineWidth',1.5)
 plot(xx*1e6,-yy(4,:), 'Color',jetcustom(2,:),'LineWidth',1.5)
 hold off
-ylim([-3 3])
+ylim([-4 4])
+yticks(-4:2:4)
 grid on
 grid minor
 legend({'$i_{la}$','$-i_{La}$'},'Location','best','FontSize', 16)
@@ -512,11 +519,12 @@ xx = [xx, xx(end)+xx(2:end)];
 i_adapt = yy(1,etapas_1p);
 i_vert = [i_adapt(end), i_adapt(1)];
 %%
-linewid = 2.2;
+linewid = 2.5;
 
 figure
 hold on
 
+plot(nan,nan,'Color',color_blue_eth,'LineWidth',linewid)
 plot(nan,nan,'-.','Color',jetcustom(1,:),'LineWidth',1.5)
 plot(nan,nan,'-.','Color',jetcustom(2,:),'LineWidth',1.5)
 plot(nan,nan,'-.','Color',jetcustom(3,:),'LineWidth',1.5)
@@ -545,8 +553,9 @@ x_points = [xx(2), xx(2), xx(4), xx(4)]*1e6;
 y_points = [-10, 10, 10, -10];
 color = [0, 0, 1];
 
-a = fill(x_points, y_points, color, 'LineStyle', 'none');
-a.FaceAlpha = 0.1;
+a = fill(x_points, y_points, color, 'LineWidth',.06);
+a.FaceAlpha = 0.08;
+a.EdgeAlpha = 0.4;
 
 text(xx(4)*1e6,3.5,'$\leftarrow 2^{\circ}$ and $3^{\circ}$ stages','Interpreter', 'Latex','FontSize', 16) 
 
@@ -555,7 +564,7 @@ hold off
 ylim([-4 4])
 grid on
 grid minor
-legend({'$-i_{A}$','$-i_{B}$','$-i_{C}$','$i_{out}$'},'Location','southeast','FontSize', 16)
+legend({'$i_{out}$','$-i_{A}$','$-i_{B}$','$-i_{C}$'},'Location','southeast','FontSize', 16)
 set(gca, 'FontSize', 20)
 xlabel('$t[\mu$s]')
 ylabel('$i\,$[A]')
@@ -566,6 +575,7 @@ exportgraphics(gca,file_name,'ContentType','vector');
 figure
 hold on
 
+plot(nan,nan,'Color',color_blue_eth,'LineWidth',linewid)
 plot(nan,nan,'-.','Color',jetcustom(1,:),'LineWidth',1.5)
 plot(nan,nan,'-.','Color',jetcustom(2,:),'LineWidth',1.5)
 plot(nan,nan,'-.','Color',jetcustom(3,:),'LineWidth',1.5)
@@ -595,7 +605,7 @@ hold off
 ylim([-4 4])
 grid on
 grid minor
-legend({'$i_{A}$','$i_{B}$','$i_{C}$','$i_{out}$'},'Location','southeast','FontSize', 16)
+legend({'$i_{out}$','$i_{A}$','$i_{B}$','$i_{C}$'},'Location','southeast','FontSize', 16)
 set(gca, 'FontSize', 20)
 xlabel('$t[\mu$s]')
 ylabel('$i\,$[A]')
@@ -624,8 +634,10 @@ figure
 hold on
 plot(xxp*1e6,yyp,'Color',color2,'LineWidth',2)
 plot(xx*1e6,yy(1,:),'-.','Color',color1,'LineWidth',1.5)
+plot([0 0], [0 yy(1,1)],'Color',color2,'LineWidth',2)
 hold off
-ylim([-5 5])
+ylim([-6 6])
+yticks(-6:3:6)
 grid on
 grid minor
 legend({'$i_{sw-p}$','$i_{a}$'},'Location','best','FontSize', 16)
@@ -658,7 +670,8 @@ hold on
 plot(xxp*1e6,-yyp,'Color',color2,'LineWidth',2)
 plot(xx*1e6,-yy(1,:),'-.','Color',color1,'LineWidth',1.5)
 hold off
-ylim([-3 3])
+ylim([-4 4])
+yticks(-4:2:4)
 grid on
 grid minor
 legend({'$i_{sw-s}$','$-i_{A}$'},'Location','best','FontSize', 16)
@@ -669,30 +682,30 @@ file_name = append('figure\finalCap2\isw_s_',trafo,'.pdf');
 exportgraphics(gca,file_name,'ContentType','vector');
 
 %%
-latex(ioME)
-latex(Ip)
-latex(Is)
+% latex(ioME)
+% latex(Ip)
+% latex(Is)
 
 
-
-%%
-figure
-sf_p
-
-
-[iSwPrm,~] = rms_and_mean(dhb(1,:),hb(1,:),ts,1:6,1:12);
-[iSwSrm,~] = rms_and_mean(dHB(1,:),HB(1,:),ts,1:6,1:12);  
-
-
-yy = fhbb(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num);
-yy = [yy, yy(:,1)];
-xx = fts(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num);
-
-teste = yy.*[sf_p, sf_p(:,1)];
-
-
-figure
-plot(xx, teste)
+% 
+% %%
+% figure
+% sf_p
+% 
+% 
+% [iSwPrm,~] = rms_and_mean(dhb(1,:),hb(1,:),ts,1:6,1:12);
+% [iSwSrm,~] = rms_and_mean(dHB(1,:),HB(1,:),ts,1:6,1:12);  
+% 
+% 
+% yy = fhbb(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num);
+% yy = [yy, yy(:,1)];
+% xx = fts(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,phi_num);
+% 
+% teste = yy.*[sf_p, sf_p(:,1)];
+% 
+% 
+% figure
+% plot(xx, teste)
 
 % 
 % xxp1 = [xx(1:7), xx(7)];

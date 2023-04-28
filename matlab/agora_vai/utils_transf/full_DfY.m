@@ -1,4 +1,4 @@
-function [f,fh] = full_DfY(phi_num)
+function [f,fh,f_plot] = full_DfY(phi_num)
     syms L1 L2 Ldab M real positive
     syms fs Vi d dt real positive
     syms phi real
@@ -73,21 +73,24 @@ function [f,fh] = full_DfY(phi_num)
     Tcl = 1/3*[2 -1 -1; 0 sqrt(2) -sqrt(2); 1 1 1]; %Transformada de clark
     Tclm = Tcl(1:2,:); %ignorar nivel zero
     Tclx = kron(eye(2), Tclm);
-    A = Tclx*As*pinv(Tclx);
-    B = Tclx*Bs*pinv(Tclx);
+    
+    Tclxx = kron(eye(2), Tcl);
+
+    A = Tclxx*As/Tclxx;
+    B = Tclxx*Bs/Tclxx;
     
     %% obter funcao de comutacao, depende de phi
     [sf_p, sf_s, sf, ang, sec_switch] = times_and_commutation(phi_num,pi);
     sf = sf+0.5;
-    scl = kron(eye(2), Tclm)*sf; %estados de comutacao, a1b1c1-a2b2c2 to alpha1beta1-alpha2beta2
+    scl = kron(eye(2), Tcl)*sf; %estados de comutacao, a1b1c1-a2b2c2 to alpha1beta1-alpha2beta2
     ts = simplify(ang)*Ts/(2*pi);
     tf = matlabFunction(ts, 'vars', {phi, fs}); %criar funcao para definir os tempos
     
     %% Obter valores de regime permanente
     g = simplify(expm(A*dt));
     h = B*dt;
-    xcl = sym('x_', [4,length(ts)], 'real');
-    x0 = sym('x0_',[4,1], 'real');
+    xcl = sym('x_', [6,length(ts)], 'real');
+    x0 = sym('x0_',[6,1], 'real');
     
     xcl(:,1) = x0;
     for i=1:length(ts)-1
@@ -96,8 +99,8 @@ function [f,fh] = full_DfY(phi_num)
     end
     
     x0x = struct2array(solve(xcl(:,1) == -xcl(:,7), x0)).';
-    x0s = simplify(pinv(Tclx)*subs(xcl, x0, x0x));
-    dx0s = pinv(Tclx)*B*scl; %derivadas dos estados, indutor e trafo secundario
+    x0s = simplify(Tclxx\subs(xcl, x0, x0x));
+    dx0s = Tclxx\B*scl; %derivadas dos estados, indutor e trafo secundario
         
     %% Corrente nos estados
     [ilrm,~] = rms_and_mean(dx0s(1,:),x0s(1,:),ts,1:12,1:12);
@@ -148,6 +151,33 @@ function [f,fh] = full_DfY(phi_num)
     Ip = hb(1,1);
     Is = -HB(1,sec_switch);
     
+    %% algumas coisas pra plotar
+    for ii=1:length(x0s)-1
+        vSS(:,ii) = subs(vS,dx,dx0s(:,ii)); %tensao aplicada na bobinas do sec da fase A
+        vPP(:,ii) = subs(vP,dx,dx0s(:,ii)); %tensao aplicada na bobinas do prim da fase A
+        vLLdab(:,ii) = subs(vLdab,dx,dx0s(:,ii)); %tensao aplicada no indutor da fase A
+        HBB(:,ii) = subs(iHB,x,x0s(:,ii)); %correntes nos 3 half bridge primario
+        hbb(:,ii) = subs(ihb,x,x0s(:,ii)); %correntes nos 3 half bridge secundario
+        idab_plot(:,ii) = subs(ild,x,x0s(:,ii));
+    end 
+
+    vSS = [vSS,vSS(:,1)];
+    vPP = [vPP,vPP(:,1)];
+    vLLdab = [vLLdab,vLLdab(:,1)];
+    HBB = [HBB,HBB(:,1)];
+    hbb = [hbb,hbb(:,1)];
+    idab_plot = [idab_plot,idab_plot(:,1)];
+
+    vSS = simplify(vSS);
+    vPP = simplify(vPP);
+    vLLdab = simplify(vLLdab);
+    HBB = simplify(HBB);
+    hbb = simplify(hbb);
+    idab_plot = simplify(idab_plot);
+	
+    sec_switch_plot = ones(1,length(ts))*sec_switch;
+    sf_plot = [sf,sf(:,1)];
+	
     %% inductor core loss
     syms ki_L b_L a_L Ac_L N_L Ve_L real positive
     
@@ -173,12 +203,7 @@ function [f,fh] = full_DfY(phi_num)
     %% secondary core loss
     syms ki_tr b_tr a_tr Ac_tr N_tr Ve_tr real positive
     
-    for ii=1:length(x0s)-1
-        vSS(ii) = subs(vS(1),dx,dx0s(:,ii));
-    end
-    vSS = simplify(vSS);
-    
-    dB_tr = vSS/(N_tr*Ac_tr);
+    dB_tr = vSS(1,:)/(N_tr*Ac_tr);
     
     integrais = sym('integrais_',[1,length(ts)-1], 'real');
     B_tr = sym('B_tr_',[1,length(ts)-1], 'real');
@@ -197,10 +222,11 @@ function [f,fh] = full_DfY(phi_num)
     
     Pv_tr = simplify(ki_tr*fs*sum_int_tr)*Bppk_tr^(b_tr-a_tr);
     P_core_tr = Pv_tr*Ve_tr;
+
+
     
-    %% gera funcoes
+    f_plot = matlabFunction([vPP;vSS;vLLdab;hbb;HBB;idab_plot;x0s;ts;sec_switch_plot;sf_plot],'vars',{L1,L2,Ldab,M,Vi,d,fs,phi});
     f = matlabFunction([hbrm;HBrm;Ip;Is;iiRMS;iiME;ioRMS;ioME;Pm;idrm;ilrm;iLrm;iSwPrm;iSwSrm;P_core_tr;Bpk_tr;P_core_L;Bpk_L],...
         'vars',{L1,L2,Ldab,M,Vi,d,fs,phi,ki_tr,b_tr,a_tr,Ac_tr,N_tr,Ve_tr,ki_L,b_L,a_L,Ac_L,N_L,Ve_L});
     fh = matlabFunction([ilrm_cn;iLrm_cn;idrm_cn],'vars',{L1,L2,Ldab,M,Vi,d,fs,phi,nn});
-
 end

@@ -193,9 +193,9 @@ colormap(cmap)
 jetcustom = cmap;
 hold on
 %legend that is unrelated to the plotted data
-L1 = plot(nan, nan,'Color',jetcustom(1,:),'LineWidth',1.5);
-L2 = plot(nan, nan,'Color',jetcustom(2,:),'LineWidth',1.5);
-L3 = plot(nan, nan,'Color',jetcustom(3,:),'LineWidth',1.5);
+L11 = plot(nan, nan,'Color',jetcustom(1,:),'LineWidth',1.5);
+L22 = plot(nan, nan,'Color',jetcustom(2,:),'LineWidth',1.5);
+L33 = plot(nan, nan,'Color',jetcustom(3,:),'LineWidth',1.5);
 
 text(-22,2.5,'HS in primary','Interpreter', 'Latex','FontSize', 14) 
 text(12,0.33,'HS in secondary','Interpreter', 'Latex','FontSize', 14) 
@@ -256,9 +256,9 @@ jetcustom = cmap;
 figure
 hold on
 %legend that is unrelated to the plotted data
-L1 = plot(nan, nan,'Color',jetcustom(1,:),'LineWidth',1.5);
-L2 = plot(nan, nan,'Color',jetcustom(2,:),'LineWidth',1.5);
-L3 = plot(nan, nan,'Color',jetcustom(3,:),'LineWidth',1.5);
+L11 = plot(nan, nan,'Color',jetcustom(1,:),'LineWidth',1.5);
+L22 = plot(nan, nan,'Color',jetcustom(2,:),'LineWidth',1.5);
+L33 = plot(nan, nan,'Color',jetcustom(3,:),'LineWidth',1.5);
 
 lim_pot.f1 = ones(1,length(vec_ph.f1)).*fpot_eq.f1(L1_num(1),L2_num(1),Ldab_num,M_num(1),Vi_num,d_num,fs_num,vec_ph.f1);
 lim_pot.f2 = ones(1,length(vec_ph.f2)).*fpot_eq.f2(L1_num(1),L2_num(1),Ldab_num,M_num(1),Vi_num,d_num,fs_num,vec_ph.f2);
@@ -296,9 +296,9 @@ jetcustom = cmap;
 figure
 hold on
 %legend that is unrelated to the plotted data
-L1 = plot(nan, nan,'Color',jetcustom(1,:),'LineWidth',1.5);
-L2 = plot(nan, nan,'Color',jetcustom(2,:),'LineWidth',1.5);
-L3 = plot(nan, nan,'Color',jetcustom(3,:),'LineWidth',1.5);
+L11 = plot(nan, nan,'Color',jetcustom(1,:),'LineWidth',1.5);
+L22 = plot(nan, nan,'Color',jetcustom(2,:),'LineWidth',1.5);
+L33 = plot(nan, nan,'Color',jetcustom(3,:),'LineWidth',1.5);
 
 text(500,2.5,'HS in primary','Interpreter', 'Latex','FontSize', 14) 
 text(2000,0.35,'HS in secondary','Interpreter', 'Latex','FontSize', 14) 
@@ -402,35 +402,30 @@ colormap(cmap)
 jetcustom = cmap;
 hold on
 
-L1 = loglog(nan, nan,'-','LineWidth',2.5,'Color',[0 0 0]);
-L2 = loglog(nan, nan,':','LineWidth',1.5,'Color',[0 0 0 0.7]);
+L11 = loglog(nan, nan,'-','LineWidth',2.5,'Color',[0 0 0]);
+L22 = loglog(nan, nan,'--.','LineWidth',1.5,'Color',[0 0 0 0.7]);
 
-% L11 = loglog(nan, nan,'Color',jetcustom(1,:));
-% L22 = loglog(nan, nan,'Color',jetcustom(2,:));
-% L33 = loglog(nan, nan,'Color',jetcustom(3,:));
+plot((-my_data1(1,1)+my_data1(:,1))*1e6,my_data1(:,2),'Color',jetcustom(1,:),'LineWidth',2.5)
+plot((-my_data2(1,1)+my_data2(:,1))*1e6,my_data2(:,2),'Color',jetcustom(3,:),'LineWidth',2.5)
+plot((-my_data3(1,1)+my_data3(:,1))*1e6,my_data3(:,2),'Color',jetcustom(2,:),'LineWidth',2.5)
 
-plot((-my_data1(1,1)+my_data1(:,1))*1e6,my_data1(:,2),'Color',jetcustom(1,:),'LineWidth',1.5)
-plot((-my_data2(1,1)+my_data2(:,1))*1e6,my_data2(:,2),'Color',jetcustom(3,:),'LineWidth',1.5)
-plot((-my_data3(1,1)+my_data3(:,1))*1e6,my_data3(:,2),'Color',jetcustom(2,:),'LineWidth',1.5)
-
-plot(equat_ts.f2*1e6,equat.f2(1,:),':','Color',[jetcustom(1,:), 0.7],'LineWidth',1.5)
-plot(equat_ts.f2*1e6,equat.f2(2,:),':','Color',[jetcustom(2,:), 0.7],'LineWidth',1.5)
-plot(equat_ts.f2*1e6,equat.f2(3,:),':','Color',[jetcustom(3,:), 0.7],'LineWidth',1.5)
-
-
+plot(equat_ts.f2*1e6,equat.f2(1,:),'--.','Color',[jetcustom(1,:), 0.7],'LineWidth',1.5)
+plot(equat_ts.f2*1e6,equat.f2(2,:),'--.','Color',[jetcustom(2,:), 0.7],'LineWidth',1.5)
+plot(equat_ts.f2*1e6,equat.f2(3,:),'--.','Color',[jetcustom(3,:), 0.7],'LineWidth',1.5)
 
 hold off
 xlim([0 max(equat_ts.f2)*1e6])
-% ylim([-8 8])
+yticks(-8:4:8)
+ylim([-8 8])
 grid on
 grid minor
-legend({'Experimental','Theoric'},'Location','best','FontSize', 14)
+legend({'Experimental','Theoric'},'Location','southeast','FontSize', 14)
 set(gca, 'FontSize', 20)
 xlabel('$t[\mu$s]')
 ylabel('$i\,$[A]')
-f_save_figure(append('figure\',string(trafo),'_DiY_phi4_400_ILabc.pdf'))
 
-
+file_name = append('figure\finalCap2\ang4d1_',trafo,'.pdf');
+exportgraphics(gca,file_name,'ContentType','vector');
 
 %% corrente indutor
 
@@ -463,8 +458,8 @@ colormap(cmap)
 jetcustom = cmap;
 hold on
 
-L1 = loglog(nan, nan,'-','LineWidth',2.5,'Color',[0 0 0]);
-L2 = loglog(nan, nan,'--.','LineWidth',1.5,'Color',[0 0 0]);
+L11 = loglog(nan, nan,'-','LineWidth',2.5,'Color',[0 0 0]);
+L22 = loglog(nan, nan,'--.','LineWidth',1.5,'Color',[0 0 0]);
 
 plot((-my_data1(1,1)+my_data1(:,1))*1e6,my_data1(:,2),'Color',jetcustom(1,:),'LineWidth',2.5)
 plot((-my_data2(1,1)+my_data2(:,1))*1e6,my_data2(:,2),'Color',jetcustom(3,:),'LineWidth',2.5)
@@ -478,16 +473,26 @@ plot(equat_ts.f2*1e6,equat.f2(3,:),'--.','Color',jetcustom(3,:),'LineWidth',1.5)
 
 hold off
 xlim([0 max(equat_ts.f2)*1e6])
-% ylim([-8 8])
+yticks(-8:4:8)
+ylim([-8 8])
 grid on
 grid minor
-legend({'Experimental','Theoric'},'Location','best','FontSize', 14)
+legend({'Experimental','Theoric'},'Location','southeast','FontSize', 14)
 set(gca, 'FontSize', 20)
 xlabel('$t[\mu$s]')
 ylabel('$i\,$[A]')
-f_save_figure(append('figure\',string(trafo),'_DiY_phi_m1_300_ILabc.pdf'))
+
+file_name = append('figure\finalCap2\angm1d075_',trafo,'.pdf');
+exportgraphics(gca,file_name,'ContentType','vector');
 
 
+equat.f2 = fx0s.f2(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,4*pi/180);
 
 
+%%
 
+fiME.f1 = matlabFunction(iME.f1, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi})
+fiME.f2 = matlabFunction(iME.f2, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+
+fiME.f2(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,4*pi/180)
+fiME.f2(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,(-1+4.5)*pi/180)

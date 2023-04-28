@@ -32,16 +32,16 @@ syms phi real
 Vo = Vi*d;
 Ts = 1/fs;
 
-phi_num = [deg2rad(-10),deg2rad(50)];  %[MUDAR]
+phi_num = [deg2rad(-10),deg2rad(15)];  %[MUDAR]
 [x0s.f1, ts.f1, idab.f1, hb.f1, HB.f1, Ip.f1, Is.f1, iME.f1, idrm.f1, ilrm.f1, iLrm.f1, iSwPrm.f1, iSwSrm.f1] = simplify_DfY(phi_num(1));
 [x0s.f2, ts.f2, idab.f2, hb.f2, HB.f2, Ip.f2, Is.f2, iME.f2, idrm.f2, ilrm.f2, iLrm.f2, iSwPrm.f2, iSwSrm.f2] = simplify_DfY(phi_num(2));
 
 trafo = 'DfY';
 
 Vi_num = 400;
-d_num = 1;
+d_num = 3/4;
 fs_num = 100e3;
-Ldab_num = 61.5e-6;
+Ldab_num = 60e-6;
 Ld1_num = 2e-6;
 n_num = 1;
 Ld2_num = 2e-6;
@@ -50,6 +50,21 @@ M_num = Lm_num*n_num;
 L1_num = Ld1_num + Lm_num;
 L2_num = Ld2_num + n_num*n_num*Lm_num;
 k_num = M_num/sqrt(L1_num.*L2_num);
+% phi_num = deg2rad(15);
+
+
+% Vi_num = 400;
+% d_num = 1;
+% fs_num = 100e3;
+% Ldab_num = 61.5e-6;
+% Ld1_num = 2e-6;
+% n_num = 1;
+% Ld2_num = 2e-6;
+% Lm_num = [.5e-3, 1.5e-3 10e-3];
+% M_num = Lm_num*n_num;
+% L1_num = Ld1_num + Lm_num;
+% L2_num = Ld2_num + n_num*n_num*Lm_num;
+% k_num = M_num/sqrt(L1_num.*L2_num);
 
 %cria intervalo de angulo
 intervalo.f1 = [deg2rad(-30) 0];
@@ -379,13 +394,16 @@ plot(lim_pot.f2,lim_p.f2,'Color',cor_aqui,'LineWidth',1.5)
 plot(lim_pot.f1,lim_s.f1,'Color',cor_aqui,'LineWidth',1.5)
 plot(lim_pot.f2,lim_s.f2,'Color',cor_aqui,'LineWidth',1.5)
 
-text(250,2.5,'HS in primary','Interpreter', 'Latex','FontSize', 14) 
-text(250,0.45,'HS in secondary','Interpreter', 'Latex','FontSize', 14) 
-text(1000,1.5,'SS in both','Interpreter', 'Latex','FontSize', 14) 
+xline(max(lim_pot.f2),'Color',cor_aqui,'LineWidth',1.5)
+
+text(200,2.5,'HS in primary','Interpreter', 'Latex','FontSize', 14) 
+text(200,0.45,'HS in secondary','Interpreter', 'Latex','FontSize', 14) 
+text(800,1.5,'SS in both','Interpreter', 'Latex','FontSize', 14) 
 
 hold off
 ylim([0 3])
-xlim([0 max(lim_pot.f2)])
+xlim([0 1200])
+xticks(0:400:1200)
 grid on
 grid minor
 xlabel('$P_o$[W]')
@@ -415,7 +433,7 @@ plot(rad2deg(vec_ph.f1),lim_pot.f1,'Color','k','LineWidth',1.5)
 plot(rad2deg(vec_ph.f2),lim_pot.f2,'Color','k','LineWidth',1.5)
 
 hold off
-ylim([0 1500])
+ylim([0 1000])
 xlim([min(intervalo.f1) max(intervalo.f2)]*180/pi)
 grid on
 grid minor
@@ -493,8 +511,8 @@ for mag=1:3
     colormap(cmap)
     jetcustom = cmap;
     hold on
-    plot(equat_ts.f2*1e6,equat.f2(1,:),'Color',jetcustom(1,:),'LineWidth',1.5)
-    plot(equat_ts.f2*1e6,-equat.f2(4,:), '-.','Color',jetcustom(2,:),'LineWidth',1.5)
+    plot(equat_ts.f2*1e6,equat.f2(1,:),'Color',jetcustom(2,:),'LineWidth',2.5)
+    plot(equat_ts.f2*1e6,-equat.f2(4,:), '-.','Color',jetcustom(1,:),'LineWidth',1.5)
     hold off
     xlim([0 max(equat_ts.f2)*1e6])
     grid on
@@ -503,7 +521,9 @@ for mag=1:3
     set(gca, 'FontSize', 20)
     xlabel('$t[\mu$s]')
     ylabel('$i\,$[A]')
-    ylim([-3 3])
+    ylim([-4 4])
+    yticks(-4:2:4)
+
     
     file_name = append('figure\finalCap2\iaiA_Lm_mag',num2str(mag),'_',trafo,'.pdf');
     exportgraphics(gca,file_name,'ContentType','vector');    
@@ -718,9 +738,9 @@ for mag=1:3
     plot(lim_pot.f2,lim_s.f2,'Color',jetcustom(mag,:),'LineWidth',1.5)
 end
 
-text(300,2.5,'HS in primary','Interpreter', 'Latex','FontSize', 14) 
-text(800,0.35,'HS in secondary','Interpreter', 'Latex','FontSize', 14) 
-text(1000,1.55,'SS in both','Interpreter', 'Latex','FontSize', 14) 
+text(100,2.5,'HS in primary','Interpreter', 'Latex','FontSize', 14) 
+text(550,0.35,'HS in secondary','Interpreter', 'Latex','FontSize', 14) 
+text(800,1.65,'SS in both','Interpreter', 'Latex','FontSize', 14) 
 
 hold off
 ylim([0 3])
@@ -739,3 +759,65 @@ set(gca, 'FontSize', 20)
 
 file_name = append('figure\finalCap2\ZVS_Lm_',trafo,'.pdf');
 exportgraphics(gca,file_name,'ContentType','vector');
+
+
+
+
+
+cmap = f_create_cmap(3, color2, color1);
+colormap(cmap)
+jetcustom = cmap;
+
+c1 = f_create_cmap(3, cmap(1,:), [1 1 1]);
+c2 = f_create_cmap(3, cmap(2,:), [1 1 1]);
+c3 = f_create_cmap(3, cmap(3,:), [1 1 1]);
+color_white = [c1(2,:);c2(2,:);c3(2,:)];
+%%
+% figure
+% hold on
+% 
+% 
+% % for ii=1:3
+% %     h = fill([1 1], [1 1],color_white(ii,:),'Edgecolor', 'none');
+% %     h.EdgeColor = jetcustom(ii,:);
+% %     h.LineWidth = 1.5;
+% % end
+% 
+% for mag=1:1
+%     lim_p.f1 = ones(1,length(vec_ph.f1)).*fIp_eq.f1(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,vec_ph.f1);
+%     lim_s.f1 = ones(1,length(vec_ph.f1)).*fIs_eq.f1(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,vec_ph.f1);
+%     lim_pot.f1 = ones(1,length(vec_ph.f1)).*fpot_eq.f1(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,vec_ph.f1);
+% %     fill([lim_pot.f1 fliplr(lim_pot.f1)], [lim_p.f1 fliplr(lim_s.f1)],color_white(mag,:), 'FaceAlpha', 1, 'EdgeColor', 'none');
+%     lim_p.f2 = ones(1,length(vec_ph.f2)).*fIp_eq.f2(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,vec_ph.f2);
+%     lim_s.f2 = ones(1,length(vec_ph.f2)).*fIs_eq.f2(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,vec_ph.f2);
+%     lim_pot.f2 = ones(1,length(vec_ph.f2)).*fpot_eq.f2(L1_num(mag),L2_num(mag),Ldab_num,M_num(mag),Vi_num,d_num,fs_num,vec_ph.f2);
+% %     fill([lim_pot.f2 fliplr(lim_pot.f2)], [lim_p.f2 fliplr(lim_s.f2)],color_white(mag,:), 'FaceAlpha', 1, 'EdgeColor', 'none');
+%     plot(lim_pot.f1./(Vi_num*lim_p.f1),lim_p.f1,'Color',jetcustom(mag,:),'LineWidth',1.5)
+%     plot(lim_pot.f2./(Vi_num*lim_p.f2),lim_p.f2,'Color',jetcustom(mag,:),'LineWidth',1.5)
+%     plot(lim_pot.f1./(Vi_num*lim_s.f1),lim_s.f1,'Color',jetcustom(mag,:),'LineWidth',1.5)
+%     plot(lim_pot.f2./(Vi_num*lim_s.f2),lim_s.f2,'Color',jetcustom(mag,:),'LineWidth',1.5)
+% end
+% 
+% % text(300,2.5,'HS in primary','Interpreter', 'Latex','FontSize', 14) 
+% % text(800,0.35,'HS in secondary','Interpreter', 'Latex','FontSize', 14) 
+% % text(1000,1.55,'SS in both','Interpreter', 'Latex','FontSize', 14) 
+% 
+% hold off
+% ylim([0 3])
+% xlim([0 max(10)])
+% grid on
+% grid minor
+% 
+% for iN = 1:length(Lm_num)
+%     legendCell{iN} = append('$L_m =$ ',num2str(Lm_num(iN)*1000),'$\,$mH');
+% end
+% legend(legendCell,'Location','best','FontSize', 14)
+% 
+% xlabel('$I_o$[A]')
+% ylabel('$d$')
+% set(gca, 'FontSize', 20)
+% 
+% file_name = append('figure\finalCap2\ZVS_Lm_Io_',trafo,'.pdf');
+% exportgraphics(gca,file_name,'ContentType','vector');
+% 
+

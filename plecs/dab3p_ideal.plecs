@@ -1,6 +1,6 @@
 Plecs {
   Name          "dab3p_ideal"
-  Version       "4.6"
+  Version       "4.7"
   CircuitModel  "ContStateSpace"
   StartTime     "0"
   TimeSpan      "3"
@@ -23,11 +23,11 @@ Plecs {
   MaxConsecutiveZCs "1000"
   AlgebraicLoopWithStateMachineMsg "3"
   AssertionAction "1"
-  InitializationCommands "d = 1;\ntdb = 0e-9;\nphi_deg = -15;\nn = 1;\n\nV_dc "
-"= 400;\nV_out = V_dc*d;\nfs = 100e3;\n\nTs = 1/fs;\n\non_percent = 0.5-tdb/Ts"
-";\n\n\n\nphi_time = phi_deg/(fs*360)\n\nLlk_p = 2e-6;\nLlk_s = 2e-6;\nLm = 50"
-"0e-6;\nLdab = 61.5e-6;\n\n\n\n\n\nRLlk_from_p = 1.5e-3;\nRm = inf;\nRLdab = 1"
-".5e-6;\n\n\n"
+  InitializationCommands "d = 3/4;\nfs = 100e3;\nTs = 1/fs;\ntdb_real = 0e-9;"
+"\ntdb = tdb_real/2;\nang_db = tdb*360/Ts\nphi_ideal = 15;\nphi_deg = phi_idea"
+"l+ang_db;\nn = 1;\n\nV_dc = 400;\nV_out = V_dc*d;\n\n\non_percent = 0.5-tdb/T"
+"s;\n\nphi_time = phi_deg/(fs*360)\n\nLlk_p = 2e-6;\nLlk_s = 2e-6;\nLm = 500e-"
+"6;\nLdab = 60e-6;\n\nRLlk_from_p = 1.5e-3;\nRm = inf;\nRLdab = 1.5e-6;\n\n\n"
   InitialState  "1"
   SystemState   ""
   TaskingMode   "1"
@@ -51,9 +51,9 @@ Plecs {
   ScriptsDialogGeometry ""
   ScriptsDialogSplitterPos "0"
   Schematic {
-    Location      [1920, 21; 3840, 983]
-    ZoomFactor    1.49862
-    SliderPosition [519, 640]
+    Location      [1920, 21; 3840, 991]
+    ZoomFactor    1.30956
+    SliderPosition [230, 433]
     ShowBrowser   off
     BrowserWidth  100
     Component {
@@ -63,6 +63,7 @@ Plecs {
       Position      [1150, 320]
       Direction     right
       Flipped       off
+      LabelPosition south
       Parameter {
         Variable      "Tag"
         Value         "a"
@@ -81,6 +82,7 @@ Plecs {
       Position      [1150, 370]
       Direction     right
       Flipped       off
+      LabelPosition south
       Parameter {
         Variable      "Tag"
         Value         "b"
@@ -99,6 +101,7 @@ Plecs {
       Position      [1150, 415]
       Direction     right
       Flipped       off
+      LabelPosition south
       Parameter {
         Variable      "Tag"
         Value         "c"
@@ -117,6 +120,7 @@ Plecs {
       Position      [1415, 320]
       Direction     left
       Flipped       off
+      LabelPosition north
       Parameter {
         Variable      "Tag"
         Value         "A"
@@ -135,6 +139,7 @@ Plecs {
       Position      [1415, 370]
       Direction     left
       Flipped       off
+      LabelPosition north
       Parameter {
         Variable      "Tag"
         Value         "B"
@@ -153,6 +158,7 @@ Plecs {
       Position      [1415, 415]
       Direction     left
       Flipped       off
+      LabelPosition north
       Parameter {
         Variable      "Tag"
         Value         "C"
@@ -171,6 +177,7 @@ Plecs {
       Position      [685, 275]
       Direction     right
       Flipped       off
+      LabelPosition south
       Parameter {
         Variable      "Tag"
         Value         "P1"
@@ -189,6 +196,7 @@ Plecs {
       Position      [845, 275]
       Direction     right
       Flipped       off
+      LabelPosition south
       Parameter {
         Variable      "Tag"
         Value         "P2"
@@ -207,6 +215,7 @@ Plecs {
       Position      [1005, 275]
       Direction     right
       Flipped       off
+      LabelPosition south
       Parameter {
         Variable      "Tag"
         Value         "P3"
@@ -225,6 +234,7 @@ Plecs {
       Position      [685, 455]
       Direction     right
       Flipped       off
+      LabelPosition south
       Parameter {
         Variable      "Tag"
         Value         "P4"
@@ -243,6 +253,7 @@ Plecs {
       Position      [845, 455]
       Direction     right
       Flipped       off
+      LabelPosition south
       Parameter {
         Variable      "Tag"
         Value         "P5"
@@ -261,6 +272,7 @@ Plecs {
       Position      [1005, 455]
       Direction     right
       Flipped       off
+      LabelPosition south
       Parameter {
         Variable      "Tag"
         Value         "P6"
@@ -279,6 +291,7 @@ Plecs {
       Position      [1470, 280]
       Direction     right
       Flipped       off
+      LabelPosition south
       Parameter {
         Variable      "Tag"
         Value         "S1"
@@ -297,6 +310,7 @@ Plecs {
       Position      [1470, 455]
       Direction     right
       Flipped       off
+      LabelPosition south
       Parameter {
         Variable      "Tag"
         Value         "S4"
@@ -315,6 +329,7 @@ Plecs {
       Position      [1630, 275]
       Direction     right
       Flipped       off
+      LabelPosition south
       Parameter {
         Variable      "Tag"
         Value         "S2"
@@ -333,6 +348,7 @@ Plecs {
       Position      [1790, 275]
       Direction     right
       Flipped       off
+      LabelPosition south
       Parameter {
         Variable      "Tag"
         Value         "S3"
@@ -351,6 +367,7 @@ Plecs {
       Position      [1630, 455]
       Direction     right
       Flipped       off
+      LabelPosition south
       Parameter {
         Variable      "Tag"
         Value         "S5"
@@ -369,6 +386,7 @@ Plecs {
       Position      [1790, 455]
       Direction     right
       Flipped       off
+      LabelPosition south
       Parameter {
         Variable      "Tag"
         Value         "S6"
@@ -387,8 +405,8 @@ Plecs {
       Position      [1185, 635]
       Direction     up
       Flipped       off
+      LabelPosition none
       Frame         [-45, -30; 45, 30]
-      LabelPosition [0, 0]
       SampleTime    "-1"
       CodeGenDiscretizationMethod "2"
       CodeGenTarget "Generic"
@@ -439,6 +457,7 @@ Plecs {
           Position      [315, 215]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Index"
             Value         "1"
@@ -457,6 +476,7 @@ Plecs {
           Position      [250, 215]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Hi"
             Value         "1"
@@ -495,6 +515,7 @@ Plecs {
           Position      [425, 215]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Hi"
             Value         "1"
@@ -533,6 +554,7 @@ Plecs {
           Position      [585, 215]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Hi"
             Value         "1"
@@ -571,6 +593,7 @@ Plecs {
           Position      [260, 395]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Hi"
             Value         "1"
@@ -609,6 +632,7 @@ Plecs {
           Position      [425, 395]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Hi"
             Value         "1"
@@ -647,6 +671,7 @@ Plecs {
           Position      [585, 395]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Hi"
             Value         "1"
@@ -685,6 +710,7 @@ Plecs {
           Position      [480, 215]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Index"
             Value         "2"
@@ -703,6 +729,7 @@ Plecs {
           Position      [645, 215]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Index"
             Value         "3"
@@ -721,6 +748,7 @@ Plecs {
           Position      [320, 395]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Index"
             Value         "4"
@@ -739,6 +767,7 @@ Plecs {
           Position      [480, 395]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Index"
             Value         "5"
@@ -757,6 +786,7 @@ Plecs {
           Position      [645, 395]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Index"
             Value         "6"
@@ -819,6 +849,7 @@ Plecs {
       Position      [1275, 585]
       Direction     right
       Flipped       off
+      LabelPosition south
       Parameter {
         Variable      "Tag"
         Value         "P1"
@@ -837,8 +868,8 @@ Plecs {
       Position      [1365, 635]
       Direction     up
       Flipped       off
+      LabelPosition none
       Frame         [-45, -30; 45, 30]
-      LabelPosition [0, 0]
       SampleTime    "-1"
       CodeGenDiscretizationMethod "2"
       CodeGenTarget "Generic"
@@ -889,6 +920,7 @@ Plecs {
           Position      [565, 275]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Hi"
             Value         "1"
@@ -927,6 +959,7 @@ Plecs {
           Position      [725, 275]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Hi"
             Value         "1"
@@ -965,6 +998,7 @@ Plecs {
           Position      [885, 275]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Hi"
             Value         "1"
@@ -1003,6 +1037,7 @@ Plecs {
           Position      [565, 455]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Hi"
             Value         "1"
@@ -1041,6 +1076,7 @@ Plecs {
           Position      [725, 455]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Hi"
             Value         "1"
@@ -1079,6 +1115,7 @@ Plecs {
           Position      [885, 455]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Hi"
             Value         "1"
@@ -1117,6 +1154,7 @@ Plecs {
           Position      [620, 275]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Index"
             Value         "1"
@@ -1135,6 +1173,7 @@ Plecs {
           Position      [780, 275]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Index"
             Value         "2"
@@ -1153,6 +1192,7 @@ Plecs {
           Position      [940, 275]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Index"
             Value         "3"
@@ -1171,6 +1211,7 @@ Plecs {
           Position      [615, 455]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Index"
             Value         "4"
@@ -1189,6 +1230,7 @@ Plecs {
           Position      [780, 455]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Index"
             Value         "5"
@@ -1207,6 +1249,7 @@ Plecs {
           Position      [940, 455]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Index"
             Value         "6"
@@ -1269,6 +1312,7 @@ Plecs {
       Position      [1275, 605]
       Direction     right
       Flipped       off
+      LabelPosition south
       Parameter {
         Variable      "Tag"
         Value         "P2"
@@ -1287,6 +1331,7 @@ Plecs {
       Position      [1275, 625]
       Direction     right
       Flipped       off
+      LabelPosition south
       Parameter {
         Variable      "Tag"
         Value         "P3"
@@ -1305,6 +1350,7 @@ Plecs {
       Position      [1275, 645]
       Direction     right
       Flipped       off
+      LabelPosition south
       Parameter {
         Variable      "Tag"
         Value         "P4"
@@ -1323,6 +1369,7 @@ Plecs {
       Position      [1275, 665]
       Direction     right
       Flipped       off
+      LabelPosition south
       Parameter {
         Variable      "Tag"
         Value         "P5"
@@ -1341,6 +1388,7 @@ Plecs {
       Position      [1275, 685]
       Direction     right
       Flipped       off
+      LabelPosition south
       Parameter {
         Variable      "Tag"
         Value         "P6"
@@ -1359,6 +1407,7 @@ Plecs {
       Position      [1455, 585]
       Direction     right
       Flipped       off
+      LabelPosition south
       Parameter {
         Variable      "Tag"
         Value         "S1"
@@ -1377,6 +1426,7 @@ Plecs {
       Position      [1455, 605]
       Direction     right
       Flipped       off
+      LabelPosition south
       Parameter {
         Variable      "Tag"
         Value         "S2"
@@ -1395,6 +1445,7 @@ Plecs {
       Position      [1455, 625]
       Direction     right
       Flipped       off
+      LabelPosition south
       Parameter {
         Variable      "Tag"
         Value         "S3"
@@ -1413,6 +1464,7 @@ Plecs {
       Position      [1455, 645]
       Direction     right
       Flipped       off
+      LabelPosition south
       Parameter {
         Variable      "Tag"
         Value         "S4"
@@ -1431,6 +1483,7 @@ Plecs {
       Position      [1455, 665]
       Direction     right
       Flipped       off
+      LabelPosition south
       Parameter {
         Variable      "Tag"
         Value         "S5"
@@ -1449,6 +1502,7 @@ Plecs {
       Position      [1455, 685]
       Direction     right
       Flipped       off
+      LabelPosition south
       Parameter {
         Variable      "Tag"
         Value         "S6"
@@ -1467,8 +1521,8 @@ Plecs {
       Position      [1010, 640]
       Direction     up
       Flipped       off
+      LabelPosition none
       Frame         [-55, -25; 55, 25]
-      LabelPosition [0, 0]
       SampleTime    "-1"
       CodeGenDiscretizationMethod "2"
       CodeGenTarget "Generic"
@@ -1492,9 +1546,9 @@ Plecs {
         Direction     left
       }
       Schematic {
-        Location      [1920, 21; 3840, 983]
-        ZoomFactor    1.49864
-        SliderPosition [275, -1]
+        Location      [1920, 21; 3840, 991]
+        ZoomFactor    1.14437
+        SliderPosition [0, -1]
         ShowBrowser   off
         BrowserWidth  100
         Component {
@@ -1504,6 +1558,7 @@ Plecs {
           Position      [125, 245]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Index"
             Value         "1"
@@ -1522,6 +1577,7 @@ Plecs {
           Position      [970, 325]
           Direction     left
           Flipped       off
+          LabelPosition north
           Parameter {
             Variable      "L"
             Value         "Ldab"
@@ -1540,6 +1596,7 @@ Plecs {
           Position      [890, 325]
           Direction     left
           Flipped       off
+          LabelPosition north
           Parameter {
             Variable      "Tag"
             Value         "a"
@@ -1558,6 +1615,7 @@ Plecs {
           Position      [1340, 325]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Tag"
             Value         "A"
@@ -1576,6 +1634,7 @@ Plecs {
           Position      [925, 325]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "R"
             Value         "RLdab"
@@ -1589,6 +1648,7 @@ Plecs {
           Position      [1000, 355]
           Direction     down
           Flipped       off
+          LabelPosition west
           Parameter {
             Variable      "Tag"
             Value         "a1"
@@ -1607,6 +1667,7 @@ Plecs {
           Position      [895, 455]
           Direction     left
           Flipped       off
+          LabelPosition north
           Parameter {
             Variable      "Tag"
             Value         "a2"
@@ -1625,6 +1686,7 @@ Plecs {
           Position      [1340, 455]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Tag"
             Value         "A1"
@@ -1643,6 +1705,7 @@ Plecs {
           Position      [265, 210]
           Direction     left
           Flipped       off
+          LabelPosition north
           Parameter {
             Variable      "Tag"
             Value         "b1"
@@ -1661,6 +1724,7 @@ Plecs {
           Position      [265, 230]
           Direction     left
           Flipped       off
+          LabelPosition north
           Parameter {
             Variable      "Tag"
             Value         "b"
@@ -1679,6 +1743,7 @@ Plecs {
           Position      [310, 220]
           Direction     left
           Flipped       on
+          LabelPosition south
           Parameter {
             Variable      "s_init"
             Value         "0"
@@ -1692,6 +1757,7 @@ Plecs {
           Position      [430, 220]
           Direction     left
           Flipped       on
+          LabelPosition south
           Parameter {
             Variable      "s_init"
             Value         "0"
@@ -1705,6 +1771,7 @@ Plecs {
           Position      [380, 210]
           Direction     left
           Flipped       off
+          LabelPosition north
           Parameter {
             Variable      "Tag"
             Value         "b2"
@@ -1723,6 +1790,7 @@ Plecs {
           Position      [475, 220]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Tag"
             Value         "a2"
@@ -1741,6 +1809,7 @@ Plecs {
           Position      [265, 300]
           Direction     left
           Flipped       off
+          LabelPosition north
           Parameter {
             Variable      "Tag"
             Value         "c1"
@@ -1759,6 +1828,7 @@ Plecs {
           Position      [265, 320]
           Direction     left
           Flipped       off
+          LabelPosition north
           Parameter {
             Variable      "Tag"
             Value         "c"
@@ -1777,6 +1847,7 @@ Plecs {
           Position      [310, 310]
           Direction     left
           Flipped       on
+          LabelPosition south
           Parameter {
             Variable      "s_init"
             Value         "0"
@@ -1790,6 +1861,7 @@ Plecs {
           Position      [430, 310]
           Direction     left
           Flipped       on
+          LabelPosition south
           Parameter {
             Variable      "s_init"
             Value         "0"
@@ -1803,6 +1875,7 @@ Plecs {
           Position      [380, 300]
           Direction     left
           Flipped       off
+          LabelPosition north
           Parameter {
             Variable      "Tag"
             Value         "c2"
@@ -1821,6 +1894,7 @@ Plecs {
           Position      [475, 310]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Tag"
             Value         "b2"
@@ -1839,6 +1913,7 @@ Plecs {
           Position      [265, 390]
           Direction     left
           Flipped       off
+          LabelPosition north
           Parameter {
             Variable      "Tag"
             Value         "a1"
@@ -1857,6 +1932,7 @@ Plecs {
           Position      [265, 410]
           Direction     left
           Flipped       off
+          LabelPosition north
           Parameter {
             Variable      "Tag"
             Value         "a"
@@ -1875,6 +1951,7 @@ Plecs {
           Position      [310, 400]
           Direction     left
           Flipped       on
+          LabelPosition south
           Parameter {
             Variable      "s_init"
             Value         "0"
@@ -1888,6 +1965,7 @@ Plecs {
           Position      [430, 400]
           Direction     left
           Flipped       on
+          LabelPosition south
           Parameter {
             Variable      "s_init"
             Value         "0"
@@ -1901,6 +1979,7 @@ Plecs {
           Position      [380, 390]
           Direction     left
           Flipped       off
+          LabelPosition north
           Parameter {
             Variable      "Tag"
             Value         "a2"
@@ -1919,6 +1998,7 @@ Plecs {
           Position      [475, 400]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Tag"
             Value         "c2"
@@ -1937,6 +2017,7 @@ Plecs {
           Position      [575, 220]
           Direction     left
           Flipped       on
+          LabelPosition south
           Parameter {
             Variable      "s_init"
             Value         "0"
@@ -1950,6 +2031,7 @@ Plecs {
           Position      [525, 210]
           Direction     left
           Flipped       off
+          LabelPosition north
           Parameter {
             Variable      "Tag"
             Value         "B1"
@@ -1968,6 +2050,7 @@ Plecs {
           Position      [620, 220]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Tag"
             Value         "A1"
@@ -1986,6 +2069,7 @@ Plecs {
           Position      [525, 230]
           Direction     left
           Flipped       off
+          LabelPosition north
           Parameter {
             Variable      "Tag"
             Value         "B"
@@ -2004,6 +2088,7 @@ Plecs {
           Position      [575, 305]
           Direction     left
           Flipped       on
+          LabelPosition south
           Parameter {
             Variable      "s_init"
             Value         "0"
@@ -2017,6 +2102,7 @@ Plecs {
           Position      [525, 295]
           Direction     left
           Flipped       off
+          LabelPosition north
           Parameter {
             Variable      "Tag"
             Value         "C1"
@@ -2035,6 +2121,7 @@ Plecs {
           Position      [620, 305]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Tag"
             Value         "B1"
@@ -2053,6 +2140,7 @@ Plecs {
           Position      [525, 315]
           Direction     left
           Flipped       off
+          LabelPosition north
           Parameter {
             Variable      "Tag"
             Value         "C"
@@ -2071,6 +2159,7 @@ Plecs {
           Position      [575, 390]
           Direction     left
           Flipped       on
+          LabelPosition south
           Parameter {
             Variable      "s_init"
             Value         "0"
@@ -2084,6 +2173,7 @@ Plecs {
           Position      [525, 380]
           Direction     left
           Flipped       off
+          LabelPosition north
           Parameter {
             Variable      "Tag"
             Value         "A1"
@@ -2102,6 +2192,7 @@ Plecs {
           Position      [620, 390]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Tag"
             Value         "C1"
@@ -2120,6 +2211,7 @@ Plecs {
           Position      [525, 400]
           Direction     left
           Flipped       off
+          LabelPosition north
           Parameter {
             Variable      "Tag"
             Value         "A"
@@ -2138,6 +2230,7 @@ Plecs {
           Position      [170, 245]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Tag"
             Value         "y1"
@@ -2156,6 +2249,7 @@ Plecs {
           Position      [125, 295]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Index"
             Value         "2"
@@ -2174,6 +2268,7 @@ Plecs {
           Position      [125, 340]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Index"
             Value         "3"
@@ -2192,6 +2287,7 @@ Plecs {
           Position      [170, 295]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Tag"
             Value         "y2"
@@ -2210,6 +2306,7 @@ Plecs {
           Position      [170, 340]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Tag"
             Value         "y3"
@@ -2228,6 +2325,7 @@ Plecs {
           Position      [240, 170]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Tag"
             Value         "y2"
@@ -2246,6 +2344,7 @@ Plecs {
           Position      [240, 260]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Tag"
             Value         "y2"
@@ -2264,6 +2363,7 @@ Plecs {
           Position      [240, 350]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Tag"
             Value         "y2"
@@ -2282,6 +2382,7 @@ Plecs {
           Position      [405, 170]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Tag"
             Value         "y1"
@@ -2300,6 +2401,7 @@ Plecs {
           Position      [410, 260]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Tag"
             Value         "y1"
@@ -2318,6 +2420,7 @@ Plecs {
           Position      [405, 350]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Tag"
             Value         "y1"
@@ -2336,6 +2439,7 @@ Plecs {
           Position      [550, 170]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Tag"
             Value         "y3"
@@ -2354,6 +2458,7 @@ Plecs {
           Position      [550, 255]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Tag"
             Value         "y3"
@@ -2372,6 +2477,7 @@ Plecs {
           Position      [550, 340]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Tag"
             Value         "y3"
@@ -2390,6 +2496,7 @@ Plecs {
           Position      [1030, 325]
           Direction     left
           Flipped       off
+          LabelPosition north
           Parameter {
             Variable      "L"
             Value         "Llk_p"
@@ -2408,6 +2515,7 @@ Plecs {
           Position      [1130, 370]
           Direction     down
           Flipped       on
+          LabelPosition west
           Parameter {
             Variable      "L"
             Value         "Lm"
@@ -2426,6 +2534,7 @@ Plecs {
           Position      [1190, 395]
           Direction     right
           Flipped       on
+          LabelPosition south
           Parameter {
             Variable      "Windings"
             Value         "[1 1]"
@@ -2459,6 +2568,7 @@ Plecs {
           Position      [1240, 325]
           Direction     left
           Flipped       on
+          LabelPosition north
           Parameter {
             Variable      "L"
             Value         "Llk_s"
@@ -2477,6 +2587,7 @@ Plecs {
           Position      [280, 625]
           Direction     down
           Flipped       off
+          LabelPosition east
         }
         Component {
           Type          Goto
@@ -2485,6 +2596,7 @@ Plecs {
           Position      [235, 625]
           Direction     left
           Flipped       off
+          LabelPosition north
           Parameter {
             Variable      "Tag"
             Value         "Vprimary"
@@ -2503,6 +2615,7 @@ Plecs {
           Position      [280, 515]
           Direction     down
           Flipped       off
+          LabelPosition east
         }
         Component {
           Type          Goto
@@ -2511,6 +2624,7 @@ Plecs {
           Position      [235, 515]
           Direction     left
           Flipped       off
+          LabelPosition north
           Parameter {
             Variable      "Tag"
             Value         "Vinductor"
@@ -2529,6 +2643,7 @@ Plecs {
           Position      [280, 545]
           Direction     down
           Flipped       off
+          LabelPosition west
           Parameter {
             Variable      "Tag"
             Value         "a"
@@ -2547,6 +2662,7 @@ Plecs {
           Position      [280, 485]
           Direction     up
           Flipped       off
+          LabelPosition east
           Parameter {
             Variable      "Tag"
             Value         "a1"
@@ -2565,6 +2681,7 @@ Plecs {
           Position      [280, 595]
           Direction     up
           Flipped       off
+          LabelPosition east
           Parameter {
             Variable      "Tag"
             Value         "a1"
@@ -2583,6 +2700,7 @@ Plecs {
           Position      [280, 655]
           Direction     down
           Flipped       off
+          LabelPosition west
           Parameter {
             Variable      "Tag"
             Value         "a2"
@@ -2601,6 +2719,7 @@ Plecs {
           Position      [975, 525]
           Direction     left
           Flipped       off
+          LabelPosition north
           Parameter {
             Variable      "L"
             Value         "Ldab"
@@ -2619,6 +2738,7 @@ Plecs {
           Position      [895, 525]
           Direction     left
           Flipped       off
+          LabelPosition north
           Parameter {
             Variable      "Tag"
             Value         "b"
@@ -2637,6 +2757,7 @@ Plecs {
           Position      [1345, 525]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Tag"
             Value         "B"
@@ -2655,6 +2776,7 @@ Plecs {
           Position      [930, 525]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "R"
             Value         "RLdab"
@@ -2668,6 +2790,7 @@ Plecs {
           Position      [1005, 555]
           Direction     down
           Flipped       off
+          LabelPosition west
           Parameter {
             Variable      "Tag"
             Value         "b1"
@@ -2686,6 +2809,7 @@ Plecs {
           Position      [900, 655]
           Direction     left
           Flipped       off
+          LabelPosition north
           Parameter {
             Variable      "Tag"
             Value         "b2"
@@ -2704,6 +2828,7 @@ Plecs {
           Position      [1345, 655]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Tag"
             Value         "B1"
@@ -2722,6 +2847,7 @@ Plecs {
           Position      [1035, 525]
           Direction     left
           Flipped       off
+          LabelPosition north
           Parameter {
             Variable      "L"
             Value         "Llk_p"
@@ -2740,6 +2866,7 @@ Plecs {
           Position      [1135, 575]
           Direction     down
           Flipped       on
+          LabelPosition west
           Parameter {
             Variable      "L"
             Value         "Lm"
@@ -2758,6 +2885,7 @@ Plecs {
           Position      [1195, 595]
           Direction     right
           Flipped       on
+          LabelPosition south
           Parameter {
             Variable      "Windings"
             Value         "[1 1]"
@@ -2791,6 +2919,7 @@ Plecs {
           Position      [1245, 525]
           Direction     left
           Flipped       on
+          LabelPosition north
           Parameter {
             Variable      "L"
             Value         "Llk_s"
@@ -2809,6 +2938,7 @@ Plecs {
           Position      [980, 715]
           Direction     left
           Flipped       off
+          LabelPosition north
           Parameter {
             Variable      "L"
             Value         "Ldab"
@@ -2827,6 +2957,7 @@ Plecs {
           Position      [900, 715]
           Direction     left
           Flipped       off
+          LabelPosition north
           Parameter {
             Variable      "Tag"
             Value         "c"
@@ -2845,6 +2976,7 @@ Plecs {
           Position      [1350, 715]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Tag"
             Value         "C"
@@ -2863,6 +2995,7 @@ Plecs {
           Position      [935, 715]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "R"
             Value         "RLdab"
@@ -2876,6 +3009,7 @@ Plecs {
           Position      [1010, 745]
           Direction     down
           Flipped       off
+          LabelPosition west
           Parameter {
             Variable      "Tag"
             Value         "c1"
@@ -2894,6 +3028,7 @@ Plecs {
           Position      [905, 845]
           Direction     left
           Flipped       off
+          LabelPosition north
           Parameter {
             Variable      "Tag"
             Value         "c2"
@@ -2912,6 +3047,7 @@ Plecs {
           Position      [1350, 845]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Tag"
             Value         "C1"
@@ -2930,6 +3066,7 @@ Plecs {
           Position      [1040, 715]
           Direction     left
           Flipped       off
+          LabelPosition north
           Parameter {
             Variable      "L"
             Value         "Llk_p"
@@ -2948,6 +3085,7 @@ Plecs {
           Position      [1140, 765]
           Direction     down
           Flipped       on
+          LabelPosition west
           Parameter {
             Variable      "L"
             Value         "Lm"
@@ -2966,6 +3104,7 @@ Plecs {
           Position      [1200, 785]
           Direction     right
           Flipped       on
+          LabelPosition south
           Parameter {
             Variable      "Windings"
             Value         "[1 1]"
@@ -2999,6 +3138,7 @@ Plecs {
           Position      [1250, 715]
           Direction     left
           Flipped       on
+          LabelPosition north
           Parameter {
             Variable      "L"
             Value         "Llk_s"
@@ -3017,6 +3157,7 @@ Plecs {
           Position      [1435, 245]
           Direction     up
           Flipped       off
+          LabelPosition south
           Location      [0, 27; 1920, 1016]
           State         "AAAA/wAAAAD9AAAAAgAAAAEAAAAAAAAAAPwCAAAAA/sAAAAQAFoAb"
 "wBvAG0AQQByAGUAYQAAAAAA/////wAAAFwA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAA"
@@ -3099,6 +3240,7 @@ Plecs {
           Position      [1285, 390]
           Direction     up
           Flipped       off
+          LabelPosition west
         }
         Component {
           Type          Voltmeter
@@ -3107,6 +3249,7 @@ Plecs {
           Position      [970, 250]
           Direction     left
           Flipped       off
+          LabelPosition south
         }
         Component {
           Type          PlecsProbe
@@ -3115,6 +3258,12 @@ Plecs {
           Position      [1195, 240]
           Direction     right
           Flipped       off
+          LabelPosition south
+          Probe {
+            Component     "La"
+            Path          "Transformador"
+            Signals       {"Inductor current"}
+          }
         }
         Component {
           Type          SignalMux
@@ -3123,6 +3272,7 @@ Plecs {
           Position      [1335, 220]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Width"
             Value         "2"
@@ -3136,6 +3286,7 @@ Plecs {
           Position      [1275, 240]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "K"
             Value         "40"
@@ -3159,6 +3310,12 @@ Plecs {
           Position      [1170, 285]
           Direction     right
           Flipped       off
+          LabelPosition south
+          Probe {
+            Component     "Llka_s"
+            Path          "Transformador"
+            Signals       {"Inductor current"}
+          }
         }
         Component {
           Type          SignalMux
@@ -3167,6 +3324,7 @@ Plecs {
           Position      [1365, 280]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Width"
             Value         "2"
@@ -3180,6 +3338,7 @@ Plecs {
           Position      [1290, 285]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "K"
             Value         "-40"
@@ -3203,6 +3362,7 @@ Plecs {
           Position      [1360, 385]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Tag"
             Value         "Vsec"
@@ -3221,6 +3381,7 @@ Plecs {
           Position      [1095, 525]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "R"
             Value         "RLlk_from_p"
@@ -3234,6 +3395,7 @@ Plecs {
           Position      [1085, 325]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "R"
             Value         "RLlk_from_p"
@@ -3247,6 +3409,7 @@ Plecs {
           Position      [1100, 715]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "R"
             Value         "RLlk_from_p"
@@ -3260,6 +3423,7 @@ Plecs {
           Position      [1140, 815]
           Direction     down
           Flipped       off
+          LabelPosition west
           Parameter {
             Variable      "R"
             Value         "RLlk_from_p"
@@ -3273,6 +3437,7 @@ Plecs {
           Position      [1135, 620]
           Direction     down
           Flipped       off
+          LabelPosition west
           Parameter {
             Variable      "R"
             Value         "RLlk_from_p"
@@ -3286,6 +3451,7 @@ Plecs {
           Position      [1130, 420]
           Direction     down
           Flipped       off
+          LabelPosition west
           Parameter {
             Variable      "R"
             Value         "RLlk_from_p"
@@ -3299,20 +3465,21 @@ Plecs {
           Position      [1195, 150]
           Direction     up
           Flipped       off
-          Location      [0, 27; 1536, 800]
+          LabelPosition south
+          Location      [1920, 21; 3840, 1010]
           State         "AAAA/wAAAAD9AAAAAgAAAAEAAAAAAAAAAPwCAAAAA/sAAAAQAFoAb"
 "wBvAG0AQQByAGUAYQAAAAAA/////wAAADQA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAA"
-"AA/////wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMAAAAAAP////8AAABmAP///wAAAAMAAAYAAAA"
-"AVvwBAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQBAAAAAAAABgAAAABQAP///wAABgAAAAKQ"
+"AA/////wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMAAAAAAP////8AAABmAP///wAAAAMAAAeAAAA"
+"AW/wBAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQBAAAAAAAAB4AAAABQAP///wAAB4AAAANj"
 "AAAABAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AA"
 "AAAAAAAAA=="
           SavedViews    "AAAAAgAAAAA="
-          HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL/gMAAAAJA"
-"AAAAgAAAGQAAAADAAAAZAAAAAEAAABkAAAABgAAAGQAAAAHAAAAZAAAAAQAAABkAAAABQAAAGQAAA"
-"AIAAAAZAAAAAkAAABkAAAGAAAAAAsBAAABAAAAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAAC"
-"3AAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAA"
-"AAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAA"
-"AAAAAVJAAAAAQAAAAAAAAPoAAAAACQ="
+          HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL+AMAAAAHA"
+"AAACQAAAGQAAAAIAAAAZAAAAAcAAABkAAAABgAAAGQAAAAFAAAAZAAAAAQAAABkAAAAAwAAAGQAAA"
+"dvAAAACwEAAAEAAAAAAAAAAAAAAABk/////wAAAIEAAAAAAAAACwAAALcAAAABAAAAAAAAAGQAAAA"
+"BAAAAAAAAAGQAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAA"
+"AAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAABfAAAAABAAAAAAAAA"
+"+gAAAAAJA=="
           PlotPalettes  "AAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
           Axes          "1"
           TimeRange     "0.0"
@@ -3359,6 +3526,17 @@ Plecs {
           Position      [1040, 150]
           Direction     right
           Flipped       off
+          LabelPosition south
+          Probe {
+            Component     "Llka_p"
+            Path          "Transformador"
+            Signals       {"Inductor current"}
+          }
+          Probe {
+            Component     "Llka_s"
+            Path          "Transformador"
+            Signals       {"Inductor current"}
+          }
         }
         Component {
           Type          SignalMux
@@ -3367,6 +3545,7 @@ Plecs {
           Position      [1155, 150]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Width"
             Value         "2"
@@ -3380,6 +3559,7 @@ Plecs {
           Position      [1080, 150]
           Direction     right
           Flipped       on
+          LabelPosition south
           Parameter {
             Variable      "Width"
             Value         "2"
@@ -3393,6 +3573,7 @@ Plecs {
           Position      [1115, 175]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "K"
             Value         "-1"
@@ -3416,6 +3597,12 @@ Plecs {
           Position      [715, 30]
           Direction     right
           Flipped       off
+          LabelPosition south
+          Probe {
+            Component     "La"
+            Path          "Transformador"
+            Signals       {"Inductor voltage", "Inductor current"}
+          }
         }
         Component {
           Type          Scope
@@ -3424,7 +3611,8 @@ Plecs {
           Position      [855, 30]
           Direction     up
           Flipped       off
-          Location      [1920, 21; 3840, 1010]
+          LabelPosition south
+          Location      [0, 27; 1920, 1016]
           State         "AAAA/wAAAAD9AAAAAgAAAAEAAAAAAAAAAPwCAAAAA/sAAAAQAFoAb"
 "wBvAG0AQQByAGUAYQAAAAAA/////wAAAFwA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAA"
 "AA/////wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMAAAAAAP////8AAABmAP///wAAAAMAAAeAAAA"
@@ -3433,7 +3621,7 @@ Plecs {
 "AAAAAAAAA=="
           SavedViews    "AAAAAgAAAAA="
           HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL+AMAAAAHA"
-"AAACQAAAH0AAAAIAAAAfQAAAAUAAAB9AAAABAAAAH0AAAAHAAAAfQAAAAYAAAB9AAAAAwAAAH0AAA"
+"AAABAAAAH0AAAAFAAAAfQAAAAYAAAB9AAAABwAAAH0AAAADAAAAfQAAAAgAAAB9AAAACQAAAH0AAA"
 "eAAAAACwEAAAEAAAAAAAAAAAAAAABk/////wAAAIEAAAAAAAAACwAAAKMAAAABAAAAAAAAAH0AAAA"
 "BAAAAAAAAAH0AAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAA"
 "AAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAABeMAAAABAAAAAAAAA"
@@ -3506,6 +3694,7 @@ Plecs {
           Position      [790, 30]
           Direction     right
           Flipped       on
+          LabelPosition south
           Parameter {
             Variable      "Width"
             Value         "2"
@@ -3519,20 +3708,21 @@ Plecs {
           Position      [855, 110]
           Direction     up
           Flipped       off
-          Location      [0, 27; 1536, 800]
+          LabelPosition south
+          Location      [0, 27; 1920, 1016]
           State         "AAAA/wAAAAD9AAAAAgAAAAEAAAAAAAAAAPwCAAAAA/sAAAAQAFoAb"
 "wBvAG0AQQByAGUAYQAAAAAA/////wAAAFwA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAA"
-"AA/////wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMAAAAAAP////8AAABmAP///wAAAAMAAAYAAAA"
-"AY/wBAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQBAAAAAAAABgAAAABQAP///wAABgAAAAKD"
+"AA/////wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMAAAAAAP////8AAABmAP///wAAAAMAAAeAAAA"
+"AffwBAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQBAAAAAAAAB4AAAABQAP///wAAB4AAAANB"
 "AAAABAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AA"
 "AAAAAAAAA=="
           SavedViews    "AAAAAgAAAAA="
-          HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL/gMAAAAJA"
-"AAAAgAAAH0AAAADAAAAfQAAAAEAAAB9AAAABgAAAH0AAAAHAAAAfQAAAAQAAAB9AAAABQAAAH0AAA"
-"AIAAAAfQAAAAkAAAB9AAAGAAAAAAsBAAABAAAAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAAC"
-"3AAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAA"
-"AAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAA"
-"AAAAAVJAAAAAQAAAAAAAAPoAAAAACQ="
+          HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL+AMAAAAHA"
+"AAABAAAAH0AAAAFAAAAfQAAAAYAAAB9AAAABwAAAH0AAAADAAAAfQAAAAgAAAB9AAAACQAAAH0AAA"
+"eAAAAACwEAAAEAAAAAAAAAAAAAAABk/////wAAAIEAAAAAAAAACwAAALcAAAABAAAAAAAAAH0AAAA"
+"BAAAAAAAAAH0AAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAA"
+"AAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAABc8AAAABAAAAAAAAA"
+"+gAAAAAJA=="
           PlotPalettes  "AAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
 "QAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
           Axes          "2"
@@ -3601,20 +3791,21 @@ Plecs {
           Position      [855, 195]
           Direction     up
           Flipped       off
-          Location      [0, 27; 1536, 800]
+          LabelPosition south
+          Location      [1920, 21; 3840, 1010]
           State         "AAAA/wAAAAD9AAAAAgAAAAEAAAAAAAAAAPwCAAAAA/sAAAAQAFoAb"
 "wBvAG0AQQByAGUAYQAAAAAA/////wAAAFwA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAA"
-"AA/////wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMAAAAAAP////8AAABmAP///wAAAAMAAAYAAAA"
-"AY/wBAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQBAAAAAAAABgAAAABQAP///wAABgAAAAKD"
+"AA/////wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMAAAAAAP////8AAABmAP///wAAAAMAAAeAAAA"
+"AffwBAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQBAAAAAAAAB4AAAABQAP///wAAB4AAAANB"
 "AAAABAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AA"
 "AAAAAAAAA=="
           SavedViews    "AAAAAgAAAAA="
-          HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL/gMAAAAJA"
-"AAAAgAAAH0AAAADAAAAfQAAAAEAAAB9AAAABgAAAH0AAAAHAAAAfQAAAAQAAAB9AAAABQAAAH0AAA"
-"AIAAAAfQAAAAkAAAB9AAAGAAAAAAsBAAABAAAAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAAC"
-"1AAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAA"
-"AAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAA"
-"AAAAAVLAAAAAQAAAAAAAAPoAAAAACQ="
+          HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL+AMAAAAHA"
+"AAACQAAAH0AAAAIAAAAfQAAAAcAAAB9AAAABgAAAH0AAAAFAAAAfQAAAAQAAAB9AAAAAwAAAH0AAA"
+"eAAAAACwEAAAEAAAAAAAAAAAAAAABk/////wAAAIEAAAAAAAAACwAAALUAAAABAAAAAAAAAH0AAAA"
+"BAAAAAAAAAH0AAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAA"
+"AAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAABdEAAAABAAAAAAAAA"
+"+gAAAAAJA=="
           PlotPalettes  "AAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
 "QAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
           Axes          "2"
@@ -3683,6 +3874,12 @@ Plecs {
           Position      [715, 115]
           Direction     right
           Flipped       off
+          LabelPosition south
+          Probe {
+            Component     "Llka_p"
+            Path          "Transformador"
+            Signals       {"Inductor current"}
+          }
         }
         Component {
           Type          From
@@ -3691,6 +3888,7 @@ Plecs {
           Position      [735, 190]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Tag"
             Value         "Vsec"
@@ -3709,6 +3907,12 @@ Plecs {
           Position      [730, 225]
           Direction     right
           Flipped       off
+          LabelPosition south
+          Probe {
+            Component     "Llka_s"
+            Path          "Transformador"
+            Signals       {"Inductor current"}
+          }
         }
         Component {
           Type          Voltmeter
@@ -3717,6 +3921,7 @@ Plecs {
           Position      [955, 390]
           Direction     up
           Flipped       off
+          LabelPosition west
         }
         Component {
           Type          Goto
@@ -3725,6 +3930,7 @@ Plecs {
           Position      [1010, 390]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Tag"
             Value         "Vprim"
@@ -3743,6 +3949,7 @@ Plecs {
           Position      [735, 95]
           Direction     right
           Flipped       off
+          LabelPosition south
           Parameter {
             Variable      "Tag"
             Value         "Vprim"
@@ -4512,29 +4719,6 @@ Plecs {
           DstTerminal   2
         }
         Connection {
-          Type          Wire
-          SrcComponent  "Llka_s"
-          SrcTerminal   1
-          DstComponent  "Label7"
-          DstTerminal   1
-        }
-        Connection {
-          Type          Wire
-          SrcComponent  "Llka_s"
-          SrcTerminal   2
-          Points        [1215, 325]
-          Branch {
-            Points        [1200, 325]
-            DstComponent  "Tr1"
-            DstTerminal   3
-          }
-          Branch {
-            Points        [1215, 350; 1285, 350]
-            DstComponent  "Vm3"
-            DstTerminal   1
-          }
-        }
-        Connection {
           Type          Signal
           SrcComponent  "Vm6"
           SrcTerminal   3
@@ -4549,6 +4733,28 @@ Plecs {
           DstComponent  "Corrente e tensao primario"
           DstTerminal   1
         }
+        Connection {
+          Type          Wire
+          SrcComponent  "Llka_s"
+          SrcTerminal   2
+          Points        [1200, 325]
+          DstComponent  "Tr1"
+          DstTerminal   3
+        }
+        Connection {
+          Type          Wire
+          SrcComponent  "Llka_s"
+          SrcTerminal   1
+          Points        [1285, 325]
+          Branch {
+            DstComponent  "Label7"
+            DstTerminal   1
+          }
+          Branch {
+            DstComponent  "Vm3"
+            DstTerminal   1
+          }
+        }
       }
     }
     Component {
@@ -4558,9 +4764,8 @@ Plecs {
       Position      [875, 600]
       Direction     right
       Flipped       off
+      LabelPosition south
       Frame         [-10, -10; 10, 10]
-      LabelPosition [0, 13]
-      LabelAlign    up
       Parameter {
         Variable      "Value"
         Value         "1"
@@ -4579,12 +4784,11 @@ Plecs {
       Position      [875, 640]
       Direction     right
       Flipped       off
+      LabelPosition south
       Frame         [-10, -10; 10, 10]
-      LabelPosition [0, 13]
-      LabelAlign    up
       Parameter {
         Variable      "Value"
-        Value         "0"
+        Value         "1"
         Show          off
       }
       Parameter {
@@ -4600,12 +4804,11 @@ Plecs {
       Position      [875, 680]
       Direction     right
       Flipped       off
+      LabelPosition south
       Frame         [-10, -10; 10, 10]
-      LabelPosition [0, 13]
-      LabelAlign    up
       Parameter {
         Variable      "Value"
-        Value         "0"
+        Value         "1"
         Show          off
       }
       Parameter {
@@ -4616,22 +4819,23 @@ Plecs {
     }
     Component {
       Type          Scope
-      Name          "Scope10"
+      Name          "indutor"
       Show          on
       Position      [1005, 855]
       Direction     up
       Flipped       off
-      Location      [0, 31; 1920, 1020]
+      LabelPosition south
+      Location      [1920, 21; 3840, 1010]
       State         "AAAA/wAAAAD9AAAAAgAAAAAAAAF0AAADwvwCAAAAAfsAAAAUAEQAYQB0A"
 "GEAVwBpAGQAZwBlAHQBAAAALwAAA8IAAABbAP///wAAAAEAAACWAAADwvwCAAAAA/sAAAAQAFoAbw"
-"BvAG0AQQByAGUAYQEAAAAvAAADHwAAADQA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAA"
-"A/////wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMBAAADUgAAAJ8AAABmAP///wAABW4AAAPCAAAA"
+"BvAG0AQQByAGUAYQEAAAAvAAAC9AAAADQA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAA"
+"A/////wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMBAAADJwAAAMoAAABmAP///wAABW4AAAPCAAAA"
 "BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
 "AAAAA=="
       SavedViews    "AAAAAgAAAAA="
       HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL/gMAAAAJAAAAC"
-"QAAAE4AAAAIAAAATgAAAAUAAABOAAAABAAAAE4AAAAHAAAATgAAAAYAAABOAAAAAQAAAE8AAAADAA"
-"AATwAAAAIAAABOAAABdAAAAAsBAAABAAAAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAACjAAA"
+"AAAAE4AAAAJAAAATgAAAAYAAABOAAAABwAAAE4AAAAEAAAATgAAAAUAAABOAAAAAgAAAE4AAAADAA"
+"AATwAAAAEAAABPAAABdAAAAAsBAAABAAAAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAACjAAA"
 "AAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAA"
 "AAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAA"
 "ADRAAAAAQAAAAAAAAPoAAAAACQ="
@@ -4684,6 +4888,7 @@ Plecs {
       Position      [500, 360]
       Direction     down
       Flipped       on
+      LabelPosition east
       Parameter {
         Variable      "V"
         Value         "V_dc"
@@ -4697,6 +4902,7 @@ Plecs {
       Position      [555, 235]
       Direction     left
       Flipped       off
+      LabelPosition south
     }
     Component {
       Type          Goto
@@ -4705,6 +4911,7 @@ Plecs {
       Position      [590, 220]
       Direction     right
       Flipped       off
+      LabelPosition south
       Parameter {
         Variable      "Tag"
         Value         "i_in"
@@ -4723,6 +4930,7 @@ Plecs {
       Position      [590, 365]
       Direction     up
       Flipped       off
+      LabelPosition west
     }
     Component {
       Type          Goto
@@ -4731,6 +4939,7 @@ Plecs {
       Position      [645, 365]
       Direction     right
       Flipped       off
+      LabelPosition south
       Parameter {
         Variable      "Tag"
         Value         "V_in"
@@ -4749,6 +4958,7 @@ Plecs {
       Position      [1925, 235]
       Direction     left
       Flipped       off
+      LabelPosition south
     }
     Component {
       Type          Goto
@@ -4757,6 +4967,7 @@ Plecs {
       Position      [1965, 220]
       Direction     right
       Flipped       off
+      LabelPosition south
       Parameter {
         Variable      "Tag"
         Value         "i_out"
@@ -4775,6 +4986,7 @@ Plecs {
       Position      [1955, 365]
       Direction     up
       Flipped       off
+      LabelPosition west
     }
     Component {
       Type          Goto
@@ -4783,6 +4995,7 @@ Plecs {
       Position      [2005, 405]
       Direction     right
       Flipped       off
+      LabelPosition south
       Parameter {
         Variable      "Tag"
         Value         "V_out"
@@ -4801,6 +5014,7 @@ Plecs {
       Position      [2090, 330]
       Direction     down
       Flipped       on
+      LabelPosition east
       Parameter {
         Variable      "V"
         Value         "V_out"
@@ -4814,6 +5028,22 @@ Plecs {
       Position      [865, 955]
       Direction     right
       Flipped       off
+      LabelPosition south
+      Probe {
+        Component     "Llka_p"
+        Path          "Transformador"
+        Signals       {"Inductor current"}
+      }
+      Probe {
+        Component     "Llkb_p"
+        Path          "Transformador"
+        Signals       {"Inductor current"}
+      }
+      Probe {
+        Component     "Llkc_p"
+        Path          "Transformador"
+        Signals       {"Inductor current"}
+      }
     }
     Component {
       Type          PlecsProbe
@@ -4822,28 +5052,45 @@ Plecs {
       Position      [865, 1005]
       Direction     right
       Flipped       off
+      LabelPosition south
+      Probe {
+        Component     "Llka_s"
+        Path          "Transformador"
+        Signals       {"Inductor current"}
+      }
+      Probe {
+        Component     "Llkb_s"
+        Path          "Transformador"
+        Signals       {"Inductor current"}
+      }
+      Probe {
+        Component     "Llkc_s"
+        Path          "Transformador"
+        Signals       {"Inductor current"}
+      }
     }
     Component {
       Type          Scope
-      Name          "Scope20"
+      Name          "magnetizante"
       Show          on
       Position      [1005, 905]
       Direction     up
       Flipped       off
-      Location      [-1920, -465; 0, 524]
-      State         "AAAA/wAAAAD9AAAAAgAAAAAAAAIfAAADwvwCAAAAAfsAAAAUAEQAYQB0A"
-"GEAVwBpAGQAZwBlAHQBAAAALwAAA8IAAABbAP///wAAAAEAAAC0AAADwvwCAAAAA/sAAAAQAFoAbw"
-"BvAG0AQQByAGUAYQEAAAAvAAADJAAAADQA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAA"
-"A/////wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMBAAADVwAAAJoAAABmAP///wAABKUAAAPCAAAA"
+      LabelPosition south
+      Location      [0, 27; 1920, 1026]
+      State         "AAAA/wAAAAD9AAAAAgAAAAAAAAIfAAADzPwCAAAAAfsAAAAUAEQAYQB0A"
+"GEAVwBpAGQAZwBlAHQBAAAALwAAA8wAAABbAP///wAAAAEAAAC0AAADzPwCAAAAA/sAAAAQAFoAbw"
+"BvAG0AQQByAGUAYQEAAAAvAAADLAAAADQA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAA"
+"A/////wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMBAAADXwAAAJwAAABmAP///wAABKUAAAPMAAAA"
 "BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
 "AAAAA=="
       SavedViews    "AAAAAgAAAAA="
-      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL+AMAAAAHAAAAA"
-"wAAAGQAAAAJAAAAZAAAAAgAAABkAAAABQAAAGQAAAAEAAAAZAAAAAcAAABkAAAABgAAAGQAAAIfAA"
-"AACwEAAAEAAAAAAAAAAAAAAABk/////wAAAIEAAAAAAAAACwAAAKwAAAABAAAAAAAAAGQAAAABAAA"
-"AAAAAAGQAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAB"
-"AAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAKsAAAABAAAAAAAAA+gAA"
-"AAAJA=="
+      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL/gMAAAAJAAAAC"
+"AAAAGQAAAAJAAAAZAAAAAYAAABkAAAABwAAAGQAAAAEAAAAZAAAAAUAAABkAAAAAgAAAGQAAAADAA"
+"AAZAAAAAEAAABkAAACHwAAAAsBAAABAAAAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAACsAAA"
+"AAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAA"
+"AAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAA"
+"AFzAAAAAQAAAAAAAAPoAAAAACQ="
       PlotPalettes  "AAAAAQAAAAEAAAABAAAAAQAAAAEC//8u4P//zMwAAAAAAAEAAAABAAAAA"
 "AEAAAABAAAAAQAAAAEAAAABAAAAAAEAAAABP/AAAAAAAAAAAAABAAAAAQA="
       Axes          "1"
@@ -4891,6 +5138,22 @@ Plecs {
       Position      [865, 905]
       Direction     right
       Flipped       off
+      LabelPosition south
+      Probe {
+        Component     "Lma"
+        Path          "Transformador"
+        Signals       {"Inductor current"}
+      }
+      Probe {
+        Component     "Lmb"
+        Path          "Transformador"
+        Signals       {"Inductor current"}
+      }
+      Probe {
+        Component     "Lmc"
+        Path          "Transformador"
+        Signals       {"Inductor current"}
+      }
     }
     Component {
       Type          Scope
@@ -4899,6 +5162,7 @@ Plecs {
       Position      [705, 925]
       Direction     up
       Flipped       off
+      LabelPosition south
       Location      [0, 27; 1536, 800]
       State         "AAAA/wAAAAD9AAAAAgAAAAAAAAGPAAAC6vwCAAAAAfsAAAAUAEQAYQB0A"
 "GEAVwBpAGQAZwBlAHQBAAAALwAAAuoAAABbAP///wAAAAEAAAB4AAAC6vwCAAAAA/sAAAAQAFoAbw"
@@ -4962,6 +5226,7 @@ Plecs {
       Position      [655, 925]
       Direction     right
       Flipped       off
+      LabelPosition south
       Parameter {
         Variable      "Tag"
         Value         "Vinductor"
@@ -4980,6 +5245,22 @@ Plecs {
       Position      [865, 855]
       Direction     right
       Flipped       off
+      LabelPosition south
+      Probe {
+        Component     "La"
+        Path          "Transformador"
+        Signals       {"Inductor current"}
+      }
+      Probe {
+        Component     "Lb"
+        Path          "Transformador"
+        Signals       {"Inductor current"}
+      }
+      Probe {
+        Component     "Lc"
+        Path          "Transformador"
+        Signals       {"Inductor current"}
+      }
     }
     Component {
       Type          MosfetWithDiode
@@ -4988,6 +5269,7 @@ Plecs {
       Position      [885, 275]
       Direction     up
       Flipped       off
+      LabelPosition east
       Parameter {
         Variable      "Ron"
         Value         "0"
@@ -5021,6 +5303,7 @@ Plecs {
       Position      [1045, 275]
       Direction     up
       Flipped       off
+      LabelPosition east
       Parameter {
         Variable      "Ron"
         Value         "0"
@@ -5054,6 +5337,7 @@ Plecs {
       Position      [725, 455]
       Direction     up
       Flipped       off
+      LabelPosition east
       Parameter {
         Variable      "Ron"
         Value         "0"
@@ -5087,6 +5371,7 @@ Plecs {
       Position      [885, 455]
       Direction     up
       Flipped       off
+      LabelPosition east
       Parameter {
         Variable      "Ron"
         Value         "0"
@@ -5120,6 +5405,7 @@ Plecs {
       Position      [1045, 455]
       Direction     up
       Flipped       off
+      LabelPosition east
       Parameter {
         Variable      "Ron"
         Value         "0"
@@ -5153,6 +5439,7 @@ Plecs {
       Position      [1670, 275]
       Direction     up
       Flipped       off
+      LabelPosition east
       Parameter {
         Variable      "Ron"
         Value         "0"
@@ -5186,6 +5473,7 @@ Plecs {
       Position      [1830, 275]
       Direction     up
       Flipped       off
+      LabelPosition east
       Parameter {
         Variable      "Ron"
         Value         "0"
@@ -5219,6 +5507,7 @@ Plecs {
       Position      [1510, 455]
       Direction     up
       Flipped       off
+      LabelPosition east
       Parameter {
         Variable      "Ron"
         Value         "0"
@@ -5252,6 +5541,7 @@ Plecs {
       Position      [1670, 455]
       Direction     up
       Flipped       off
+      LabelPosition east
       Parameter {
         Variable      "Ron"
         Value         "0"
@@ -5285,6 +5575,7 @@ Plecs {
       Position      [1830, 455]
       Direction     up
       Flipped       off
+      LabelPosition east
       Parameter {
         Variable      "Ron"
         Value         "0"
@@ -5318,6 +5609,12 @@ Plecs {
       Position      [1215, 840]
       Direction     right
       Flipped       off
+      LabelPosition south
+      Probe {
+        Component     "FET1"
+        Path          ""
+        Signals       {"MOSFET voltage", "MOSFET current"}
+      }
     }
     Component {
       Type          Scope
@@ -5326,7 +5623,8 @@ Plecs {
       Position      [1345, 840]
       Direction     up
       Flipped       off
-      Location      [1920, 21; 3840, 1010]
+      LabelPosition south
+      Location      [0, 27; 1920, 1016]
       State         "AAAA/wAAAAD9AAAAAgAAAAEAAAAAAAAAAPwCAAAAA/sAAAAQAFoAbwBvA"
 "G0AQQByAGUAYQAAAAAA/////wAAAFwA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAAA//"
 "///wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMAAAAAAP////8AAABmAP///wAAAAMAAAeAAAAAY/w"
@@ -5335,8 +5633,8 @@ Plecs {
 "AAAAA=="
       SavedViews    "AAAAAgAAAAA="
       HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL/gMAAAAJAAAAA"
-"wAAAH0AAAABAAAAfQAAAAYAAAB9AAAABwAAAH0AAAAEAAAAfQAAAAUAAAB9AAAACAAAAH0AAAAJAA"
-"AAfQAAAAIAAAB9AAAHbwAAAAsBAAABAAAAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAACvAAA"
+"gAAAH0AAAADAAAAfQAAAAgAAAB9AAAACQAAAH0AAAAEAAAAfQAAAAUAAAB9AAAABgAAAH0AAAAHAA"
+"AAfQAAAAEAAAB9AAAHbwAAAAsBAAABAAAAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAACvAAA"
 "AAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAA"
 "AAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAA"
 "AbAAAAAAQAAAAAAAAPoAAAAACQ="
@@ -5408,6 +5706,7 @@ Plecs {
       Position      [1265, 840]
       Direction     right
       Flipped       on
+      LabelPosition south
       Parameter {
         Variable      "Width"
         Value         "2"
@@ -5421,6 +5720,12 @@ Plecs {
       Position      [1220, 925]
       Direction     right
       Flipped       off
+      LabelPosition south
+      Probe {
+        Component     "FET2"
+        Path          ""
+        Signals       {"MOSFET voltage", "MOSFET current"}
+      }
     }
     Component {
       Type          Scope
@@ -5429,6 +5734,7 @@ Plecs {
       Position      [1345, 925]
       Direction     up
       Flipped       off
+      LabelPosition south
       Location      [0, 27; 1920, 1016]
       State         "AAAA/wAAAAD9AAAAAgAAAAEAAAAAAAAAAPwCAAAAA/sAAAAQAFoAbwBvA"
 "G0AQQByAGUAYQAAAAAA/////wAAAFwA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAAA//"
@@ -5437,12 +5743,12 @@ Plecs {
 "BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
 "AAAAA=="
       SavedViews    "AAAAAgAAAAA="
-      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL/gMAAAAJAAAAC"
-"QAAAH0AAAAIAAAAfQAAAAEAAAB9AAAAAwAAAH0AAAACAAAAfQAAAAUAAAB9AAAABAAAAH0AAAAHAA"
-"AAfQAAAAYAAAB9AAAHgAAAAAsBAAABAAAAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAACvAAA"
+      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL/gMAAAAJAAAAA"
+"gAAAH0AAAADAAAAfQAAAAgAAAB9AAAACQAAAH0AAAAEAAAAfQAAAAUAAAB9AAAABgAAAH0AAAAHAA"
+"AAfQAAAAEAAAB9AAAHbwAAAAsBAAABAAAAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAACvAAA"
 "AAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAA"
 "AAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAA"
-"AbRAAAAAQAAAAAAAAPoAAAAACQ="
+"AbAAAAAAQAAAAAAAAPoAAAAACQ="
       PlotPalettes  "AAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAA"
 "AEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
       Axes          "2"
@@ -5511,6 +5817,7 @@ Plecs {
       Position      [1270, 925]
       Direction     right
       Flipped       on
+      LabelPosition south
       Parameter {
         Variable      "Width"
         Value         "2"
@@ -5519,25 +5826,26 @@ Plecs {
     }
     Component {
       Type          Scope
-      Name          "Scope"
+      Name          "primario"
       Show          on
       Position      [1005, 955]
       Direction     up
       Flipped       off
-      Location      [-1920, -465; 0, 524]
+      LabelPosition south
+      Location      [9, 32; 1911, 1013]
       State         "AAAA/wAAAAD9AAAAAgAAAAEAAAAAAAAAAPwCAAAAA/sAAAAQAFoAbwBvA"
 "G0AQQByAGUAYQAAAAAA/////wAAADQA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAAA//"
-"///wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMAAAAAAP////8AAABmAP///wAAAAMAAAeAAAAAffw"
-"BAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQBAAAAAAAAB4AAAABQAP///wAAB4AAAANBAAAA"
+"///wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMAAAAAAP////8AAABmAP///wAAAAMAAAduAAAAW/w"
+"BAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQBAAAAAAAAB24AAABQAP///wAAB24AAANbAAAA"
 "BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
 "AAAAA=="
       SavedViews    "AAAAAgAAAAA="
-      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL+AMAAAAHAAAAA"
-"wAAAGQAAAAJAAAAZAAAAAgAAABkAAAABQAAAGQAAAAEAAAAZAAAAAcAAABkAAAABgAAAGQAAAeAAA"
-"AACwEAAAEAAAAAAAAAAAAAAABk/////wAAAIEAAAAAAAAACwAAALgAAAABAAAAAAAAAGQAAAABAAA"
-"AAAAAAGQAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAB"
-"AAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAABgAAAAABAAAAAAAAA+gAA"
-"AAAJA=="
+      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL/gMAAAAJAAAAC"
+"AAAAGQAAAAJAAAAZAAAAAYAAABkAAAABwAAAGQAAAAEAAAAZAAAAAUAAABkAAAAAgAAAGQAAAADAA"
+"AAZAAAAAEAAABkAAAHXQAAAAsBAAABAAAAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAAC4AAA"
+"AAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAA"
+"AAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAA"
+"AalAAAAAQAAAAAAAAPoAAAAACQ="
       PlotPalettes  "AAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
       Axes          "1"
       TimeRange     "0.0"
@@ -5579,25 +5887,26 @@ Plecs {
     }
     Component {
       Type          Scope
-      Name          "Scope1"
+      Name          "secundario"
       Show          on
       Position      [1005, 1005]
       Direction     up
       Flipped       off
-      Location      [640, 276; 990, 503]
+      LabelPosition south
+      Location      [0, 27; 1920, 1026]
       State         "AAAA/wAAAAD9AAAAAgAAAAEAAAAAAAAAAPwCAAAAA/sAAAAQAFoAbwBvA"
 "G0AQQByAGUAYQAAAAAA/////wAAADQA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAAA//"
-"///wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMAAAAAAP////8AAABmAP///wAAAAMAAAAAAAAAAPw"
-"BAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQAAAAAAP////8AAABQAP///wAAAV4AAADIAAAA"
+"///wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMAAAAAAP////8AAABmAP///wAAAAMAAAeAAAAAffw"
+"BAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQBAAAAAAAAB4AAAABQAP///wAAB4AAAANLAAAA"
 "BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
 "AAAAA=="
       SavedViews    "AAAAAgAAAAA="
-      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL/gMAAAAJAAAAA"
-"QAAAGQAAAADAAAAZAAAAAIAAABkAAAACQAAAGQAAAAIAAAAZAAAAAUAAABkAAAABAAAAGQAAAAHAA"
-"AAZAAAAAYAAABkAAAA2gAAAAsBAAABAAAAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAAC2AAA"
+      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL/gMAAAAJAAAAC"
+"AAAAGQAAAAJAAAAZAAAAAYAAABkAAAABwAAAGQAAAAEAAAAZAAAAAUAAABkAAAAAgAAAGQAAAADAA"
+"AAZAAAAAEAAABkAAAHgAAAAAsBAAABAAAAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAAC2AAA"
 "AAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAA"
 "AAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAA"
-"AAkAAAAAQAAAAAAAAPoAAAAACQ="
+"AbKAAAAAQAAAAAAAAPoAAAAACQ="
       PlotPalettes  "AAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
       Axes          "1"
       TimeRange     "0.0"
@@ -5644,20 +5953,21 @@ Plecs {
       Position      [1995, 170]
       Direction     up
       Flipped       off
-      Location      [0, 23; 1920, 1012]
-      State         "AAAA/wAAAAD9AAAAAgAAAAAAAAF0AAADwvwCAAAAAfsAAAAUAEQAYQB0A"
+      LabelPosition south
+      Location      [0, 27; 1920, 1016]
+      State         "AAAA/wAAAAD9AAAAAgAAAAAAAAHWAAADwvwCAAAAAfsAAAAUAEQAYQB0A"
 "GEAVwBpAGQAZwBlAHQBAAAALwAAA8IAAABbAP///wAAAAEAAAB4AAADwvwCAAAAA/sAAAAQAFoAbw"
 "BvAG0AQQByAGUAYQEAAAAvAAADJwAAADQA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAA"
-"A/////wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMBAAADWgAAAJcAAABmAP///wAABYwAAAPCAAAA"
+"A/////wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMBAAADWgAAAJcAAABmAP///wAABSoAAAPCAAAA"
 "BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
 "AAAAA=="
       SavedViews    "AAAAAgAAAAA="
       HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL/gMAAAAJAAAAA"
-"wAAAE8AAAABAAAATwAAAAYAAABOAAAABwAAAE4AAAAEAAAATgAAAAUAAABOAAAACAAAAE4AAAAJAA"
-"AATgAAAAIAAABOAAABdAAAAAsBAAABAAAAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAAC0AAA"
+"gAAAE4AAAADAAAATwAAAAgAAABOAAAACQAAAE4AAAAEAAAATgAAAAUAAABOAAAABgAAAE4AAAAHAA"
+"AATgAAAAEAAABPAAAB1gAAAAsBAAABAAAAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAAC0AAA"
 "AAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAA"
 "AAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAA"
-"ADAAAAAAQAAAAAAAAPoAAAAACQ="
+"AEiAAAAAQAAAAAAAAPoAAAAACQ="
       PlotPalettes  "AAAAAQAAAAMAAAABAAAAAwAAAAEC//8u4P//zMwAAAAAAAEC//8AAP///"
 "/8AAAAAAAEC//9PsP////8AAAAAAAMAAAABAAAAAAEAAAAAAQAAAAADAAAAAQAAAAEAAAABAAAAAQ"
 "AAAAEAAAABAAAAAwAAAAEAAAAAAQAAAAABAAAAAAMAAAABP/AAAAAAAAAAAAABQAgAAAAAAAAAAAA"
@@ -5707,17 +6017,18 @@ Plecs {
       Position      [1410, 180]
       Direction     up
       Flipped       off
-      Location      [384, 143; 1920, 916]
-      State         "AAAA/wAAAAD9AAAAAgAAAAAAAAF0AAAC6vwCAAAAAfsAAAAUAEQAYQB0A"
-"GEAVwBpAGQAZwBlAHQBAAAALwAAAuoAAABbAP///wAAAAEAAACWAAAC6vwCAAAAA/sAAAAQAFoAbw"
-"BvAG0AQQByAGUAYQEAAAAvAAACawAAADQA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAA"
-"A/////wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMBAAACngAAAHsAAABmAP///wAAA+4AAALqAAAA"
+      LabelPosition south
+      Location      [0, 27; 1920, 1016]
+      State         "AAAA/wAAAAD9AAAAAgAAAAAAAAF0AAADwvwCAAAAAfsAAAAUAEQAYQB0A"
+"GEAVwBpAGQAZwBlAHQBAAAALwAAA8IAAABbAP///wAAAAEAAACWAAADwvwCAAAAA/sAAAAQAFoAbw"
+"BvAG0AQQByAGUAYQEAAAAvAAADHwAAADQA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAA"
+"A/////wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMBAAADUgAAAJ8AAABmAP///wAABW4AAAPCAAAA"
 "BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
 "AAAAA=="
       SavedViews    "AAAAAgAAAAA="
       HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL/gMAAAAJAAAAC"
-"QAAAE4AAAAIAAAATgAAAAEAAABPAAAAAwAAAE8AAAACAAAATgAAAAUAAABOAAAABAAAAE4AAAAHAA"
-"AATgAAAAYAAABOAAABdAAAAAsBAAABAAAAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAAC0AAA"
+"QAAAE4AAAAIAAAATgAAAAcAAABOAAAABgAAAE4AAAAFAAAATgAAAAQAAABOAAAAAwAAAE8AAAACAA"
+"AATgAAAAEAAABPAAABdAAAAAsBAAABAAAAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAAC0AAA"
 "AAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAA"
 "AAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAA"
 "ADAAAAAAQAAAAAAAAPoAAAAACQ="
@@ -5770,6 +6081,7 @@ Plecs {
       Position      [1110, 320]
       Direction     left
       Flipped       off
+      LabelPosition south
     }
     Component {
       Type          Display
@@ -5778,9 +6090,8 @@ Plecs {
       Position      [670, 390]
       Direction     up
       Flipped       off
+      LabelPosition south
       Frame         [-31, -11; 31, 11]
-      LabelPosition [0, 14]
-      LabelAlign    up
       Parameter {
         Variable      "Notation"
         Value         "1"
@@ -5799,9 +6110,8 @@ Plecs {
       Position      [2035, 440]
       Direction     up
       Flipped       off
+      LabelPosition south
       Frame         [-31, -11; 31, 11]
-      LabelPosition [0, 14]
-      LabelAlign    up
       Parameter {
         Variable      "Notation"
         Value         "1"
@@ -5820,6 +6130,7 @@ Plecs {
       Position      [1460, 320]
       Direction     left
       Flipped       off
+      LabelPosition south
     }
     Component {
       Type          SignalMux
@@ -5828,6 +6139,7 @@ Plecs {
       Position      [1370, 180]
       Direction     right
       Flipped       off
+      LabelPosition south
       Parameter {
         Variable      "Width"
         Value         "2"
@@ -5841,6 +6153,17 @@ Plecs {
       Position      [1325, 55]
       Direction     right
       Flipped       off
+      LabelPosition south
+      Probe {
+        Component     "FET2"
+        Path          ""
+        Signals       {"MOSFET current"}
+      }
+      Probe {
+        Component     "D2"
+        Path          ""
+        Signals       {"Diode current"}
+      }
     }
     Component {
       Type          Scope
@@ -5849,6 +6172,7 @@ Plecs {
       Position      [1535, 80]
       Direction     up
       Flipped       off
+      LabelPosition south
       Location      [0, 23; 1536, 796]
       State         "AAAA/wAAAAD9AAAAAgAAAAEAAAAAAAAAAPwCAAAAA/sAAAAQAFoAbwBvA"
 "G0AQQByAGUAYQAAAAAA/////wAAAG4A////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAAA//"
@@ -5931,6 +6255,7 @@ Plecs {
       Position      [1460, 140]
       Direction     up
       Flipped       off
+      LabelPosition east
       Parameter {
         Variable      "K"
         Value         "-1"
@@ -5954,6 +6279,7 @@ Plecs {
       Position      [725, 275]
       Direction     up
       Flipped       off
+      LabelPosition east
       Parameter {
         Variable      "Ron"
         Value         "0"
@@ -5987,6 +6313,7 @@ Plecs {
       Position      [765, 275]
       Direction     down
       Flipped       off
+      LabelPosition east
       Parameter {
         Variable      "Vf"
         Value         "0"
@@ -6020,6 +6347,7 @@ Plecs {
       Position      [1510, 280]
       Direction     up
       Flipped       off
+      LabelPosition east
       Parameter {
         Variable      "Ron"
         Value         "0"
@@ -6053,6 +6381,7 @@ Plecs {
       Position      [1550, 280]
       Direction     down
       Flipped       off
+      LabelPosition east
       Parameter {
         Variable      "Vf"
         Value         "0"
@@ -6086,6 +6415,7 @@ Plecs {
       Position      [1480, 55]
       Direction     right
       Flipped       off
+      LabelPosition south
       Parameter {
         Variable      "Width"
         Value         "2"
@@ -6099,6 +6429,7 @@ Plecs {
       Position      [1415, 70]
       Direction     right
       Flipped       off
+      LabelPosition south
       Parameter {
         Variable      "K"
         Value         "-1"
@@ -6122,6 +6453,7 @@ Plecs {
       Position      [1365, 55]
       Direction     right
       Flipped       on
+      LabelPosition south
       Parameter {
         Variable      "Width"
         Value         "2"
@@ -6135,6 +6467,12 @@ Plecs {
       Position      [865, 790]
       Direction     right
       Flipped       off
+      LabelPosition south
+      Probe {
+        Component     "La"
+        Path          "Transformador"
+        Signals       {"Inductor voltage", "Inductor current"}
+      }
     }
     Component {
       Type          Scope
@@ -6143,7 +6481,8 @@ Plecs {
       Position      [1005, 790]
       Direction     up
       Flipped       off
-      Location      [1920, 21; 3840, 1010]
+      LabelPosition south
+      Location      [0, 27; 1920, 1016]
       State         "AAAA/wAAAAD9AAAAAgAAAAEAAAAAAAAAAPwCAAAAA/sAAAAQAFoAbwBvA"
 "G0AQQByAGUAYQAAAAAA/////wAAAFwA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAAA//"
 "///wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMAAAAAAP////8AAABmAP///wAAAAMAAAeAAAAAffw"
@@ -6151,19 +6490,19 @@ Plecs {
 "BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
 "AAAAA=="
       SavedViews    "AAAAAgAAAAA="
-      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL+AMAAAAHAAAAA"
-"wAAAH0AAAAGAAAAfQAAAAcAAAB9AAAABAAAAH0AAAAFAAAAfQAAAAgAAAB9AAAACQAAAH0AAAeAAA"
-"AACwEAAAEAAAAAAAAAAAAAAABk/////wAAAIEAAAAAAAAACwAAAKMAAAABAAAAAAAAAH0AAAABAAA"
-"AAAAAAH0AAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAB"
-"AAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAABeMAAAABAAAAAAAAA+gAA"
-"AAAJA=="
+      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL/gMAAAAJAAAAB"
+"AAAAH0AAAAFAAAAfQAAAAYAAAB9AAAABwAAAH0AAAABAAAAfQAAAAIAAAB9AAAAAwAAAH0AAAAIAA"
+"AAfQAAAAkAAAB9AAAHgAAAAAsBAAABAAAAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAACjAAA"
+"AAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAA"
+"AAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAA"
+"AbdAAAAAQAAAAAAAAPoAAAAACQ="
       PlotPalettes  "AAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAA"
 "AEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
       Axes          "2"
       TimeRange     "0.0"
       ScrollingMode "1"
       SingleTimeAxis "1"
-      Open          "1"
+      Open          "0"
       Ts            "-1"
       SampleLimit   "0"
       XAxisLabel    ""
@@ -6225,6 +6564,7 @@ Plecs {
       Position      [940, 790]
       Direction     right
       Flipped       on
+      LabelPosition south
       Parameter {
         Variable      "Width"
         Value         "2"
@@ -6238,6 +6578,7 @@ Plecs {
       Position      [610, 170]
       Direction     up
       Flipped       off
+      LabelPosition south
       Location      [1920, 21; 3840, 1010]
       State         "AAAA/wAAAAD9AAAAAgAAAAEAAAAAAAAAAPwCAAAAA/sAAAAQAFoAbwBvA"
 "G0AQQByAGUAYQAAAAAA/////wAAADQA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAAA//"
@@ -6295,17 +6636,29 @@ Plecs {
       Type          PlecsProbe
       Name          "Probe11"
       Show          on
-      Position      [1700, 760]
+      Position      [1585, 880]
       Direction     right
       Flipped       off
+      LabelPosition south
+      Probe {
+        Component     "FETD3"
+        Path          ""
+        Signals       {"Device current"}
+      }
+      Probe {
+        Component     "FETD9"
+        Path          ""
+        Signals       {"Device current"}
+      }
     }
     Component {
       Type          Scope
       Name          "Corrente P e S"
       Show          on
-      Position      [1785, 760]
+      Position      [1670, 880]
       Direction     up
       Flipped       off
+      LabelPosition south
       Location      [1920, 21; 3840, 1010]
       State         "AAAA/wAAAAD9AAAAAgAAAAAAAAF0AAADwvwCAAAAAfsAAAAUAEQAYQB0A"
 "GEAVwBpAGQAZwBlAHQBAAAALwAAA8IAAABbAP///wAAAAEAAACWAAADwvwCAAAAA/sAAAAQAFoAbw"
@@ -6329,6 +6682,633 @@ Plecs {
       ScrollingMode "1"
       SingleTimeAxis "1"
       Open          "0"
+      Ts            "-1"
+      SampleLimit   "0"
+      XAxisLabel    ""
+      ShowLegend    "1"
+      Axis {
+        Name          ""
+        AutoScale     1
+        MinValue      0
+        MaxValue      1
+        Signals       {}
+        SignalTypes   [ ]
+        Untangle      0
+        KeepBaseline  off
+        BaselineValue 0
+      }
+      Fourier {
+        SingleXAxis       on
+        AxisLabel         "Frequency"
+        Scaling           0
+        PhaseDisplay      0
+        ShowFourierLegend off
+        Axis {
+          Name          ""
+          AutoScale     1
+          MinValue      0
+          MaxValue      1
+          Signals       {}
+          Untangle      0
+          KeepBaseline  off
+          BaselineValue 0
+        }
+      }
+    }
+    Component {
+      Type          PeriodicAverage
+      Name          "Periodic Average"
+      Show          on
+      Position      [1690, 790]
+      Direction     up
+      Flipped       off
+      LabelPosition south
+      Parameter {
+        Variable      "T_average"
+        Value         "1/fs"
+        Show          off
+      }
+    }
+    Component {
+      Type          PlecsProbe
+      Name          "Probe"
+      Show          on
+      Position      [1575, 790]
+      Direction     right
+      Flipped       off
+      LabelPosition south
+      Probe {
+        Component     "V_dc1"
+        Path          ""
+        Signals       {"Source power"}
+      }
+    }
+    Component {
+      Type          Display
+      Name          "Display2"
+      Show          on
+      Position      [1790, 790]
+      Direction     up
+      Flipped       off
+      LabelPosition south
+      Frame         [-41, -11; 41, 11]
+      Parameter {
+        Variable      "Notation"
+        Value         "1"
+        Show          off
+      }
+      Parameter {
+        Variable      "Precision"
+        Value         "4"
+        Show          off
+      }
+    }
+    Component {
+      Type          Scope
+      Name          "Scope"
+      Show          on
+      Position      [1805, 745]
+      Direction     up
+      Flipped       off
+      LabelPosition south
+      Location      [0, 27; 1920, 1016]
+      State         "AAAA/wAAAAD9AAAAAgAAAAEAAAAAAAAAAPwCAAAAA/sAAAAQAFoAbwBvA"
+"G0AQQByAGUAYQAAAAAA/////wAAADQA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAAA//"
+"///wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMAAAAAAP////8AAABmAP///wAAAAMAAAAAAAAAAPw"
+"BAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQAAAAAAP////8AAABQAP///wAAB4AAAAPCAAAA"
+"BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
+"AAAAA=="
+      SavedViews    "AAAAAgAAAAA="
+      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL/gMAAAAJAAAAC"
+"QAAAGQAAAAIAAAAZAAAAAcAAABkAAAABgAAAGQAAAAFAAAAZAAAAAQAAABkAAAAAwAAAGQAAAACAA"
+"AAZAAAAAEAAABkAAAAuQAAAAsBAAABAAAAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAACVAAA"
+"AAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAA"
+"AAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAA"
+"AAkAAAAAQAAAAAAAAPoAAAAACQ="
+      PlotPalettes  "AAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      Axes          "1"
+      TimeRange     "0.0"
+      ScrollingMode "1"
+      SingleTimeAxis "1"
+      Open          "0"
+      Ts            "-1"
+      SampleLimit   "0"
+      XAxisLabel    ""
+      ShowLegend    "1"
+      Axis {
+        Name          ""
+        AutoScale     1
+        MinValue      0
+        MaxValue      1
+        Signals       {}
+        SignalTypes   [ ]
+        Untangle      0
+        KeepBaseline  off
+        BaselineValue 0
+      }
+      Fourier {
+        SingleXAxis       on
+        AxisLabel         "Frequency"
+        Scaling           0
+        PhaseDisplay      0
+        ShowFourierLegend off
+        Axis {
+          Name          ""
+          AutoScale     1
+          MinValue      0
+          MaxValue      1
+          Signals       {}
+          Untangle      0
+          KeepBaseline  off
+          BaselineValue 0
+        }
+      }
+    }
+    Component {
+      Type          Gain
+      Name          "Gain2"
+      Show          on
+      Position      [1630, 790]
+      Direction     right
+      Flipped       off
+      LabelPosition south
+      Parameter {
+        Variable      "K"
+        Value         "-1"
+        Show          off
+      }
+      Parameter {
+        Variable      "Multiplication"
+        Value         "1"
+        Show          off
+      }
+      Parameter {
+        Variable      "DataType"
+        Value         "10"
+        Show          off
+      }
+    }
+    Component {
+      Type          Scope
+      Name          "Scope1"
+      Show          on
+      Position      [1400, 500]
+      Direction     up
+      Flipped       off
+      LabelPosition south
+      Location      [0, 23; 1920, 1012]
+      State         "AAAA/wAAAAD9AAAAAgAAAAEAAAAAAAAAAPwCAAAAA/sAAAAQAFoAbwBvA"
+"G0AQQByAGUAYQAAAAAA/////wAAAFwA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAAA//"
+"///wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMAAAAAAP////8AAABmAP///wAAAAMAAAeAAAAAffw"
+"BAAAAAfsAAAAUAEQAYQB0AGEAVwBpAGQAZwBlAHQBAAAAAAAAB4AAAABQAP///wAAB4AAAANBAAAA"
+"BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
+"AAAAA=="
+      SavedViews    "AAAAAgAAAAA="
+      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL8AMAAAAGAAAAC"
+"AAAAGQAAAAJAAAAZAAAAAQAAABkAAAABQAAAGQAAAAGAAAAZAAAAAcAAABkAAAHgAAAAAsBAAABAA"
+"AAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAACYAAAAAQAAAAAAAABkAAAAAQAAAAAAAABkAAA"
+"AAQAAAAAAAABkAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAA"
+"AAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAW8AAAAAQAAAAAAAAPoAAAAACQ="
+      PlotPalettes  "AAAAAQAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAA"
+"AEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+      Axes          "2"
+      TimeRange     "0.0"
+      ScrollingMode "1"
+      SingleTimeAxis "1"
+      Open          "0"
+      Ts            "-1"
+      SampleLimit   "0"
+      XAxisLabel    ""
+      ShowLegend    "1"
+      Axis {
+        Name          ""
+        AutoScale     1
+        MinValue      0
+        MaxValue      1
+        Signals       {}
+        SignalTypes   [ ]
+        Untangle      0
+        KeepBaseline  off
+        BaselineValue 0
+      }
+      Axis {
+        Name          ""
+        AutoScale     1
+        MinValue      0
+        MaxValue      1
+        Signals       {}
+        SignalTypes   [ ]
+        Untangle      0
+        KeepBaseline  off
+        BaselineValue 0
+      }
+      Fourier {
+        SingleXAxis       on
+        AxisLabel         "Frequency"
+        Scaling           0
+        PhaseDisplay      0
+        ShowFourierLegend off
+        Axis {
+          Name          ""
+          AutoScale     1
+          MinValue      0
+          MaxValue      1
+          Signals       {}
+          Untangle      0
+          KeepBaseline  off
+          BaselineValue 0
+        }
+        Axis {
+          Name          ""
+          AutoScale     1
+          MinValue      0
+          MaxValue      1
+          Signals       {}
+          Untangle      0
+          KeepBaseline  off
+          BaselineValue 0
+        }
+      }
+    }
+    Component {
+      Type          From
+      Name          "From12"
+      Show          off
+      Position      [1350, 485]
+      Direction     right
+      Flipped       off
+      LabelPosition south
+      Parameter {
+        Variable      "Tag"
+        Value         "P1"
+        Show          off
+      }
+      Parameter {
+        Variable      "Visibility"
+        Value         "1"
+        Show          off
+      }
+    }
+    Component {
+      Type          From
+      Name          "From13"
+      Show          off
+      Position      [1350, 515]
+      Direction     right
+      Flipped       off
+      LabelPosition south
+      Parameter {
+        Variable      "Tag"
+        Value         "P4"
+        Show          off
+      }
+      Parameter {
+        Variable      "Visibility"
+        Value         "1"
+        Show          off
+      }
+    }
+    Component {
+      Type          Display
+      Name          base64 "QXRyYXNvL2F2YW7Dp28gcXVlIHBvZGUgZ2VyYXI="
+      Show          on
+      Position      [1715, 620]
+      Direction     up
+      Flipped       off
+      LabelPosition south
+      Frame         [-41, -11; 41, 11]
+      Parameter {
+        Variable      "Notation"
+        Value         "1"
+        Show          off
+      }
+      Parameter {
+        Variable      "Precision"
+        Value         "4"
+        Show          off
+      }
+    }
+    Component {
+      Type          Constant
+      Name          "Constant3"
+      Show          on
+      Position      [1595, 620]
+      Direction     right
+      Flipped       off
+      LabelPosition south
+      Frame         [-25, -10; 25, 10]
+      Parameter {
+        Variable      "Value"
+        Value         "ang_db"
+        Show          off
+      }
+      Parameter {
+        Variable      "DataType"
+        Value         "10"
+        Show          off
+      }
+    }
+    Component {
+      Type          Display
+      Name          "Dead Time"
+      Show          on
+      Position      [1715, 580]
+      Direction     up
+      Flipped       off
+      LabelPosition south
+      Frame         [-41, -11; 41, 11]
+      Parameter {
+        Variable      "Notation"
+        Value         "2"
+        Show          off
+      }
+      Parameter {
+        Variable      "Precision"
+        Value         "4"
+        Show          off
+      }
+    }
+    Component {
+      Type          Constant
+      Name          "Constant4"
+      Show          on
+      Position      [1595, 580]
+      Direction     right
+      Flipped       off
+      LabelPosition south
+      Frame         [-25, -10; 25, 10]
+      Parameter {
+        Variable      "Value"
+        Value         "tdb_real"
+        Show          off
+      }
+      Parameter {
+        Variable      "DataType"
+        Value         "10"
+        Show          off
+      }
+    }
+    Component {
+      Type          Display
+      Name          "Angulo atrasado/adiantado"
+      Show          on
+      Position      [1715, 705]
+      Direction     up
+      Flipped       off
+      LabelPosition south
+      Frame         [-41, -11; 41, 11]
+      Parameter {
+        Variable      "Notation"
+        Value         "1"
+        Show          off
+      }
+      Parameter {
+        Variable      "Precision"
+        Value         "4"
+        Show          off
+      }
+    }
+    Component {
+      Type          Constant
+      Name          "Constant5"
+      Show          on
+      Position      [1595, 705]
+      Direction     right
+      Flipped       off
+      LabelPosition south
+      Frame         [-25, -10; 25, 10]
+      Parameter {
+        Variable      "Value"
+        Value         "phi_deg"
+        Show          off
+      }
+      Parameter {
+        Variable      "DataType"
+        Value         "10"
+        Show          off
+      }
+    }
+    Component {
+      Type          Display
+      Name          "Relacao tensao"
+      Show          on
+      Position      [1715, 540]
+      Direction     up
+      Flipped       off
+      LabelPosition south
+      Frame         [-41, -11; 41, 11]
+      Parameter {
+        Variable      "Notation"
+        Value         "1"
+        Show          off
+      }
+      Parameter {
+        Variable      "Precision"
+        Value         "4"
+        Show          off
+      }
+    }
+    Component {
+      Type          Constant
+      Name          "Constant6"
+      Show          on
+      Position      [1595, 540]
+      Direction     right
+      Flipped       off
+      LabelPosition south
+      Frame         [-25, -10; 25, 10]
+      Parameter {
+        Variable      "Value"
+        Value         "d"
+        Show          off
+      }
+      Parameter {
+        Variable      "DataType"
+        Value         "10"
+        Show          off
+      }
+    }
+    Component {
+      Type          Display
+      Name          "Angulo ideal"
+      Show          on
+      Position      [1715, 665]
+      Direction     up
+      Flipped       off
+      LabelPosition south
+      Frame         [-41, -11; 41, 11]
+      Parameter {
+        Variable      "Notation"
+        Value         "1"
+        Show          off
+      }
+      Parameter {
+        Variable      "Precision"
+        Value         "4"
+        Show          off
+      }
+    }
+    Component {
+      Type          Constant
+      Name          "Constant7"
+      Show          on
+      Position      [1595, 665]
+      Direction     right
+      Flipped       off
+      LabelPosition south
+      Frame         [-25, -10; 25, 10]
+      Parameter {
+        Variable      "Value"
+        Value         "phi_ideal"
+        Show          off
+      }
+      Parameter {
+        Variable      "DataType"
+        Value         "10"
+        Show          off
+      }
+    }
+    Component {
+      Type          PlecsProbe
+      Name          "Probe4"
+      Show          on
+      Position      [1090, 130]
+      Direction     right
+      Flipped       off
+      LabelPosition south
+      Probe {
+        Component     "La"
+        Path          "Transformador"
+        Signals       {"Inductor current"}
+      }
+      Probe {
+        Component     "Llka_p"
+        Path          "Transformador"
+        Signals       {"Inductor current"}
+      }
+      Probe {
+        Component     "Llka_s"
+        Path          "Transformador"
+        Signals       {"Inductor current"}
+      }
+      Probe {
+        Component     "FETD1"
+        Path          ""
+        Signals       {"Device current"}
+      }
+      Probe {
+        Component     "FETD7"
+        Path          ""
+        Signals       {"Device current"}
+      }
+    }
+    Component {
+      Type          Scope
+      Name          "Scope14"
+      Show          on
+      Position      [1165, 130]
+      Direction     up
+      Flipped       off
+      LabelPosition south
+      Location      [1920, 21; 3840, 1010]
+      State         "AAAA/wAAAAD9AAAAAgAAAAAAAAH5AAADwvwCAAAAAfsAAAAUAEQAYQB0A"
+"GEAVwBpAGQAZwBlAHQBAAAALwAAA8IAAABbAP///wAAAAEAAACWAAADwvwCAAAAA/sAAAAQAFoAbw"
+"BvAG0AQQByAGUAYQEAAAAvAAADIQAAADQA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAA"
+"A/////wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMBAAADVAAAAJ0AAABmAP///wAABOkAAAPCAAAA"
+"BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
+"AAAAA=="
+      SavedViews    "AAAAAgAAAAA="
+      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAAL+AIAAAAGAAAAC"
+"QAAAE4AAAAGAAAATgAAAAcAAABOAAAABAAAAE4AAAAFAAAATgAAAAMAAABPAAAB+QAAAAsBAAABAA"
+"AAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAAC3AAAAAQAAAAAAAABPAAAAAQAAAAAAAABOAAA"
+"AAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAA"
+"AAAAAQAAAAAAAABOAAAAAQAAAAAAAAAAAAAAAQAAAAAAAABXAAAAAQAAAAAAAAPoAAAAACQ="
+      PlotPalettes  "AAAAAQAAAAMAAAABAAAAAwAAAAEC//8u4P//zMwAAAAAAAEC//8AAP///"
+"/8AAAAAAAEC//9PsP////8AAAAAAAMAAAABAAAAAAEAAAAAAQAAAAADAAAAAQAAAAEAAAABAAAAAQ"
+"AAAAEAAAABAAAAAwAAAAEAAAAAAQAAAAABAAAAAAMAAAABP/AAAAAAAAAAAAABQAgAAAAAAAAAAAA"
+"BQAgAAAAAAAAAAAADAAAAAQAAAAABAAAAAAEA"
+      Axes          "1"
+      TimeRange     "0.0"
+      ScrollingMode "1"
+      SingleTimeAxis "1"
+      Open          "1"
+      Ts            "-1"
+      SampleLimit   "0"
+      XAxisLabel    ""
+      ShowLegend    "1"
+      Axis {
+        Name          ""
+        AutoScale     1
+        MinValue      0
+        MaxValue      1
+        Signals       {}
+        SignalTypes   [ ]
+        Untangle      0
+        KeepBaseline  off
+        BaselineValue 0
+      }
+      Fourier {
+        SingleXAxis       on
+        AxisLabel         "Frequency"
+        Scaling           0
+        PhaseDisplay      0
+        ShowFourierLegend off
+        Axis {
+          Name          ""
+          AutoScale     1
+          MinValue      0
+          MaxValue      1
+          Signals       {}
+          Untangle      0
+          KeepBaseline  off
+          BaselineValue 0
+        }
+      }
+    }
+    Component {
+      Type          PlecsProbe
+      Name          "Probe5"
+      Show          on
+      Position      [1090, 80]
+      Direction     right
+      Flipped       off
+      LabelPosition south
+      Probe {
+        Component     "V_dc1"
+        Path          ""
+        Signals       {"Source power"}
+      }
+    }
+    Component {
+      Type          Scope
+      Name          "Scope15"
+      Show          on
+      Position      [1165, 80]
+      Direction     up
+      Flipped       off
+      LabelPosition south
+      Location      [1761, 311; 3681, 1310]
+      State         "AAAA/wAAAAD9AAAAAgAAAAAAAANZAAADzPwCAAAAAfsAAAAUAEQAYQB0A"
+"GEAVwBpAGQAZwBlAHQBAAAALwAAA8wAAABbAP///wAAAAEAAACWAAADzPwCAAAAA/sAAAAQAFoAbw"
+"BvAG0AQQByAGUAYQEAAAAvAAADLQAAADQA////+wAAABQAUwBhAHYAZQBkAFYAaQBlAHcAcwAAAAA"
+"A/////wAAAGYA////+wAAAAwAVAByAGEAYwBlAHMBAAADYAAAAJsAAABmAP///wAAA4kAAAPMAAAA"
+"BAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAOAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAA"
+"AAAAA=="
+      SavedViews    "AAAAAgAAAAA="
+      HeaderState   "AAAA/wAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAAALeAMAAAAGAAAAC"
+"AAAAE4AAAAJAAAATgAAAAYAAABOAAAABAAAAE4AAAAFAAAATgAAAAMAAABPAAADWQAAAAsBAAABAA"
+"AAAAAAAAAAAAAAZP////8AAACBAAAAAAAAAAsAAACoAAAAAQAAAAAAAABPAAAAAQAAAAAAAABOAAA"
+"AAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAABO"
+"AAAAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAHGAAAAAQAAAAAAAAPoAAAAACQ="
+      PlotPalettes  "AAAAAQAAAAMAAAABAAAAAwAAAAEC//8u4P//zMwAAAAAAAEC//8AAP///"
+"/8AAAAAAAEC//9PsP////8AAAAAAAMAAAABAAAAAAEAAAAAAQAAAAADAAAAAQAAAAEAAAABAAAAAQ"
+"AAAAEAAAABAAAAAwAAAAEAAAAAAQAAAAABAAAAAAMAAAABP/AAAAAAAAAAAAABQAgAAAAAAAAAAAA"
+"BQAgAAAAAAAAAAAADAAAAAQAAAAABAAAAAAEA"
+      Axes          "1"
+      TimeRange     "0.0"
+      ScrollingMode "1"
+      SingleTimeAxis "1"
+      Open          "1"
       Ts            "-1"
       SampleLimit   "0"
       XAxisLabel    ""
@@ -6859,28 +7839,28 @@ Plecs {
       Type          Signal
       SrcComponent  "Corrente nos indutores1"
       SrcTerminal   1
-      DstComponent  "Scope10"
+      DstComponent  "indutor"
       DstTerminal   1
     }
     Connection {
       Type          Signal
       SrcComponent  "Corrente nas magnetizantes"
       SrcTerminal   1
-      DstComponent  "Scope20"
+      DstComponent  "magnetizante"
       DstTerminal   1
     }
     Connection {
       Type          Signal
       SrcComponent  "Corrente secundario  trafo"
       SrcTerminal   1
-      DstComponent  "Scope1"
+      DstComponent  "secundario"
       DstTerminal   1
     }
     Connection {
       Type          Signal
       SrcComponent  "Corrente primario trafo"
       SrcTerminal   1
-      DstComponent  "Scope"
+      DstComponent  "primario"
       DstTerminal   1
     }
     Connection {
@@ -7069,6 +8049,100 @@ Plecs {
       DstComponent  "Corrente P e S"
       DstTerminal   1
     }
+    Connection {
+      Type          Signal
+      SrcComponent  "Periodic Average"
+      SrcTerminal   1
+      Points        [1725, 790]
+      Branch {
+        DstComponent  "Display2"
+        DstTerminal   1
+      }
+      Branch {
+        Points        [1725, 745]
+        DstComponent  "Scope"
+        DstTerminal   1
+      }
+    }
+    Connection {
+      Type          Signal
+      SrcComponent  "Probe"
+      SrcTerminal   1
+      DstComponent  "Gain2"
+      DstTerminal   1
+    }
+    Connection {
+      Type          Signal
+      SrcComponent  "Gain2"
+      SrcTerminal   2
+      DstComponent  "Periodic Average"
+      DstTerminal   2
+    }
+    Connection {
+      Type          Signal
+      SrcComponent  "From13"
+      SrcTerminal   1
+      Points        [1365, 515; 1365, 505]
+      DstComponent  "Scope1"
+      DstTerminal   2
+    }
+    Connection {
+      Type          Signal
+      SrcComponent  "From12"
+      SrcTerminal   1
+      Points        [1365, 485; 1365, 495]
+      DstComponent  "Scope1"
+      DstTerminal   1
+    }
+    Connection {
+      Type          Signal
+      SrcComponent  "Constant3"
+      SrcTerminal   1
+      DstComponent  base64 "QXRyYXNvL2F2YW7Dp28gcXVlIHBvZGUgZ2VyYXI="
+      DstTerminal   1
+    }
+    Connection {
+      Type          Signal
+      SrcComponent  "Constant4"
+      SrcTerminal   1
+      DstComponent  "Dead Time"
+      DstTerminal   1
+    }
+    Connection {
+      Type          Signal
+      SrcComponent  "Constant5"
+      SrcTerminal   1
+      DstComponent  "Angulo atrasado/adiantado"
+      DstTerminal   1
+    }
+    Connection {
+      Type          Signal
+      SrcComponent  "Constant6"
+      SrcTerminal   1
+      DstComponent  "Relacao tensao"
+      DstTerminal   1
+    }
+    Connection {
+      Type          Signal
+      SrcComponent  "Constant7"
+      SrcTerminal   1
+      DstComponent  "Angulo ideal"
+      DstTerminal   1
+    }
+    Connection {
+      Type          Signal
+      SrcComponent  "Probe4"
+      SrcTerminal   1
+      DstComponent  "Scope14"
+      DstTerminal   1
+    }
+    Connection {
+      Type          Signal
+      SrcComponent  "Probe5"
+      SrcTerminal   1
+      DstComponent  "Scope15"
+      DstTerminal   1
+    }
     Annotation {
       Name          "<html><body>\n<p>YY</p>\n<p>y1 = 0;</p>\n<p>y2 = 0;</p>\n"
 "<p>y3 = 0;</p>\n<p> </p>\n<p>YD</p>\n<p>y1 = 0;</p>\n<p>y2 = 0;</p>\n<p>y3 = "
@@ -7107,180 +8181,5 @@ Plecs {
       Name          "<html><body>\n<p>checar ZVS secundario</p></body></html>"
       Position      [1310, 895]
     } 
-  }
-  ProbeBlock {
-    Tag           "dab3p_ideal/Corrente nas magnetizantes"
-    Probe {
-      Component     "Lma"
-      Path          "Transformador"
-      Signals       {"Inductor current"}
-    }
-    Probe {
-      Component     "Lmb"
-      Path          "Transformador"
-      Signals       {"Inductor current"}
-    }
-    Probe {
-      Component     "Lmc"
-      Path          "Transformador"
-      Signals       {"Inductor current"}
-    }
-  }
-  ProbeBlock {
-    Tag           "dab3p_ideal/Corrente nos indutores1"
-    Probe {
-      Component     "La"
-      Path          "Transformador"
-      Signals       {"Inductor current"}
-    }
-    Probe {
-      Component     "Lb"
-      Path          "Transformador"
-      Signals       {"Inductor current"}
-    }
-    Probe {
-      Component     "Lc"
-      Path          "Transformador"
-      Signals       {"Inductor current"}
-    }
-  }
-  ProbeBlock {
-    Tag           "dab3p_ideal/Corrente primario trafo"
-    Probe {
-      Component     "Llka_p"
-      Path          "Transformador"
-      Signals       {"Inductor current"}
-    }
-    Probe {
-      Component     "Llkb_p"
-      Path          "Transformador"
-      Signals       {"Inductor current"}
-    }
-    Probe {
-      Component     "Llkc_p"
-      Path          "Transformador"
-      Signals       {"Inductor current"}
-    }
-  }
-  ProbeBlock {
-    Tag           "dab3p_ideal/Corrente secundario  trafo"
-    Probe {
-      Component     "Llka_s"
-      Path          "Transformador"
-      Signals       {"Inductor current"}
-    }
-    Probe {
-      Component     "Llkb_s"
-      Path          "Transformador"
-      Signals       {"Inductor current"}
-    }
-    Probe {
-      Component     "Llkc_s"
-      Path          "Transformador"
-      Signals       {"Inductor current"}
-    }
-  }
-  ProbeBlock {
-    Tag           "dab3p_ideal/Probe10"
-    Probe {
-      Component     "FET2"
-      Path          ""
-      Signals       {"MOSFET current"}
-    }
-    Probe {
-      Component     "D2"
-      Path          ""
-      Signals       {"Diode current"}
-    }
-  }
-  ProbeBlock {
-    Tag           "dab3p_ideal/Probe11"
-    Probe {
-      Component     "FETD3"
-      Path          ""
-      Signals       {"Device current"}
-    }
-    Probe {
-      Component     "FETD9"
-      Path          ""
-      Signals       {"Device current"}
-    }
-  }
-  ProbeBlock {
-    Tag           "dab3p_ideal/Probe2"
-    Probe {
-      Component     "La"
-      Path          "Transformador"
-      Signals       {"Inductor voltage", "Inductor current"}
-    }
-  }
-  ProbeBlock {
-    Tag           "dab3p_ideal/Probe8"
-    Probe {
-      Component     "FET1"
-      Path          ""
-      Signals       {"MOSFET voltage", "MOSFET current"}
-    }
-  }
-  ProbeBlock {
-    Tag           "dab3p_ideal/Probe9"
-    Probe {
-      Component     "FET2"
-      Path          ""
-      Signals       {"MOSFET voltage", "MOSFET current"}
-    }
-  }
-  ProbeBlock {
-    Tag           "dab3p_ideal/Transformador/Probe"
-    Probe {
-      Component     "La"
-      Path          "Transformador"
-      Signals       {"Inductor current"}
-    }
-  }
-  ProbeBlock {
-    Tag           "dab3p_ideal/Transformador/Probe1"
-    Probe {
-      Component     "Llka_s"
-      Path          "Transformador"
-      Signals       {"Inductor current"}
-    }
-  }
-  ProbeBlock {
-    Tag           "dab3p_ideal/Transformador/Probe2"
-    Probe {
-      Component     "Llka_p"
-      Path          "Transformador"
-      Signals       {"Inductor current"}
-    }
-    Probe {
-      Component     "Llka_s"
-      Path          "Transformador"
-      Signals       {"Inductor current"}
-    }
-  }
-  ProbeBlock {
-    Tag           "dab3p_ideal/Transformador/Probe3"
-    Probe {
-      Component     "La"
-      Path          "Transformador"
-      Signals       {"Inductor voltage", "Inductor current"}
-    }
-  }
-  ProbeBlock {
-    Tag           "dab3p_ideal/Transformador/Probe6"
-    Probe {
-      Component     "Llka_p"
-      Path          "Transformador"
-      Signals       {"Inductor current"}
-    }
-  }
-  ProbeBlock {
-    Tag           "dab3p_ideal/Transformador/Probe7"
-    Probe {
-      Component     "Llka_s"
-      Path          "Transformador"
-      Signals       {"Inductor current"}
-    }
   }
 }

@@ -1197,3 +1197,250 @@ text(1500,400,'SS in both','Interpreter', 'Latex','FontSize', 14)
 
 file_name = append('figure\comparacoes\sozinho_',oDD.trafo,'.pdf');
 exportgraphics(gca,file_name,'ContentType','vector');
+
+%%
+
+Vi_num = 400;
+d_num = 1;
+fs_num = 100e3;
+Ldab_num = 61.5e-6;
+Ld1_num = 1.4e-6;
+n_num = 5/9;
+Ld2_num = Ld1_num*n_num*n_num;
+Lm_num = .7e-3;
+M_num = Lm_num*n_num;
+L1_num = Ld1_num + Lm_num;
+L2_num = Ld2_num + n_num*n_num*Lm_num;
+k_num = M_num/sqrt(L1_num.*L2_num);
+
+
+%pts experimentais testados
+pt_vo = [400, 300];
+pt_io = [10,    10];
+pt_po = pt_vo.*pt_io;
+io_offset = 0.5;
+po_offset = 200;
+
+%% calcular phi teorico
+syms Ptarget
+
+iDY.phi_target.f1 = matlabFunction(solve(d*Vi*iDY.iME.f1 == Ptarget,phi), 'vars', {L1,L2,Ldab,M,Vi,d,fs,Ptarget});
+iDY.phi_target.f2 = matlabFunction(solve(d*Vi*iDY.iME.f2 == Ptarget,phi), 'vars', {L1,L2,Ldab,M,Vi,d,fs,Ptarget});
+YY.phi_target.f1 = matlabFunction(solve(d*Vi*YY.iME.f1 == Ptarget,phi), 'vars', {L1,L2,Ldab,M,Vi,d,fs,Ptarget});
+YY.phi_target.f2 = matlabFunction(solve(d*Vi*YY.iME.f2 == Ptarget,phi), 'vars', {L1,L2,Ldab,M,Vi,d,fs,Ptarget});
+
+target = 2;
+opcoes = YY.phi_target.f1(L1_num,L2_num,Ldab_num,M_num,Vi_num,pt_vo(target)/400,fs_num,pt_po(target))*180/pi;
+opcoes(1)
+opcoes(2)
+opcoes = YY.phi_target.f2(L1_num,L2_num,Ldab_num,M_num,Vi_num,pt_vo(target)/400,fs_num,pt_po(target))*180/pi;
+opcoes(1)
+opcoes(2)
+%%
+
+n_10 = round(n_limit_10/5);
+
+figure
+hold on
+
+cmap = f_create_cmap(2, color2, color1);
+colormap(cmap)
+jetcustom = cmap;
+
+for ii=1:2
+    h = fill([1 1], [1 1],jetcustom(ii,:),'Edgecolor', 'none');
+    h.FaceAlpha = 0.5;
+    h.EdgeColor = jetcustom(ii,:);
+    h.LineWidth = 1.5;
+end
+
+YY.lim_p.f1 = ones(1,length(YY.vec_ph.f1)).*YY.fIp_eq.f1(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,YY.vec_ph.f1);
+YY.lim_s.f1 = ones(1,length(YY.vec_ph.f1)).*YY.fIs_eq.f1(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,YY.vec_ph.f1);
+YY.lim_pot.f1 = ones(1,length(YY.vec_ph.f1)).*YY.fpot_eq.f1(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,YY.vec_ph.f1);
+fill([YY.lim_pot.f1 fliplr(YY.lim_pot.f1)], [Vi_num*YY.lim_p.f1 fliplr(Vi_num*YY.lim_s.f1)],jetcustom(1,:), 'FaceAlpha', .3, 'EdgeColor', 'none');
+YY.lim_p.f2 = ones(1,length(YY.vec_ph.f2)).*YY.fIp_eq.f2(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,YY.vec_ph.f2);
+YY.lim_s.f2 = ones(1,length(YY.vec_ph.f2)).*YY.fIs_eq.f2(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,YY.vec_ph.f2);
+YY.lim_pot.f2 = ones(1,length(YY.vec_ph.f2)).*YY.fpot_eq.f2(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,YY.vec_ph.f2);
+fill([YY.lim_pot.f2 fliplr(YY.lim_pot.f2)], [Vi_num*YY.lim_p.f2 fliplr(Vi_num*YY.lim_s.f2)],jetcustom(1,:), 'FaceAlpha', .3, 'EdgeColor', 'none');
+plot(YY.lim_pot.f1,Vi_num*YY.lim_p.f1,'Color',jetcustom(1,:),'LineWidth',1.5)
+plot(YY.lim_pot.f2,Vi_num*YY.lim_p.f2,'Color',jetcustom(1,:),'LineWidth',1.5)
+plot(YY.lim_pot.f1,Vi_num*YY.lim_s.f1,'Color',jetcustom(1,:),'LineWidth',1.5)
+plot(YY.lim_pot.f2,Vi_num*YY.lim_s.f2,'Color',jetcustom(1,:),'LineWidth',1.5)
+xline(max(YY.lim_pot.f2),'Color',jetcustom(1,:),'LineWidth',1.5)
+    
+iDY.lim_p.f1 = ones(1,length(iDY.vec_ph.f1)).*iDY.fIp_eq.f1(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,iDY.vec_ph.f1);
+iDY.lim_s.f1 = ones(1,length(iDY.vec_ph.f1)).*iDY.fIs_eq.f1(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,iDY.vec_ph.f1);
+iDY.lim_pot.f1 = ones(1,length(iDY.vec_ph.f1)).*iDY.fpot_eq.f1(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,iDY.vec_ph.f1);
+fill([iDY.lim_pot.f1 fliplr(iDY.lim_pot.f1)], [Vi_num*iDY.lim_p.f1 fliplr(Vi_num*iDY.lim_s.f1)],jetcustom(2,:), 'FaceAlpha', .5, 'EdgeColor', 'none');
+iDY.lim_p.f2 = ones(1,length(iDY.vec_ph.f2)).*iDY.fIp_eq.f2(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,iDY.vec_ph.f2);
+iDY.lim_s.f2 = ones(1,length(iDY.vec_ph.f2)).*iDY.fIs_eq.f2(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,iDY.vec_ph.f2);
+iDY.lim_pot.f2 = ones(1,length(iDY.vec_ph.f2)).*iDY.fpot_eq.f2(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,iDY.vec_ph.f2);
+fill([iDY.lim_pot.f2 fliplr(iDY.lim_pot.f2)], [Vi_num*iDY.lim_p.f2 fliplr(Vi_num*iDY.lim_s.f2)],jetcustom(2,:), 'FaceAlpha', .5, 'EdgeColor', 'none');
+plot(iDY.lim_pot.f1,Vi_num*iDY.lim_p.f1,'Color',jetcustom(2,:),'LineWidth',1.5)
+plot(iDY.lim_pot.f2,Vi_num*iDY.lim_p.f2,'Color',jetcustom(2,:),'LineWidth',1.5)
+plot(iDY.lim_pot.f1,Vi_num*iDY.lim_s.f1,'Color',jetcustom(2,:),'LineWidth',1.5)
+plot(iDY.lim_pot.f2,Vi_num*iDY.lim_s.f2,'Color',jetcustom(2,:),'LineWidth',1.5)
+xline(max(iDY.lim_pot.f2),'Color',jetcustom(2,:),'LineWidth',1.5)
+
+scatter(pt_po,pt_vo,'filled','square','MarkerEdgeColor','k','MarkerFaceColor','k')
+text(pt_po(1)+po_offset,pt_vo(1),'$\leftarrow$ A','Interpreter', 'Latex','FontSize', 16) 
+text(pt_po(2)+po_offset,pt_vo(2),'$\leftarrow$ B','Interpreter', 'Latex','FontSize', 16) 
+
+hold off
+ylim([0 1.2*Vi_num])
+xlim([0 5000])
+legend({'YY','iDY'},'Location','southwest','FontSize', 14)
+grid on
+grid minor
+xlabel('$P_o\,$[W]')
+ylabel('$V_o\,$[V]')
+set(gca, 'FontSize', 20)
+
+file_name = append('figure\comparacoes\pontos_testados_Po_',YY.trafo,'_',iDY.trafo,'.pdf');
+exportgraphics(gca,file_name,'ContentType','vector');
+
+
+
+%%
+figure
+hold on
+
+cmap = f_create_cmap(2, color2, color1);
+colormap(cmap)
+jetcustom = cmap;
+
+for ii=1:2
+    h = fill([1 1], [1 1],jetcustom(ii,:),'Edgecolor', 'none');
+    h.FaceAlpha = 0.5;
+    h.EdgeColor = jetcustom(ii,:);
+    h.LineWidth = 1.5;
+end
+
+YY.lim_p.f1 = ones(1,length(YY.vec_ph.f1)).*YY.fIp_eq.f1(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,YY.vec_ph.f1);
+YY.lim_s.f1 = ones(1,length(YY.vec_ph.f1)).*YY.fIs_eq.f1(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,YY.vec_ph.f1);
+YY.lim_pot.f1 = ones(1,length(YY.vec_ph.f1)).*YY.fpot_eq.f1(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,YY.vec_ph.f1);
+YY.lim_p.f2 = ones(1,length(YY.vec_ph.f2)).*YY.fIp_eq.f2(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,YY.vec_ph.f2);
+YY.lim_s.f2 = ones(1,length(YY.vec_ph.f2)).*YY.fIs_eq.f2(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,YY.vec_ph.f2);
+YY.lim_pot.f2 = ones(1,length(YY.vec_ph.f2)).*YY.fpot_eq.f2(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,YY.vec_ph.f2);
+
+fill([YY.lim_pot.f1./(Vi_num*YY.lim_p.f1) fliplr(YY.lim_pot.f1./(Vi_num*YY.lim_s.f1))], [Vi_num*YY.lim_p.f1 fliplr(Vi_num*YY.lim_s.f1)],jetcustom(1,:), 'FaceAlpha', .5, 'EdgeColor', 'none');
+fill([YY.lim_pot.f2./(Vi_num*YY.lim_p.f2) fliplr(YY.lim_pot.f2./(Vi_num*YY.lim_s.f2))], [Vi_num*YY.lim_p.f2 fliplr(Vi_num*YY.lim_s.f2)],jetcustom(1,:), 'FaceAlpha', .5, 'EdgeColor', 'none');
+plot(YY.lim_pot.f1./(Vi_num*YY.lim_p.f1),Vi_num*YY.lim_p.f1,'Color',jetcustom(1,:),'LineWidth',1.5)
+plot(YY.lim_pot.f2./(Vi_num*YY.lim_p.f2),Vi_num*YY.lim_p.f2,'Color',jetcustom(1,:),'LineWidth',1.5)
+plot(YY.lim_pot.f1./(Vi_num*YY.lim_s.f1),Vi_num*YY.lim_s.f1,'Color',jetcustom(1,:),'LineWidth',1.5)
+plot(YY.lim_pot.f2./(Vi_num*YY.lim_s.f2),Vi_num*YY.lim_s.f2,'Color',jetcustom(1,:),'LineWidth',1.5)
+    
+iDY.lim_p.f1 = ones(1,length(iDY.vec_ph.f1)).*iDY.fIp_eq.f1(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,iDY.vec_ph.f1);
+iDY.lim_s.f1 = ones(1,length(iDY.vec_ph.f1)).*iDY.fIs_eq.f1(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,iDY.vec_ph.f1);
+iDY.lim_pot.f1 = ones(1,length(iDY.vec_ph.f1)).*iDY.fpot_eq.f1(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,iDY.vec_ph.f1);
+iDY.lim_p.f2 = ones(1,length(iDY.vec_ph.f2)).*iDY.fIp_eq.f2(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,iDY.vec_ph.f2);
+iDY.lim_s.f2 = ones(1,length(iDY.vec_ph.f2)).*iDY.fIs_eq.f2(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,iDY.vec_ph.f2);
+iDY.lim_pot.f2 = ones(1,length(iDY.vec_ph.f2)).*iDY.fpot_eq.f2(L1_num,L2_num,Ldab_num,M_num,Vi_num,d_num,fs_num,iDY.vec_ph.f2);
+
+fill([iDY.lim_pot.f1./(Vi_num*iDY.lim_p.f1) fliplr(iDY.lim_pot.f1./(Vi_num*iDY.lim_s.f1))], [Vi_num*iDY.lim_p.f1 fliplr(Vi_num*iDY.lim_s.f1)],jetcustom(2,:), 'FaceAlpha', .5, 'EdgeColor', 'none');
+fill([iDY.lim_pot.f2./(Vi_num*iDY.lim_p.f2) fliplr(iDY.lim_pot.f2./(Vi_num*iDY.lim_s.f2))], [Vi_num*iDY.lim_p.f2 fliplr(Vi_num*iDY.lim_s.f2)],jetcustom(2,:), 'FaceAlpha', .5, 'EdgeColor', 'none');
+plot(iDY.lim_pot.f1./(Vi_num*iDY.lim_p.f1),Vi_num*iDY.lim_p.f1,'Color',jetcustom(2,:),'LineWidth',1.5)
+plot(iDY.lim_pot.f2./(Vi_num*iDY.lim_p.f2),Vi_num*iDY.lim_p.f2,'Color',jetcustom(2,:),'LineWidth',1.5)
+plot(iDY.lim_pot.f1./(Vi_num*iDY.lim_s.f1),Vi_num*iDY.lim_s.f1,'Color',jetcustom(2,:),'LineWidth',1.5)
+plot(iDY.lim_pot.f2./(Vi_num*iDY.lim_s.f2),Vi_num*iDY.lim_s.f2,'Color',jetcustom(2,:),'LineWidth',1.5)
+
+scatter(pt_io,pt_vo,'filled','square','MarkerEdgeColor','k','MarkerFaceColor','k')
+text(pt_io(1)+io_offset,pt_vo(1),'$\leftarrow$ A','Interpreter', 'Latex','FontSize', 16) 
+text(pt_io(2)+io_offset,pt_vo(2),'$\leftarrow$ B','Interpreter', 'Latex','FontSize', 16) 
+% text(pt_io(3)+io_offset,pt_vo(3),'$\leftarrow$ C','Interpreter', 'Latex','FontSize', 16) 
+
+hold off
+ylim([0 1.2*Vi_num])
+xlim([0 12])
+legend({'YY','iDY'},'Location','southeast','FontSize', 14)
+grid on
+grid minor
+xlabel('$I_o\,$[A]')
+ylabel('$V_o\,$[V]')
+set(gca, 'FontSize', 20)
+
+file_name = append('figure\comparacoes\pontos_testados_Io_',YY.trafo,'_',iDY.trafo,'.pdf');
+exportgraphics(gca,file_name,'ContentType','vector');
+
+%% potencia de saida em funcao do angulo
+pr2 = pr*100;
+iDY.vec_ph2.f2 = min(iDY.intervalo.f2):(max(iDY.intervalo.f2)-min(iDY.intervalo.f2))/pr2:max(iDY.intervalo.f2);
+iDY.vec_ph2.f1 = min(iDY.intervalo.f1):(max(iDY.intervalo.f1)-min(iDY.intervalo.f1))/pr2:max(iDY.intervalo.f1);
+
+iDY.fPo.f1 = matlabFunction(iDY.iME.f1*Vo, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+iDY.fPo.f2 = matlabFunction(iDY.iME.f2*Vo, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+
+figure
+hold on
+plot(iDY.vec_ph2.f1*180/pi,iDY.fPo.f1(L1_num,L2_num,Ldab_num,M_num,Vi_num,1,fs_num,iDY.vec_ph2.f1),'Color',jetcustom(1,:),'LineWidth',1.5)
+plot(iDY.vec_ph2.f1*180/pi,iDY.fPo.f1(L1_num,L2_num,Ldab_num,M_num,Vi_num,1/2,fs_num,iDY.vec_ph2.f1),'Color',jetcustom(2,:),'LineWidth',1.5)
+
+plot(iDY.vec_ph2.f2*180/pi,iDY.fPo.f2(L1_num,L2_num,Ldab_num,M_num,Vi_num,1,fs_num,iDY.vec_ph2.f2),'Color',jetcustom(1,:),'LineWidth',1.5)
+plot(iDY.vec_ph2.f2*180/pi,iDY.fPo.f2(L1_num,L2_num,Ldab_num,M_num,Vi_num,1/2,fs_num,iDY.vec_ph2.f2),'Color',jetcustom(2,:),'LineWidth',1.5)
+yline(pt_po)
+
+legend({'400','300'},'Location','southeast','FontSize', 16)
+hold off
+grid on
+grid minor
+set(gca, 'FontSize', 20)
+title('iDY')
+
+
+%% potencia de saida em funcao do angulo
+pr2 = pr*100;
+YY.vec_ph2.f2 = min(YY.intervalo.f2):(max(YY.intervalo.f2)-min(YY.intervalo.f2))/pr2:max(YY.intervalo.f2);
+YY.vec_ph2.f1 = min(YY.intervalo.f1):(max(YY.intervalo.f1)-min(YY.intervalo.f1))/pr2:max(YY.intervalo.f1);
+
+YY.fPo.f1 = matlabFunction(YY.iME.f1*Vo, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+YY.fPo.f2 = matlabFunction(YY.iME.f2*Vo, 'vars', {L1,L2,Ldab,M,Vi,d,fs,phi});
+
+figure
+hold on
+plot(YY.vec_ph2.f1*180/pi,YY.fPo.f1(L1_num,L2_num,Ldab_num,M_num,Vi_num,1,fs_num,YY.vec_ph2.f1),'Color',jetcustom(1,:),'LineWidth',1.5)
+plot(YY.vec_ph2.f1*180/pi,YY.fPo.f1(L1_num,L2_num,Ldab_num,M_num,Vi_num,3/4,fs_num,YY.vec_ph2.f1),'Color',jetcustom(2,:),'LineWidth',1.5)
+
+plot(YY.vec_ph2.f2*180/pi,YY.fPo.f2(L1_num,L2_num,Ldab_num,M_num,Vi_num,1,fs_num,YY.vec_ph2.f2),'Color',jetcustom(1,:),'LineWidth',1.5)
+plot(YY.vec_ph2.f2*180/pi,YY.fPo.f2(L1_num,L2_num,Ldab_num,M_num,Vi_num,3/4,fs_num,YY.vec_ph2.f2),'Color',jetcustom(2,:),'LineWidth',1.5)
+yline(pt_po)
+legend({'400','300'},'Location','southeast','FontSize', 16)
+hold off
+grid on
+grid minor
+set(gca, 'FontSize', 20)
+title('YY')
+
+
+% 
+% 
+% %% primeiro trafo DiY
+% load('YY.mat');
+% load('YD.mat');
+% load('DfD.mat');
+% load('DiD.mat');
+% load('DiY.mat');
+% load('DfY.mat');
+% 
+% % Combine the structs into a single struct
+% l.eq = struct('YY', YY, 'YD', YD, 'DfD', DfD, ...
+%               'DiD', DiD, 'DiY', DiY, 'DfY', DfY);
+% 
+% trafoo = "DfY";
+% %% os plots, ponto A 
+% l.pr.phi = deg2rad(-15);
+% [out] = f_equations_plot(l,trafoo);
+% C = num2cell(out);
+% vPP(1:3,:) = cell2mat(C(1:3,:));
+% vSS(1:3,:) = cell2mat(C(4:6,:));
+% vLLdab(1:3,:) = cell2mat(C(7:9,:));
+% hbb(1:3,:) = cell2mat(C(10:12,:));
+% HBB(1:3,:) = cell2mat(C(13:15,:));
+% idab_plot(1:3,:) = cell2mat(C(16:18,:));
+% x0s(1:6,:) = cell2mat(C(19:24,:));
+% ts(1,:) = cell2mat(C(25,:));
+% sec_switch_plot(1,:) = cell2mat(C(26,:));
+% sf_plot(1:6,:) = cell2mat(C(27:32,:));
+
+
+
+
